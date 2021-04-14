@@ -2,6 +2,8 @@
 
 namespace IlBronza\FileCabinet;
 
+use App\Observers\DossierObserver;
+use IlBronza\FileCabinet\Models\Dossier;
 use Illuminate\Support\ServiceProvider;
 
 class FileCabinetServiceProvider extends ServiceProvider
@@ -13,10 +15,12 @@ class FileCabinetServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'ilbronza');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'filecabinet');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'ilbronza');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
+
+        Dossier::observe(DossierObserver::class);
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -32,6 +36,11 @@ class FileCabinetServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/filecabinet.php', 'filecabinet');
+
+        $this->app->make('IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetController');
+        $this->app->make('IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController');
+        $this->app->make('IlBronza\FileCabinet\Http\Controllers\CrudDossierController');
+
 
         // Register the service the package provides.
         $this->app->singleton('filecabinet', function ($app) {
