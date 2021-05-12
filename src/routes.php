@@ -19,10 +19,14 @@ Route::group([
 		Route::prefix('filecabinets/{filecabinet}')->group(function () {
 			Route::resource('filecabinetrows', 'CrudFilecabinetrowController')->names('filecabinets.filecabinetrows');
 		});
+
+		Route::resource('filecabinetrows', 'CrudFilecabinetrowController');
+
+
+		Route::resource('dossiers', 'CrudDossierController');
 	}
 );
 
-Route::resource('dossiers', 'IlBronza\Filecabinet\Http\Controllers\CrudDossierController');
 
 
 // Route::get('asdasad', 'asdcontroller@masd')->name('categories.children.create');

@@ -4,20 +4,37 @@ namespace IlBronza\FileCabinet\Models;
 
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
 use IlBronza\CRUD\Traits\Model\CRUDModelTrait;
+use IlBronza\CRUD\Traits\Model\CRUDRelationshipModelTrait;
+use IlBronza\Category\Models\Category;
+use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Models\Filecabinet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Filecabinetrow extends Model
 {
 	use SoftDeletes;
+
 	use CRUDModelTrait;
+	use CRUDRelationshipModelTrait;
+
 	use CRUDSluggableTrait;
+
+	public $deletingRelationships = ['dossierrows'];
+
+	public function dossierrows()
+	{
+		return $this->hasMany(Dossierrow::class);
+	}
+
+	public function filecabinet()
+	{
+		return $this->belongsTo(Filecabinet::class);
+	}
 
 	protected $dates = [
 		'deleted_at'
 	];
-
-	public $deletingRelationships = [];
 
 	static $possibleTypes = [
 		'string',

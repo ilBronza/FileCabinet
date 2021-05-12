@@ -13,7 +13,10 @@ trait CRUDFilecabinetParametersTrait
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'name' => 'flat',
-                'slug' => 'flat'
+                'slug' => 'flat',
+                'filecabinetrows' => 'relations.hasMany',
+                'categories' => 'relations.belongsToMany',
+                'mySelfDelete' => 'links.delete',
             /**
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => [
@@ -46,7 +49,14 @@ trait CRUDFilecabinetParametersTrait
     static $formFields = [
         'common' => [
             'default' => [
-                'name' => ['text' => 'string|required|max:191']
+                'name' => ['text' => 'string|required|max:191'],
+                'slug' => ['text' => 'string|nullable|max:191'],
+                'categories' => [
+                    'type' => 'select',
+                    'multiple' => true,
+                    'rules' => 'array|nullable|exists:categories,id',
+                    'relation' => 'categories'
+                ],
         /**
                 'age' => ['number' => 'numeric|required'],
                 'color' => ['color' => 'numeric|required'],

@@ -16,6 +16,9 @@ trait CRUDFilecabinetrowParametersTrait
                 'slug' => 'flat',
                 'type' => 'flat',
                 'parameters' => 'flat',
+                'description' => 'flat',
+                'icon' => 'flat',
+                'compulsory' => 'boolean',
                 'mySelfDelete' => 'links.delete'
             ]
         ],
@@ -41,6 +44,9 @@ trait CRUDFilecabinetrowParametersTrait
                 'slug' => ['text' => 'string|nullable|max:191'],
                 'type' => ['select' => 'string|required'],
                 'parameters' => ['textarea' => 'string|nullable|max:1024000'],
+                'description' => ['texteditor' => 'string|nullable|max:10240'],
+                'icon' => ['text' => 'string|required|max:191'],
+                'compulsory' => ['boolean' => 'string|required'],
                 'nullable' => ['boolean' => 'boolean|required'],
         /**
                 'age' => ['number' => 'numeric|required'],
