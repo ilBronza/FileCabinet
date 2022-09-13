@@ -12,7 +12,7 @@
     "homepage": "https://github.com/ilbronza/filecabinet",
     "keywords": ["Laravel", "FileCabinet"],
     "require": {
-        "illuminate/support": "~7|~8"
+        "illuminate/support": "~7|~8|~9"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",
