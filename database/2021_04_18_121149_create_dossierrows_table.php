@@ -31,11 +31,6 @@ class CreateDossierrowsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
-
-        Schema::table('filecabinetrows', function (Blueprint $table)
-        {
-            $table->string('default_value', 1024)->nullable();
-        });
     }
 
 
@@ -48,10 +43,5 @@ class CreateDossierrowsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('dossierrows');
-
-        Schema::table('filecabinetrows', function (Blueprint $table)
-        {
-            $table->dropColumn('default_value');
-        });
     }
 }

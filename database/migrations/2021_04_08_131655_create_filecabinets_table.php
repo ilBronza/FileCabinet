@@ -14,10 +14,15 @@ class CreateFilecabinetsTable extends Migration
     public function up()
     {
         Schema::create('filecabinets', function (Blueprint $table) {
-            $table->id();
-
             $table->string('name');
             $table->string('slug');
+
+            $table->boolean('repeatable')->default(false);
+            $table->boolean('multiple')->default(false);
+
+            $table->unsignedSmallInteger('validity_days')->nullable();
+            $table->unsignedSmallInteger('validity_months')->nullable();
+            $table->unsignedTinyInteger('validity_months_starting-date')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

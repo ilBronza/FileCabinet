@@ -16,6 +16,9 @@ class CreateFilecabinetrowsTable extends Migration
         Schema::create('filecabinetrows', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('filecabinet_id');
+            $table->foreign('filecabinet_id')->references('id')->on('filecabinets');
+
             $table->string('name');
             $table->string('slug');
 
@@ -24,8 +27,7 @@ class CreateFilecabinetrowsTable extends Migration
 
             $table->text('parameters')->nullable();
 
-            $table->unsignedBigInteger('filecabinet_id');
-            $table->foreign('filecabinet_id')->references('id')->on('filecabinets');
+            $table->string('default_value', 1024)->nullable();
 
             $table->softDeletes();
             $table->timestamps();

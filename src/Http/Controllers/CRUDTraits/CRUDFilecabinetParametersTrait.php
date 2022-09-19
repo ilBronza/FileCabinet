@@ -15,7 +15,7 @@ trait CRUDFilecabinetParametersTrait
                 'name' => 'flat',
                 'slug' => 'flat',
                 'filecabinetrows' => 'relations.hasMany',
-                'categories' => 'relations.belongsToMany',
+                // 'categories' => 'relations.belongsToMany',
                 'mySelfDelete' => 'links.delete',
             /**
                 'mySelfEdit' => 'links.edit',

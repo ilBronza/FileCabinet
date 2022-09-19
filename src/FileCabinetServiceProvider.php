@@ -17,10 +17,9 @@ class FileCabinetServiceProvider extends ServiceProvider
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'filecabinet');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'ilbronza');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
-        Dossier::observe(DossierObserver::class);
+        // Dossier::observe(DossierObserver::class);
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -69,6 +68,10 @@ class FileCabinetServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/filecabinet.php' => config_path('filecabinet.php'),
         ], 'filecabinet.config');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/' => database_path('migrations')
+        ], 'filecabinet.migrations');
 
         // Publishing the views.
         /*$this->publishes([
