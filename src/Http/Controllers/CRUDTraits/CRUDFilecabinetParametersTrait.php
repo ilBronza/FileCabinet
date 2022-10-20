@@ -14,7 +14,7 @@ trait CRUDFilecabinetParametersTrait
                 'mySelfSee' => 'links.see',
                 'name' => 'flat',
                 'slug' => 'flat',
-                'filecabinetrows' => 'relations.hasMany',
+                // 'filecabinetrows' => 'relations.hasMany',
                 // 'categories' => 'relations.belongsToMany',
                 'mySelfDelete' => 'links.delete',
             /**
@@ -54,7 +54,7 @@ trait CRUDFilecabinetParametersTrait
                 'categories' => [
                     'type' => 'select',
                     'multiple' => true,
-                    'rules' => 'array|nullable|exists:categories,id',
+                    'rules' => 'array|nullable|exists:categories,slug',
                     'relation' => 'categories'
                 ],
         /**

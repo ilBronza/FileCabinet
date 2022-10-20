@@ -53,25 +53,6 @@ class CrudFilecabinetController extends CRUD
     ];
 
     /**
-     * to override show view use full view name
-     **/
-    //public $showView = 'products.showPartial';
-
-    // public $guardedEditDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    public $guardedCreateDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    public $guardedShowDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-
-    /**
-     * relations called to be automatically shown on 'show' method
-     **/
-    public $showMethodRelationships = ['filecabinetrows'];
-
-    protected $relationshipsControllers = [
-        'filecabinetrows' => '\IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController'
-    ];
-
-
-    /**
      * getter method for 'index' method.
      *
      * is declared here to force the developer to rationally choose which elements to be shown
