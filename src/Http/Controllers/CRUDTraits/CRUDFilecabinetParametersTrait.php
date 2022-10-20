@@ -54,7 +54,7 @@ trait CRUDFilecabinetParametersTrait
                 'categories' => [
                     'type' => 'select',
                     'multiple' => true,
-                    'rules' => 'array|nullable|exists:categories,id',
+                    'rules' => 'array|nullable|exists:categories,slug',
                     'relation' => 'categories'
                 ],
         /**

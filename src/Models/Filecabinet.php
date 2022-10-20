@@ -2,33 +2,24 @@
 
 namespace IlBronza\FileCabinet\Models;
 
-
+use IlBronza\CRUD\Models\SluggableBaseModel;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
-use IlBronza\CRUD\Traits\Model\CRUDModelTrait;
-use IlBronza\CRUD\Traits\Model\CRUDRelationshipModelTrait;
-use IlBronza\Category\Models\Category;
-use IlBronza\FileCabinet\Models\Dossier;
-use IlBronza\FileCabinet\Models\Filecabinetrow;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use IlBronza\Category\Traits\InteractsWithCategoryTrait;
 
-class Filecabinet extends Model
+class Filecabinet extends SluggableBaseModel
 {
-	use HasFactory;
-
-	use SoftDeletes;
-
-	use CRUDModelTrait;
-	use CRUDRelationshipModelTrait;
-
-	use CRUDSluggableTrait;
+	use InteractsWithCategoryTrait;
 
 	public $deletingRelationships = ['dossiers', 'filecabinetrows'];
 
-	public function categories()
+	public function getCategoryModel() : string
 	{
-		return $this->morphToMany(Category::class, 'categorizeable');
+		return config('filecabinet.categories.model');
+	}
+
+	public function getCategoriesCollection() : ? string
+	{
+		return config('filecabinet.categories.collection');
 	}
 
 	public function dossiers()

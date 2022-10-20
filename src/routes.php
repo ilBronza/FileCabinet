@@ -14,7 +14,7 @@ Route::group([
 
 		// //START ROUTES PER REORDERING
 		// Route::get('categories-reorder', 'CrudCategoryController@reorder')->name('categories.reorder');
-		// Route::post('categories-reorder', 'CrudCategoryController@stroreReorder')->name('categories.stroreReorder');
+		// Route::post('categories-reorder', 'CrudCategoryController@storeReorder')->name('categories.storeReorder');
 		// //STOP ROUTES PER REORDERING
 
 		// Route::prefix('filecabinets/{filecabinet}')->group(function () {
