@@ -14,7 +14,7 @@ trait CRUDFilecabinetParametersTrait
                 'mySelfSee' => 'links.see',
                 'name' => 'flat',
                 'slug' => 'flat',
-                'filecabinetrows' => 'relations.hasMany',
+                // 'filecabinetrows' => 'relations.hasMany',
                 // 'categories' => 'relations.belongsToMany',
                 'mySelfDelete' => 'links.delete',
             /**

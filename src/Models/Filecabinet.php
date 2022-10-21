@@ -5,6 +5,7 @@ namespace IlBronza\FileCabinet\Models;
 use IlBronza\CRUD\Models\SluggableBaseModel;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
 use IlBronza\Category\Traits\InteractsWithCategoryTrait;
+use IlBronza\FileCabinet\Models\Filecabinetrow;
 
 class Filecabinet extends SluggableBaseModel
 {
