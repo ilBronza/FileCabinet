@@ -15,6 +15,7 @@ use IlBronza\CRUD\Traits\CRUDShowTrait;
 use IlBronza\CRUD\Traits\CRUDUpdateEditorTrait;
 use IlBronza\FileCabinet\Http\Controllers\CRUDTraits\CRUDFilecabinetParametersTrait;
 use IlBronza\FileCabinet\Models\Filecabinet;
+use IlBronza\FileCabinet\Providers\RelationshipsManagers\FilecabinetRelationManager;
 use Illuminate\Http\Request;
 
 class CrudFilecabinetController extends CRUD
@@ -52,24 +53,7 @@ class CrudFilecabinetController extends CRUD
         'destroy'
     ];
 
-    /**
-     * to override show view use full view name
-     **/
-    //public $showView = 'products.showPartial';
-
-    // public $guardedEditDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    public $guardedCreateDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    public $guardedShowDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-
-    /**
-     * relations called to be automatically shown on 'show' method
-     **/
-    public $showMethodRelationships = ['filecabinetrows'];
-
-    protected $relationshipsControllers = [
-        'filecabinetrows' => '\IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController'
-    ];
-
+    public $relationshipsManagerClass = FilecabinetRelationManager::class;
 
     /**
      * getter method for 'index' method.
@@ -109,26 +93,6 @@ class CrudFilecabinetController extends CRUD
     {
         return $this->_destroy($filecabinet);
     }
-
-    /**
-     * END base methods
-     **/
-
-
-
-
-     /**
-      * START CREATE PARAMETERS AND METHODS
-      **/
-
-    // public function beforeRenderCreate()
-    // {
-    //     $this->modelInstance->agent_id = session('agent')->getKey();
-    // }
-
-     /**
-      * STOP CREATE PARAMETERS AND METHODS
-      **/
 
 }
 

@@ -48,30 +48,10 @@ class CrudFilecabinetrowController extends BelongsToCRUDController
         'update',
         'create',
         'store',
-        'destroy'
+        'destroy',
+        'reorder',
+        'storereorder'
     ];
-
-    /**
-     * to override show view use full view name
-     **/
-    //public $showView = 'products.showPartial';
-
-    // public $guardedEditDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    public $guardedCreateDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    public $guardedShowDBFields = ['id', 'created_at', 'updated_at', 'deleted_at'];
-
-    /**
-     * relations called to be automatically shown on 'show' method
-     **/
-    //public $showMethodRelationships = ['posts', 'users', 'operations'];
-
-    /**
-        protected $relationshipsControllers = [
-        'permissions' => '\IlBronza\AccountManager\Http\Controllers\PermissionController'
-    ];
-    **/
-
-    public $showMethodRelationships = ['filecabinet'];
 
     public function index(Request $request, Filecabinet $filecabinet)
     {

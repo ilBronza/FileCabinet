@@ -2,23 +2,25 @@
 
 namespace IlBronza\FileCabinet\Models;
 
-use IlBronza\CRUD\Traits\CRUDSluggableTrait;
-use IlBronza\CRUD\Traits\Model\CRUDModelTrait;
-use IlBronza\CRUD\Traits\Model\CRUDRelationshipModelTrait;
+use IlBronza\CRUD\Models\SluggableBaseModel;
+use IlBronza\CRUD\Traits\Model\CRUDBelongsToModelRouteTrait;
 use IlBronza\Category\Models\Category;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Filecabinet;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Filecabinetrow extends Model
+class Filecabinetrow extends SluggableBaseModel
 {
-	use SoftDeletes;
+	use CRUDBelongsToModelRouteTrait;
 
-	use CRUDModelTrait;
-	use CRUDRelationshipModelTrait;
+	public function getOwnerModelLocalKey() : string
+	{
+		return 'filecabinet_slug';
+	}
 
-	use CRUDSluggableTrait;
+	public function getOwnerModelClass() : string
+	{
+		return Filecabinet::class;
+	}
 
 	public $deletingRelationships = ['dossierrows'];
 
@@ -51,30 +53,6 @@ class Filecabinetrow extends Model
 		'set',
 		'email'
 	];
-
-    public function getDeleteUrl(array $data = [])
-    {
-		return route('filecabinets.filecabinetrows.destroy', [
-			$this->filecabinet_id,
-			$this->getKey()
-		]);
-    }
-
-    public function getEditUrl(array $data = [])
-    {
-		return route('filecabinets.filecabinetrows.edit', [
-			$this->filecabinet_id,
-			$this->getKey()
-		]);
-    }
-
-    public function getShowUrl(array $data = [])
-    {
-        return route('filecabinets.filecabinetrows.show', [
-        	$this->filecabinet_id,
-        	$this->getKey()
-        ]);
-    }
 
 	public function getSelectPossibleTypeValues()
 	{

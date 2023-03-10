@@ -10,7 +10,7 @@ trait CRUDFilecabinetrowParametersTrait
             'fields' => 
             [
                 'mySelfPrimary' => 'primary',
-                'mySelfEdit' => 'links.edit',
+                'mySelfEdit' => 'links.editByOwnerModel',
                 'mySelfSee' => 'links.see',
                 'name' => 'flat',
                 'slug' => 'flat',
@@ -27,7 +27,7 @@ trait CRUDFilecabinetrowParametersTrait
             'fields' => 
             [
                 'mySelfPrimary' => 'primary',
-                'mySelfEdit' => 'links.edit',
+                'mySelfEdit' => 'links.editByOwnerModel',
                 'mySelfSee' => 'links.see',
                 'name' => 'flat',
                 'slug' => 'flat',

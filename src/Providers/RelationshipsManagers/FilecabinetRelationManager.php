@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Providers\RelationshipsManagers;
 
 use IlBronza\CRUD\Providers\RelationshipsManager;
+use IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController;
 
 class FilecabinetRelationManager Extends RelationshipsManager
 {
@@ -11,7 +12,7 @@ class FilecabinetRelationManager Extends RelationshipsManager
 		return [
 			'show' => [
 				'relations' => [
-					'filecabinetrows' => CrudFilecabinetrowController::class,
+					'filecabinetrows' => CrudFilecabinetrowController::class
 				]
 			]
 		];

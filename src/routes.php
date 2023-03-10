@@ -2,6 +2,7 @@
 
 use IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetController;
 use IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -17,12 +18,9 @@ Route::group([
 		// Route::post('categories-reorder', 'CrudCategoryController@storeReorder')->name('categories.storeReorder');
 		// //STOP ROUTES PER REORDERING
 
-		// Route::prefix('filecabinets/{filecabinet}')->group(function () {
-		// 	Route::resource('filecabinetrows', 'CrudFilecabinetrowController')->names('filecabinets.filecabinetrows');
-		// });
-
-		Route::resource('filecabinetrows', CrudFilecabinetrowController::class);
-
+		Route::prefix('filecabinets/{filecabinet}')->group(function () {
+			Route::resource('filecabinetrows', CrudFilecabinetrowController::class)->names('filecabinets.filecabinetrows');
+		});
 
 		// Route::resource('dossiers', 'CrudDossierController');
 	}
