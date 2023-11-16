@@ -13,16 +13,11 @@ class CreateFilecabinetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('filecabinets', function (Blueprint $table) {
-            $table->string('name');
+        Schema::create(config('filecabinet.models.form.table'), function (Blueprint $table) {
+            $table->uuid();
+
             $table->string('slug');
-
-            $table->boolean('repeatable')->default(false);
-            $table->boolean('multiple')->default(false);
-
-            $table->unsignedSmallInteger('validity_days')->nullable();
-            $table->unsignedSmallInteger('validity_months')->nullable();
-            $table->unsignedTinyInteger('validity_months_starting-date')->nullable();
+            $table->string('name');
 
             $table->softDeletes();
             $table->timestamps();
@@ -36,6 +31,6 @@ class CreateFilecabinetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('filecabinets');
+        Schema::dropIfExists(config('filecabinet.models.form.table'));
     }
 }

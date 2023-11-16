@@ -2,26 +2,16 @@
 
 namespace IlBronza\FileCabinet\Models;
 
-use IlBronza\CRUD\Traits\Model\CRUDModelTrait;
-use IlBronza\CRUD\Traits\Model\CRUDRelationshipModelTrait;
 use IlBronza\FileCabinet\Models\Dossierrow;
-use IlBronza\FileCabinet\Models\Filecabinet;
-use IlBronza\FileCabinet\Models\Filecabinetrow;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use IlBronza\FileCabinet\Models\Form;
 
-class Dossier extends Model
+class Dossier extends BaseModel
 {
-	use SoftDeletes;
-
-	use CRUDModelTrait;
-	use CRUDRelationshipModelTrait;
-
 	public $deletingRelationships = ['dossierrows'];
 
-	public function filecabinet()
+	public function form()
 	{
-		return $this->belongsTo(Filecabinet::class);
+		return $this->belongsTo(Form::class);
 	}
 
 	public function dossierrows()

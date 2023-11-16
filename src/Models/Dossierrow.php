@@ -20,5 +20,4 @@ class Dossierrow extends Model
 	{
 		return $this->belongsTo(Dossier::class);
 	}
-
 }

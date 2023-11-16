@@ -2,12 +2,12 @@
 
 namespace IlBronza\FileCabinet\Providers\RelationshipsManagers;
 
-use IlBronza\CRUD\Providers\RelationshipsManager;
+use IlBronza\CRUD\Providers\RelationshipsManager\RelationshipsManager;
 use IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController;
 
 class FilecabinetRelationManager Extends RelationshipsManager
 {
-	public function getAllRelationsParameters()
+	public  function getAllRelationsParameters() : array
 	{
 		return [
 			'show' => [
