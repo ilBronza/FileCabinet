@@ -1,0 +1,113 @@
+<?php
+
+namespace IlBronza\FileCabinet\Helpers;
+
+use IlBronza\FileCabinet\Models\Dossier;
+use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Models\Form;
+use IlBronza\FileCabinet\Models\Formrow;
+use Illuminate\Database\Eloquent\Model;
+
+class DossierCreatorHelper
+{
+    static function makeDossierrowFromFormrow(Formrow $formrow) : Dossierrow
+    {
+        $dossierrow = Dossierrow::make();
+        $dossierrow->formrow()->associate($formrow);
+
+        return $dossierrow;
+    }
+
+    static function addFormrowToDossier(Dossier $dossier, Formrow $formrow) : Dossierrow
+    {
+        $dossierrow = $dossier->dossierrows()->save(
+            static::makeDossierrowFromFormrow(
+                $formrow
+            )
+        );
+
+        return $dossierrow;
+    }
+
+
+    static function replicateDossierrow(Dossierrow $dossierrow)
+    {
+        $dossier = $dossierrow->getDossier();
+        $formrow = $dossierrow->getFormrow();
+
+        $newDossierrow = static::addFormrowToDossier($dossier, $formrow);
+
+        return $newDossierrow;
+    }
+
+    static function dossierHasFormRow(Dossier $dossier, Formrow $formrow) : bool
+    {
+        return $dossier->getDossierrows()->contains('formrow_id', $formrow->getKey());
+    }
+
+    static function formHasFormRow(Form $form, Dossierrow $dossierrow) : bool
+    {
+        return $form->getFormrows()->contains('id', $dossierrow->formrow_id);
+    }
+
+    static function updateDossierRowsByForm(Dossier $dossier)
+    {
+        if(! $dossier->getForm())
+            throw new \Exception('Dossier ' . $this->gretKey() . ' has not form anymore');
+
+        foreach($dossier->getForm()->getFormrows() as $formrow)
+            if(! static::dossierHasFormRow($dossier, $formrow))
+                static::addFormrowToDossier($dossier, $formrow);
+                // $dossier->dossierrows()->save(
+                //     static::makeDossierrowFromFormrow(
+                //         $formrow
+                //     )
+                // );
+
+        foreach($dossier->getDossierrows(true) as $dossierrow)
+            if(! static::formHasFormRow($dossier->getForm(), $dossierrow))
+                $dossierrow->delete();
+
+        $dossier->setFieldsUpdated();
+
+        return $dossier;        
+    }
+
+    static function makeByForm(Form $form) : Dossier
+    {
+        $dossier = Dossier::make();
+        $dossier->form()->associate($form);
+        $dossier->save();
+
+        foreach($form->getFormrows() as $formrow)
+            $dossier->dossierrows()->save(
+                static::makeDossierrowFromFormrow(
+                    $formrow
+                )
+            );
+
+        return $dossier;
+    }
+
+    static function createByForm(Model $model, Form $form) : Dossier
+    {
+        $dossier = static::makeByForm($form);
+
+        $dossier = $model->dossiers()->save($dossier);
+
+        return $dossier;
+    }
+
+    static function createByDossier(Dossier $dossier) : Dossier
+    {
+        $newDossier = static::makeByForm($dossier->getForm());
+
+        //Attach to same model
+        $dossier->getDossierable()->dossiers()->save($newDossier);
+
+        foreach($dossier->getFilecabinets() as $filecabinet)
+            $filecabinet->dossiers()->save($newDossier);
+
+        return $newDossier;
+    }
+}

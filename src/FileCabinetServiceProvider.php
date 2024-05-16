@@ -16,7 +16,8 @@ class FileCabinetServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'filecabinet');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'ilbronza');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'filecabinet');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         // Dossier::observe(DossierObserver::class);
@@ -35,11 +36,6 @@ class FileCabinetServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/filecabinet.php', 'filecabinet');
-
-        $this->app->make('IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetController');
-        $this->app->make('IlBronza\FileCabinet\Http\Controllers\CrudFilecabinetrowController');
-        $this->app->make('IlBronza\FileCabinet\Http\Controllers\CrudDossierController');
-
 
         // Register the service the package provides.
         $this->app->singleton('filecabinet', function ($app) {

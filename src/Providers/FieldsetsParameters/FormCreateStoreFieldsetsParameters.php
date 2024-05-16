@@ -1,0 +1,35 @@
+<?php
+
+namespace IlBronza\FileCabinet\Providers\FieldsetsParameters;
+
+use IlBronza\Form\Helpers\FieldsetsProvider\FieldsetParametersFile;
+
+class FormCreateStoreFieldsetsParameters extends FieldsetParametersFile
+{
+    public function _getFieldsetsParameters() : array
+    {
+        return [
+            'package' => [
+                'translationPrefix' => 'filecabinet::fields',
+                'fields' => [
+                    'name' => ['text' => 'string|required|max:255'],
+                    'slug' => ['text' => 'string|nullable|max:255'],
+                    'category' => [
+                        'type' => 'select',
+                        'label' => 'mainCategory',
+                        'multiple' => false,
+                        'mustBeSorted' => false,
+                        'rules' => 'required|exists:' . config('category.models.category.table') . ',id',
+                        'relation' => 'category'
+                    ],
+                    'repeatable' => [
+                        'type' => 'boolean',
+                        'tooltip' => 'filecabinet::fields.repeatableTooltip',
+                        'rules' => 'boolean|required'
+                    ],
+                    'description' => ['texteditor' => 'string|nullable|max:2048'],
+                ]
+            ]
+        ];
+    }
+}

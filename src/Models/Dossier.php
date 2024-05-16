@@ -2,21 +2,32 @@
 
 namespace IlBronza\FileCabinet\Models;
 
-use IlBronza\FileCabinet\Models\Dossierrow;
-use IlBronza\FileCabinet\Models\Form;
+use IlBronza\CRUD\Traits\Model\CRUDUseUlidKeyTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierButtonsRoutesTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierCheckersTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierGettersSettersTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierHtmlFormTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierRelationsTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierRenderTrait;
+use IlBronza\FileCabinet\Models\Traits\DossierScopesTrait;
 
-class Dossier extends BaseModel
+class Dossier extends BaseFileCabinetModel
 {
-	public $deletingRelationships = ['dossierrows'];
+	use CRUDUseUlidKeyTrait;
+	use DossierHtmlFormTrait;
+	use DossierRenderTrait;
+	use DossierRelationsTrait;
+	use DossierGettersSettersTrait;
+	use DossierButtonsRoutesTrait;
+	use DossierCheckersTrait;
+	use DossierScopesTrait;
 
-	public function form()
-	{
-		return $this->belongsTo(Form::class);
-	}
+	protected $dates = [
+		'populated_at',
+		'must_be_updated_at'
+	];
 
-	public function dossierrows()
-	{
-		return $this->hasMany(Dossierrow::class);
-	}
+	static $modelConfigPrefix = 'dossier';
+	static $deletingRelationships = ['dossierrows'];
 
 }
