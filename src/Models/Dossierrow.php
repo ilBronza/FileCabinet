@@ -8,8 +8,10 @@ use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FormField\FormField;
+use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Validator;
 
 class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface
 {
@@ -17,6 +19,19 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	static $modelConfigPrefix = 'dossierrow';
 	static $deletingRelationships = [];
+
+	public function scopeByFormrowName($query, string $formrowName)
+	{
+		$query->whereHas('formrow', function ($query) use($formrowName)
+		{
+			$query->where('name', $formrowName);
+		});		
+	}
+
+	public function scopeByFormrow($query, Formrow $formrow)
+	{
+		$query->where('formrow_id', $formrow->getKey());
+	}
 
 	public function getRepeatableFormfieldAjaxUrl() : string
 	{
@@ -28,6 +43,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()?->getName() ?? '-';
 	}
 
+	public function getNameAttribute() : ? string
+	{
+		return $this->getName();
+	}
+
 	public function formrow() : BelongsTo
 	{
 		return $this->belongsTo(Formrow::getProjectClassName());
@@ -36,6 +56,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getFormrow() : ? Formrow
 	{
 		return $this->formrow;
+	}
+
+	public function getFormrowId() : string
+	{
+		return $this->formrow_id;
 	}
 
 	public function dossier() : BelongsTo
@@ -58,8 +83,33 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getRowType()->getDatabaseField();
 	}
 
-	public function storeRowValue(mixed $value)
+	public function validateRowValue(mixed $value)
 	{
+		$fieldname = $this->getFormfieldName();
+
+		$rules = FormfieldParametersHelper::getValidationRulesFromModel($this);
+
+ 		$validator = Validator::make([
+ 			'value' => $value
+ 		],
+ 		[
+            'value' => $rules
+        ]);
+ 
+        if ($validator->fails())
+        	throw new \Exception(implode(" . ", [
+        		'errore in questo campo: ' . $this->getName(),
+        		'valore' . json_encode($value),
+        		json_encode($validator->getMessageBag()->getMessages()),
+        		json_encode($rules)
+        	]));
+	}
+
+	public function storeRowValue(mixed $value, bool $validate = false)
+	{
+		if($validate)
+			$this->validateRowValue($value);
+
 		$databaseField = $this->getDatabaseField();
 
 		$this->$databaseField = $value;
@@ -70,6 +120,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function isRepeatable() : bool
 	{
 		return $this->getFormrow()->isRepeatable();
+	}
+
+	public function getValueAttribute() : mixed
+	{
+		return $this->getValue();
 	}
 
 	public function getValue() : mixed
@@ -83,6 +138,13 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getFormfieldType() : string
 	{
 		return $this->getFormrow()->getFormfieldType();
+	}
+
+	public function getShowValue() : mixed
+	{
+		return $this->getRowType()->getShowValue(
+			$this->getValue()
+		);
 	}
 
 	public function getFormfieldValue() : mixed

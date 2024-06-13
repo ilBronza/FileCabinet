@@ -4,9 +4,25 @@ namespace IlBronza\FileCabinet\Models\Traits;
 
 use Auth;
 use Carbon\Carbon;
+use IlBronza\FileCabinet\Models\Dossierrow;
 
 trait DossierGettersSettersTrait
 {
+	public function getRowByName(string $rowName) : Dossierrow
+	{
+		// if(! $this->relationLoaded('dossierrows'))
+		// 	return $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first();
+
+		$dossierrows = $this->getDossierrows();
+
+		$formrow = $this->getForm()->getFormrowByName($rowName);
+
+		return $dossierrows->sortByDesc('created_at')->first(function($item) use($formrow)
+		{
+			return $item->formrow_id == $formrow->getKey();
+		});
+	}
+
 	public function setNotPopulated()
 	{
 		$this->populated_at = null;
@@ -35,6 +51,11 @@ trait DossierGettersSettersTrait
 	public function getName() : ? string
 	{
 		return $this->getForm()->getName();
+	}
+
+	public function getNameAttribute() : string
+	{
+		return $this->getName();
 	}
 
 	public function getDescription() : ? string

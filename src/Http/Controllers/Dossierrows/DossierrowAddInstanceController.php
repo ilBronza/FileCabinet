@@ -19,8 +19,12 @@ class DossierrowAddInstanceController extends DossierrowCRUD
 
         $newDossierrow = DossierCreatorHelper::replicateDossierrow($dossierrow);
 
-        $forField = DossierrowFormFieldHelper::createFieldFromDossierrow($newDossierrow);
+        $formField = DossierrowFormFieldHelper::createFieldFromDossierrow($newDossierrow);
 
-        return $forField->render();
+        return response()->json([
+            'success' => true,
+            'message' => __('filecabinet::filecabinet.dossierrowInstanceAdded', ['formrow' => $newDossierrow->getName()]),
+            'html' => $formField->render()->render()
+        ]);
     }
 }

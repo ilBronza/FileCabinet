@@ -1,12 +1,16 @@
 <?php
 
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowAddInstanceController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierDestroyController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierEditController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierShowController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateFieldsController;
+use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPdfController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPopulateController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetShowController;
@@ -16,6 +20,7 @@ use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
+use IlBronza\FileCabinet\Http\Controllers\Forms\FormCloneController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormEditUpdateController;
@@ -29,16 +34,23 @@ use IlBronza\FileCabinet\Models\Form;
 use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierRelatedFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowRelatedFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowRelatedFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsetsParameters\DossierShowFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormCreateStoreFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormEditUpdateFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormShowFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormrowCreateStoreFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormrowEditFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormrowShowFieldsetsParameters;
+use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierRelationManager;
+use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierrowRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormRelationManager;
+use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormrowRelationManager;
 
 // use IlBronza\Category\Models\Category;
 // use IlBronza\FileCabinet\Models\Filecabinet;
@@ -55,6 +67,7 @@ use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormRelationManager;
 
 
 return [
+    'enabled' => true,
     'routePrefix' => 'ibFilecabinet',
 
     'defaultRules' => [
@@ -86,6 +99,7 @@ return [
                 'create' => FormCreateStoreController::class,
                 'store' => FormCreateStoreController::class,
                 'show' => FormShowController::class,
+                'clone' => FormCloneController::class,
                 'edit' => FormEditUpdateController::class,
                 'update' => FormEditUpdateController::class,
                 'destroy' => FormDestroyController::class,
@@ -104,6 +118,9 @@ return [
                 'update' => FormrowEditUpdateController::class,
                 'destroy' => FormrowDestroyController::class,
             ],
+            'relationshipsManagerClasses' => [
+                'show' => FormrowRelationManager::class
+            ],
             'fieldsGroupsFiles' => [
                 'index' => FormrowFieldsGroupParametersFile::class,
                 'related' => FormrowRelatedFieldsGroupParametersFile::class
@@ -121,8 +138,16 @@ return [
                 'index' => DossierFieldsGroupParametersFile::class,
                 'related' => DossierRelatedFieldsGroupParametersFile::class
             ],
+            'relationshipsManagerClasses' => [
+                'show' => DossierRelationManager::class
+            ],
+            'parametersFiles' => [
+                'show' => DossierShowFieldsetsParameters::class
+            ],
             'controllers' => [
                 'index' => DossierIndexController::class,
+                'show' => DossierShowController::class,
+                'edit' => DossierEditController::class,
                 'update' => DossierUpdateController::class,
                 'updateFields' => DossierUpdateFieldsController::class,
                 'createNewInstance' => DossierCreateNewInstanceController::class,
@@ -132,8 +157,16 @@ return [
         'dossierrow' => [
             'class' => Dossierrow::class,
             'table' => 'filecabinets__dossierrows',
+            'fieldsGroupsFiles' => [
+                'index' => DossierrowFieldsGroupParametersFile::class,
+                'related' => DossierrowRelatedFieldsGroupParametersFile::class
+            ],
+            'relationshipsManagerClasses' => [
+                'show' => DossierrowRelationManager::class
+            ],
             'controllers' => [
                 'show' => DossierrowShowController::class,
+                'index' => DossierrowIndexController::class,
                 'addInstance' => DossierrowAddInstanceController::class,
             ],
         ],
@@ -144,9 +177,14 @@ return [
         'filecabinet' => [
             'class' => Filecabinet::class,
             'table' => 'filecabinets__filecabinets',
+            'fieldsGroupsFiles' => [
+                'index' => FilecabinetFieldsGroupParametersFile::class,
+                'related' => FilecabinetRelatedFieldsGroupParametersFile::class
+            ],
             'controllers' => [
                 'populate' => FilecabinetPopulateController::class,
                 'show' => FilecabinetShowController::class,
+                'index' => FilecabinetIndexController::class,
                 'pdf' => FilecabinetPdfController::class,
             ],
 

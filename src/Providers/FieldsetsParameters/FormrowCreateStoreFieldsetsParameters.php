@@ -19,6 +19,11 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
                     'slug' => ['text' => 'string|nullable|max:255'],
                     'required' => ['boolean' => 'bool|required'],
                     'repeatable' => ['boolean' => 'bool|required'],
+                    'sorting_index' => [
+                        'type' => 'number',
+                        'default' => $this->getModel()->getForm()->getFormrowsMaxSortingIndex() + 1,
+                        'rules' => 'integer|required|min:0|max:65535'
+                    ],
                     'description' => ['texteditor' => 'string|nullable|max:2048'],
                     'type' => [
                         'type' => 'select',

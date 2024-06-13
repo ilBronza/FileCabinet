@@ -2,6 +2,7 @@
 
 namespace IlBronza\FileCabinet\Models\Traits;
 
+use IlBronza\AccountManager\Models\User;
 use IlBronza\FileCabinet\Models\DossierFilecabinet;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Filecabinet;
@@ -22,6 +23,11 @@ trait DossierRelationsTrait
 			Filecabinet::getProjectClassName(),
 			config('filecabinet.models.dossierFilecabinet.table')
 		)->using(DossierFilecabinet::getProjectClassName());
+	}
+
+	public function populator()
+	{
+		return $this->belongsTo(User::getProjectClassName(), 'populated_by');
 	}
 
 	public function getFilecabinets() : Collection

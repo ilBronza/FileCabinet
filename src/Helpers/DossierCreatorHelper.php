@@ -89,6 +89,14 @@ class DossierCreatorHelper
         return $dossier;
     }
 
+    static function getOrCreateByForm(Model $model, Form $form) : Dossier
+    {
+        if($dossier = $model->dossiers()->byForm($form)->first())
+            return $dossier;
+
+        return static::createByForm($model, $form);
+    }
+
     static function createByForm(Model $model, Form $form) : Dossier
     {
         $dossier = static::makeByForm($form);

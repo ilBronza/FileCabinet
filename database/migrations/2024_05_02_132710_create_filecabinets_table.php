@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('parent_id')->nullable();
 
-            $table->uuid('category_id');
+            $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on(config('category.models.category.table'));
 
             $table->nullableUuidMorphs('filecabinetable', 'filecabinet_filecabinetable');

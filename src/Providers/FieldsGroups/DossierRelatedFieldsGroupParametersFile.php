@@ -16,10 +16,20 @@ class DossierRelatedFieldsGroupParametersFile extends FieldsGroupParametersFile
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
 
-                'name' => 'flat',
+                'form' => 'relations.belongsTo',
                 'repeatable' => 'boolean',
                 'description' => 'flat',
                 'dossierrows' => 'relations.hasMany',
+                'dossierable' => 'relations.belongsTo',
+                'mySelfRowValues.dossierrows' => [
+                    'type' => 'iterators.each',
+                    'childParameters' => [
+                        'type' => 'function',
+                        'function' => 'getValue'
+                    ],
+                ],
+
+
                 'filecabinets' => 'relations.belongsToMany',
 
                 'mySelfDelete' => 'links.delete'

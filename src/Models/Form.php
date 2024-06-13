@@ -3,8 +3,9 @@
 namespace IlBronza\FileCabinet\Models;
 
 use IlBronza\Buttons\Button;
+use IlBronza\CRUD\Helpers\ModelManagers\Interfaces\ClonableModelInterface;
+use IlBronza\CRUD\Helpers\ModelManagers\Traits\ClonableModelTrait;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
-
 use IlBronza\CRUD\Traits\Model\CRUDUseUlidKeyTrait;
 use IlBronza\Category\Traits\InteractsWithCategoryTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
@@ -13,13 +14,34 @@ use IlBronza\FileCabinet\Models\Traits\FormGettersSettersTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
-class Form extends BaseFileCabinetModel
+class Form extends BaseFileCabinetModel implements ClonableModelInterface
 {
 	use CRUDUseUlidKeyTrait;
 	use CRUDSluggableTrait;
 	use FormGettersSettersTrait;
 
 	use InteractsWithCategoryTrait;
+
+
+	/** START CLONE INTERFACE MANAGEMENT **/
+
+	use ClonableModelTrait;
+
+    public function getClonableRelations() : array
+    {
+        return [
+            'formrows'
+        ];
+    }
+
+    public function getNotClonableFields() : array
+    {
+        return [];
+    }
+
+	/** END CLONE INTERFACE MANAGEMENT **/
+
+
 
 	static $deletingRelationships = ['formrows', 'dossiers'];
 
@@ -45,6 +67,11 @@ class Form extends BaseFileCabinetModel
 		return $this->hasMany(Formrow::getProjectClassName());
 	}
 
+	public function getFormrowsMaxSortingIndex() : int
+	{
+		return $this->formrows()->max('sorting_index') ?? 0;
+	}
+
 	public function getFormrows() : Collection
 	{
 		return $this->formrows;
@@ -58,7 +85,6 @@ class Form extends BaseFileCabinetModel
 			'icon' => 'plus'
 		]);
 	}
-
 
 	public function isRepeatable() :bool
 	{

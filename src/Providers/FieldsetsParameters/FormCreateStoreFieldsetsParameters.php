@@ -19,7 +19,7 @@ class FormCreateStoreFieldsetsParameters extends FieldsetParametersFile
                         'label' => 'mainCategory',
                         'multiple' => false,
                         'mustBeSorted' => false,
-                        'rules' => 'required|exists:' . config('category.models.category.table') . ',id',
+                        'rules' => 'nullable|exists:' . config('category.models.category.table') . ',id',
                         'relation' => 'category'
                     ],
                     'repeatable' => [

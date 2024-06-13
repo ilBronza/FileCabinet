@@ -31,6 +31,8 @@ class CreateFormrowsTable extends Migration
 
             $table->string('default_value', 1024)->nullable();
 
+            $table->unsignedInteger('sorting_index')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });

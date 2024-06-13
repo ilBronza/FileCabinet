@@ -27,7 +27,13 @@ class DossierIndexController extends DossierCRUD
 
     public function getIndexElements()
     {
-        return $this->getModelClass()::all();
+        return $this->getModelClass()::with(
+                    'filecabinets',
+                    'form',
+                    'dossierable'
+                    // 'dossierrows.formrow'
+                )
+                ->get();
     }
 
 }

@@ -39,6 +39,13 @@ Route::group([
 
 			Route::delete('{dossier}/delete', [FileCabinet::getController('dossier', 'destroy'), 'destroy'])->name('dossiers.destroy');
 
+
+			Route::get('', [FileCabinet::getController('dossier', 'index'), 'index'])->name('dossiers.index');
+
+			Route::get('{dossier}', [FileCabinet::getController('dossier', 'show'), 'show'])->name('dossiers.show');
+
+			Route::get('{dossier}/edit', [FileCabinet::getController('dossier', 'edit'), 'edit'])->name('dossiers.edit');
+
 		});
 
 		Route::group(['prefix' => 'dossierrows'], function()
@@ -46,12 +53,17 @@ Route::group([
 			//DossierrowShowController
 			Route::get('{dossierrow}', [FileCabinet::getController('dossierrow', 'show'), 'show'])->name('dossierrows.show');
 
+			//DossierrowAddInstanceController
 			Route::post('{dossierrow}/add-instance', [FileCabinet::getController('dossierrow', 'addInstance'), 'addInstance'])->name('dossierrows.addInstance');
 
 		});
 
 		Route::group(['prefix' => 'forms'], function()
 		{
+			Route::get('{form}/clone', [FileCabinet::getController('form', 'clone'), 'clone'])
+				->name('forms.clone');
+
+
 			Route::get('{form}/formrows/create', [FileCabinet::getController('formrow', 'create'), 'createFromForm'])
 				->name('forms.formrows.create');
 			Route::post('{form}/formrows', [FileCabinet::getController('formrow', 'store'), 'storeFromForm'])->name('formrows.storeFromForm');

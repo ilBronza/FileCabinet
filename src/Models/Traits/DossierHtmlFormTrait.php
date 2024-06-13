@@ -30,12 +30,24 @@ trait DossierHtmlFormTrait
 	{
 		$result = collect();
 
+		$previousFormrowId = null;
+		$repeating = false;
+
 		foreach($this->getSortedDossierrows() as $dossierrow)
 		{
+			if(($repeating)&&($previousFormrowId != $dossierrow->getFormrowId()))
+				$formField->setLastOfType();
+
 			$formField = DossierrowFormFieldHelper::createFieldFromDossierrow($dossierrow);
+
+			$repeating = ($previousFormrowId == $dossierrow->getFormrowId());
+			$previousFormrowId = $dossierrow->getFormrowId();
 
 			$result->push($formField);
 		}
+
+		if($repeating)
+			$formField->setLastOfType();
 
 		return $result;
 	}

@@ -2,5 +2,26 @@
 
 return [
 	'mainCategory' => 'Categoria principale',
-	'name' => 'Nome'
+	'name' => 'Nome',
+	'sorting_index' => 'Ordinamento',
+	'type' => 'Tipo',
+	'package' => 'pacchetto',
+	'interventions' => 'Modifiche avvenute',
+	'stats' => 'Statistiche',
+	'slug' => 'Slug',
+	'repeatable' => 'Ripetibile',
+	'description' => 'Descrizione',
+	'formrows' => 'Righe del form',
+	'category' => 'Categoria',
+	'repeatableTooltip' => 'Questo campo indica se il form può essere associato più volte ad un elemento o se è possibile averne al massimo uno per ciascun elemento',
+	'categories' => 'Categorie',
+	'prettyInterventions' => 'Modifiche avvenute',
+	'dossiersCount' => 'Utilizzato in N. schedari',
+	'mySelfPrimary' => 'Chiave',
+	'required' => 'Obbligatorio',
+	'dossierrows' => 'Righe schedari',
+	'filecabinets' => 'Faldoni',
+	'possibleValues' => 'Possibili valori associabili',
+	'parameters' => 'Parametri',
+	'roles' => 'Ruoli',
 ];

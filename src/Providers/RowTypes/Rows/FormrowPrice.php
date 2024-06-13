@@ -6,7 +6,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FormField\Fields\NumberFormField;
 use IlBronza\FormField\FormField;
 
-class FormrowDecimal extends BaseRow
+class FormrowPrice extends BaseRow
 {
 	static $fieldType = 'number';
 	static $databaseField = 'decimal';
@@ -17,7 +17,7 @@ class FormrowDecimal extends BaseRow
 	public function getDefaultRules() : array
 	{
 		return [
-			'numeric',
+			'decimal',
 			'min:' . $this->min,
 			'max:' . $this->max
 		];

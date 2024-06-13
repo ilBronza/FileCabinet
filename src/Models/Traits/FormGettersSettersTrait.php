@@ -4,13 +4,30 @@ namespace IlBronza\FileCabinet\Models\Traits;
 
 use Auth;
 use Carbon\Carbon;
+use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\Ukn\Facades\Ukn;
+use Illuminate\Support\Str;
 
 trait FormGettersSettersTrait
 {
 	public function getUpdatedAt() : ? Carbon
 	{
 		return $this->updated_at;
+	}
+
+	public function getFormrowByName(string $name) : Formrow
+	{
+		return cache()->remember(
+			Str::slug('dossier' . $this->getName() . $name),
+			3600,
+			function() use($name)
+			{
+				if($this->relationLoaded('formrows'))
+					return $this->formrows->where('name', $name)->first();
+
+				return $this->formrows()->where('name', $name)->first();				
+			}
+		);
 	}
 
 	public function getCreatedAt() : ? Carbon

@@ -35,6 +35,15 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 		return $result;
 	}
 
+	public function getPossibleValuesValidationArray() : array
+	{
+		$fields = $this->getPossibleValuesArray();
+
+		return [
+			'in:' . implode(",", array_keys($fields))
+		];
+	}
+
 	public function getSpecialParametersFieldsetParameters() : array
 	{
 		return [

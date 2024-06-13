@@ -2,6 +2,7 @@
 
 namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 
+use IlBronza\AccountManager\Models\Role;
 use IlBronza\AccountManager\Models\User;
 use IlBronza\CRUD\Helpers\QueryHelpers\ModelSelectQueryHelper;
 use IlBronza\FormField\Fields\SelectFormField;
@@ -16,6 +17,11 @@ class FormrowOperatorSelect extends FormrowSingleSelect
 		return [
 			'string'
 		];
+	}
+
+	public function getShowValue(mixed $databaseValue) : mixed
+	{
+		return User::getProjectClassname()::findCached($databaseValue)?->getFullName();
 	}
 
 	public function getPossibleValuesArray() : array
@@ -40,7 +46,7 @@ class FormrowOperatorSelect extends FormrowSingleSelect
 					'roles' => [
 						'type' => 'select',
 						'multiple' => true,
-						'rules' => 'array|required|in:' . implode(',', array_keys($rolesList)),
+						'rules' => 'array|nullable|in:' . implode(',', array_keys($rolesList)),
 						'list' => $rolesList,
 						'value' => $this->getModel()->getSpecialParameter('roles', [])
 					]

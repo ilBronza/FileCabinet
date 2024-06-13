@@ -4,7 +4,7 @@ namespace IlBronza\FileCabinet\Providers\FieldsGroups;
 
 use IlBronza\Datatables\Providers\FieldsGroupParametersFile;
 
-class FormFieldsGroupParametersFile extends FieldsGroupParametersFile
+class DossierrowFieldsGroupParametersFile extends FieldsGroupParametersFile
 {
 	static function getFieldsGroup() : array
 	{
@@ -15,15 +15,13 @@ class FormFieldsGroupParametersFile extends FieldsGroupParametersFile
                 'mySelfPrimary' => 'primary',
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
-                'mySelfLink' => 'links.clone',
 
                 'name' => 'flat',
-                'slug' => 'flat',
-                'repeatable' => 'boolean',
-                'description' => 'flat',
-                'formrows' => 'relations.hasMany',
-                'category' => 'relations.belongsTo',
-                // 'categories' => 'relations.belongsToMany',
+                'mySelfValue' => '_fn_getShowValue',
+
+                'dossier' => 'relations.belongsTo',
+                'formrow' => 'relations.belongsTo',
+                'formrow.type' => 'flat',
 
                 'mySelfDelete' => 'links.delete'
             ]

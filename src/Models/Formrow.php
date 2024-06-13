@@ -65,7 +65,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function getSortingIndex()
 	{
-		return $this->created_at;
+		return $this->sorting_index;
 	}
 
 	public function isNullable() : bool
@@ -170,11 +170,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function getFormfieldRules() : array
 	{
-		$this->getRowType()->setRequired(
-			$this->isRequired()
-		);
-
-		return $this->getRowType()->buildRules();
+		return $this->getRowType()->buildRules($this);
 	}
 
 	public function getFormfieldRepeatable() : bool

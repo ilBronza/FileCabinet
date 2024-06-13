@@ -5,6 +5,7 @@ namespace IlBronza\FileCabinet\Providers\RowTypes;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowListInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FormField\FormField;
+use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRow
@@ -19,6 +20,11 @@ abstract class BaseRow
 	public function transformValue(mixed $databaseValue) : mixed
 	{
 		return $databaseValue;
+	}
+
+	public function getShowValue(mixed $databaseValue) : mixed
+	{
+		return $this->transformValue($databaseValue);
 	}
 
 	public function renderValueForView($value) : ? string
@@ -85,7 +91,7 @@ abstract class BaseRow
 		return static::$databaseField;
 	}
 
-	private function unsetRule(string $rule)
+	public function unsetRule(string $rule)
 	{
 		$key = array_search($rule, $this->defaultRules);
 
@@ -93,7 +99,7 @@ abstract class BaseRow
 			unset($this->defaultRules[$key]);
 	}
 
-	private function setRule(string $rule)
+	public function setRule(string $rule)
 	{
 		$key = array_search($rule, $this->defaultRules);
 
@@ -113,11 +119,17 @@ abstract class BaseRow
 
 	public function acceptsArray() : bool
 	{
-		return in_array('array', $this->buildRules());
+		return in_array('array', $this->buildRules(
+			$this->getModel()
+		));
 	}
 
 	private function manageRequiredRule()
 	{
+		$this->setRequired(
+			$this->getModel()->isRequired()
+		);
+
 		if(! $this->isRequired())
 		{
 			$this->unsetRule('required');
@@ -130,11 +142,17 @@ abstract class BaseRow
 		}
 	}
 
-	public function buildRules() : array
+	public function buildRules(FormfieldModelCompatibilityInterface $model) : array
 	{
+		$this->setModel($model);
+
 		$this->defaultRules = $this->getDefaultRules();
 
 		$this->manageRequiredRule();
+
+
+		if($this->hasSpecialParameters())
+			$this->addSpecialParametersValidationRules();
 
 		return $this->defaultRules;
 	}

@@ -19,7 +19,9 @@ class DossierFieldsGroupParametersFile extends FieldsGroupParametersFile
                 'name' => 'flat',
                 'repeatable' => 'boolean',
                 'description' => 'flat',
-                'dossierrows' => 'relations.hasMany',
+                'populated_at' => 'dates.datetime',
+                'dossierable' => 'relations.belongsTo',
+                // 'dossierrows' => 'relations.hasMany',
                 'filecabinets' => 'relations.belongsToMany',
 
                 'mySelfDelete' => 'links.delete'
