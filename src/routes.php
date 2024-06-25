@@ -11,8 +11,24 @@ Route::group([
 	],
 	function()
 	{
+		Route::group(['prefix' => 'filecabinet-templates'], function()
+		{
+			Route::get('', [FileCabinet::getController('filecabinetTemplate', 'index'), 'index'])->name('filecabinetTemplates.index');
+			Route::get('create', [FileCabinet::getController('filecabinetTemplate', 'create'), 'create'])->name('filecabinetTemplates.create');
+			Route::post('', [FileCabinet::getController('filecabinetTemplate', 'store'), 'store'])->name('filecabinetTemplates.store');
+			Route::get('{filecabinetTemplate}', [FileCabinet::getController('filecabinetTemplate', 'show'), 'show'])->name('filecabinetTemplates.show');
+			Route::get('{filecabinetTemplate}/edit', [FileCabinet::getController('filecabinetTemplate', 'edit'), 'edit'])->name('filecabinetTemplates.edit');
+			Route::put('{filecabinetTemplate}', [FileCabinet::getController('filecabinetTemplate', 'edit'), 'update'])->name('filecabinetTemplates.update');
+
+			Route::delete('{filecabinetTemplate}/delete', [FileCabinet::getController('filecabinetTemplate', 'destroy'), 'destroy'])->name('filecabinetTemplates.destroy');
+		});
+
+
 		Route::group(['prefix' => 'filecabinets'], function()
 		{
+			Route::get('', [FileCabinet::getController('filecabinet', 'index'), 'index'])->name('filecabinets.index');
+
+
 			//FilecabinetPdfController
 			Route::get('{filecabinet}/generate-total-pdf', [FileCabinet::getController('filecabinet', 'pdf'), 'generateTotalPdf'])->name('filecabinets.generateTotalPdf');
 

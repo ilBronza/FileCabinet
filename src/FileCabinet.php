@@ -29,11 +29,25 @@ class FileCabinet implements RoutedObjectInterface
 
         $containerButton = $menu->createButton([
             'name' => 'file-cabinet-manager',
-            'icon' => 'box-archive',
+            'icon' => 'file-invoice',
             'text' => 'filecabinet::filecabinet.manage'
         ]);
 
+        $filecabinetTemplateButton = $menu->createButton([
+            'name' => 'filecabinetTemplates',
+            'icon' => 'box-archive',
+            'text' => 'filecabinet::filecabinetTemplates.index',
+            'href' => app('filecabinet')->route('filecabinetTemplates.index'),
+        ]);
+
         $filecabinetButton = $menu->createButton([
+            'name' => 'filecabinets',
+            'icon' => 'box-archive',
+            'text' => 'filecabinet::filecabinets.index',
+            'href' => app('filecabinet')->route('filecabinets.index'),
+        ]);
+
+        $formsButton = $menu->createButton([
             'name' => 'forms',
             'icon' => 'box-archive',
             'text' => 'filecabinet::forms.index',
@@ -59,6 +73,8 @@ class FileCabinet implements RoutedObjectInterface
         $button->addChild($containerButton);
 
         $containerButton->addChild($filecabinetButton);
+        $containerButton->addChild($filecabinetTemplateButton);
+        $containerButton->addChild($formsButton);
         // $containerButton->addChild($rolesButton);
         // $containerButton->addChild($permissionsButton);
     }

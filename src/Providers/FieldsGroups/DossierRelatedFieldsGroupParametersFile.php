@@ -28,8 +28,6 @@ class DossierRelatedFieldsGroupParametersFile extends FieldsGroupParametersFile
                         'function' => 'getValue'
                     ],
                 ],
-
-
                 'filecabinets' => 'relations.belongsToMany',
 
                 'mySelfDelete' => 'links.delete'

@@ -62,6 +62,16 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 		return $this->hasMany(Dossier::getProjectClassName());
 	}
 
+	public function getRelatedDossiers() : Collection
+	{
+		return $this->dossiers()->with(
+			'form',
+			'dossierrows.formrow',
+			'filecabinets',
+			'dossierable'
+		)->get();
+	}
+
 	public function formrows() : HasMany
 	{
 		return $this->hasMany(Formrow::getProjectClassName());

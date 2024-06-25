@@ -21,7 +21,10 @@ class FormIndexController extends FormCRUD
 
     public function getIndexElements()
     {
-        return $this->getModelClass()::all();
+        return $this->getModelClass()::with(
+            'formrows',
+            'category'
+        )->get();
     }
 
 }

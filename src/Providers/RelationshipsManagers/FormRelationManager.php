@@ -12,7 +12,10 @@ class FormRelationManager Extends RelationshipsManager
 			'show' => [
 				'relations' => [
 					'formrows' => config('filecabinet.models.formrow.controllers.index'),
-					'dossiers' => config('filecabinet.models.dossier.controllers.index'),
+					'dossiers' => [
+						'controller' =>  config('filecabinet.models.dossier.controllers.index'),
+						'elementGetterMethod' => 'getRelatedDossiers'
+					],
 				]
 			]
 		];

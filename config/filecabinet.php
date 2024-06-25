@@ -30,6 +30,7 @@ use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\DossierFilecabinet;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Filecabinet;
+use IlBronza\FileCabinet\Models\FilecabinetTemplate;
 use IlBronza\FileCabinet\Models\Form;
 use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierFieldsGroupParametersFile;
@@ -37,10 +38,12 @@ use IlBronza\FileCabinet\Providers\FieldsGroups\DossierRelatedFieldsGroupParamet
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetTemplateFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\DossierShowFieldsetsParameters;
+use IlBronza\FileCabinet\Providers\FieldsetsParameters\FilecabinetTemplateCreateStoreFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormCreateStoreFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormEditUpdateFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormShowFieldsetsParameters;
@@ -49,8 +52,14 @@ use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormrowEditFieldsetsParam
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormrowShowFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierrowRelationManager;
+use IlBronza\FileCabinet\Providers\RelationshipsManagers\FilecabinetTemplateRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormrowRelationManager;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateCreateStoreController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateDestroyController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateEditUpdateController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateIndexController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateShowController;
 
 // use IlBronza\Category\Models\Category;
 // use IlBronza\FileCabinet\Models\Filecabinet;
@@ -188,6 +197,28 @@ return [
                 'pdf' => FilecabinetPdfController::class,
             ],
 
+        ],
+        'filecabinetTemplate' => [
+            'class' => FilecabinetTemplate::class,
+            'table' => 'filecabinets__filecabinettemplates',
+            'fieldsGroupsFiles' => [
+                'index' => FilecabinetTemplateFieldsGroupParametersFile::class
+            ],
+            'relationshipsManagerClasses' => [
+                'show' => FilecabinetTemplateRelationManager::class
+            ],
+            'parametersFiles' => [
+                'create' => FilecabinetTemplateCreateStoreFieldsetsParameters::class
+            ],
+            'controllers' => [
+                'index' => FilecabinetTemplateIndexController::class,
+                'create' => FilecabinetTemplateCreateStoreController::class,
+                'store' => FilecabinetTemplateCreateStoreController::class,
+                'show' => FilecabinetTemplateShowController::class,
+                'edit' => FilecabinetTemplateEditUpdateController::class,
+                'update' => FilecabinetTemplateEditUpdateController::class,
+                'destroy' => FilecabinetTemplateDestroyController::class,
+            ]
         ],
         // 'accessory' => [
         //     'class' => Accessory::class,
