@@ -7,36 +7,20 @@
         </div>
 
         @if(count($dossiers = $filecabinet->getDossiers()) > 1)
-        <div class="uk-width-1-2@s uk-width-2-5@m">
-            <ul class="uk-nav uk-nav-default">
-                @foreach($dossiers as $dossier)
-                <li><a href="#dossier{{ $dossier->getKey() }}">{{ $dossier->getName() }}</a></li>
-                @endforeach
-            </ul>
-        </div>
+            @include('filecabinet::dossiers.menu')
         @endif
 
     </div>
 
     <div class="uk-card-body">
-        <ul class="uk-list">
-            @foreach($dossiers as $dossier)
-            <li id="dossier{{ $dossier->getKey() }}">
-                @if($viewMode == 'populate')
-                    {!! $dossier->renderAjaxForm() !!}
-                @elseif($viewMode == 'show')
-                    {!! $dossier->show() !!}
-                @endif
-            </li>
-            @endforeach
-        </ul>
+        @include('filecabinet::dossiers.populate')
     </div>
 
 
     @if($filecabinet->mustShowChildrenContent())
     <div class="uk-card-footer">
         <ul>
-            @foreach($filecabinet->getChildren() as $child)
+            @foreach($filecabinet->getChildren()->sortBy('sorting_index') as $child)
             <li>
                 @include('filecabinet::filecabinet._populate', [
                     'filecabinet' => $child,

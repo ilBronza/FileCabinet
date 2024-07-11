@@ -14,9 +14,9 @@ class CreateDossiersTable extends Migration
     public function up()
     {
         Schema::create(config('filecabinet.models.dossier.table'), function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->uuid('id')->primary();
 
-            $table->ulid('form_id');
+            $table->uuid('form_id');
             $table->foreign('form_id')->references('id')->on(config('filecabinet.models.form.table'));
 
             $table->nullableUuidMorphs('dossierable');

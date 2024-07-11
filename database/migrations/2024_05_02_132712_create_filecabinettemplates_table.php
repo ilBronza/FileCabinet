@@ -16,8 +16,14 @@ return new class extends Migration
         Schema::create(config('filecabinet.models.filecabinetTemplate.table'), function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->uuid('category_id');
+            $table->uuid('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on(config('category.models.category.table'));
+
+            $table->text('models')->nullable();
+
+            $table->unsignedInteger('sorting_index')->nullable();
+
+            $table->boolean('force_consecutiveness')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

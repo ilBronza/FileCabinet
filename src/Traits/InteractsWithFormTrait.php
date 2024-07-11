@@ -74,7 +74,7 @@ trait InteractsWithFormTrait
         return $this->rootFilecabinets()->byMainCategory($mainCategory)->get();
     }
 
-    public function haseRootsFilecabinetByMainCategory(Category $mainCategory) : bool
+    public function hasRootsFilecabinetByMainCategory(Category $mainCategory) : bool
     {
         return $this->rootFilecabinets()->byMainCategory($mainCategory)->take(1)->count() > 0;
     }

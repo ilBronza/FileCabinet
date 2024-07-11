@@ -29,6 +29,7 @@ class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
                         'rules' => 'nullable|exists:' . config('category.models.category.table') . ',id',
                         'relation' => 'categories'
                     ],
+                    'sorting_index' => ['number' => 'integer|nullable|min:0|max:65535'],
                     'repeatable' => [
                         'type' => 'boolean',
                         'tooltip' => 'filecabinet::fields.repeatableTooltip',

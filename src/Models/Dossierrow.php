@@ -2,7 +2,6 @@
 
 namespace IlBronza\FileCabinet\Models;
 
-use IlBronza\CRUD\Traits\Model\CRUDUseUlidKeyTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Formrow;
@@ -15,8 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface
 {
-	use CRUDUseUlidKeyTrait;
-
 	static $modelConfigPrefix = 'dossierrow';
 	static $deletingRelationships = [];
 

@@ -17,6 +17,26 @@ $ composer require ilbronza/filecabinet
 
 ## Usage
 
+## Datatable Fields
+
+``` bash
+
+        //filecabinets list with populate/show link
+        'rootFilecabinets' => 'filecabinet::filecabinets.filecabinetsStatus',
+
+        //create a button to add filecabinets based on defined category
+        'mySelfAddTest' => [
+            'type' => 'filecabinet::attachForm.attachFormByCategory',
+            'category' => Category::getProjectClassName()::findCachedField('name', 'Collaudo')
+        ],
+
+        //create a button to add filecabinets based on root filecabinets categories
+        'mySelfAddTests' => 'filecabinet::attachForm.attachFormByRoots',
+
+```
+
+
+
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.

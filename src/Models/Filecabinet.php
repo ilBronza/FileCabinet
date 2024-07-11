@@ -6,6 +6,7 @@ use IlBronza\Buttons\Icons\FaIcon;
 use IlBronza\CRUD\Interfaces\RecursiveTreeInterface;
 use IlBronza\CRUD\Traits\IlBronzaPackages\CRUDExtraButtonsTrait;
 use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
+use IlBronza\CRUD\Traits\Model\CRUDSortingIndexTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetButtonsRoutesTrait;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetCompletionTrait;
@@ -13,10 +14,14 @@ use IlBronza\FileCabinet\Models\Traits\FilecabinetRelationsTrait;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetScopesTrait;
 use IlBronza\Menu\Interfaces\NavbarableElementInterface;
 
-class Filecabinet extends BaseFileCabinetModel implements RecursiveTreeInterface, NavbarableElementInterface
+class Filecabinet extends BaseFileCabinetModel implements 
+	RecursiveTreeInterface,
+	NavbarableElementInterface
 {
-    // use CRUDUseUlidKeyTrait;
     use CRUDParentingTrait;
+
+    use CRUDSortingIndexTrait;
+
     use FilecabinetRelationsTrait;
     use FilecabinetButtonsRoutesTrait;
     use FilecabinetScopesTrait;

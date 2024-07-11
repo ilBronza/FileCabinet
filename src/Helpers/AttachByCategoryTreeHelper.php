@@ -40,6 +40,13 @@ class AttachByCategoryTreeHelper extends AttachByCategoryHelper
             $parentFilecabinet
         );
 
+        if($filecabinetTemplate = $this->getFilecabinetTemplate())
+        {
+            $filecabinet->filecabinetTemplate()->associate($filecabinetTemplate);
+
+            $filecabinet->save();
+        }
+
         foreach($node->getFormElements() as $form)
             $this->addFormToFilecabinet(
                 $filecabinet,

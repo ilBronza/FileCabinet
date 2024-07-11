@@ -73,4 +73,8 @@ trait FormGettersSettersTrait
 		$this->touch();
 	}
 
+	public function getSortingIndex() : ? int
+	{
+		return $this->sorting_index;
+	}
 }

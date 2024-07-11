@@ -23,7 +23,9 @@ class FormIndexController extends FormCRUD
     {
         return $this->getModelClass()::with(
             'formrows',
-            'category'
+            'category',
+            'parent',
+            'children'
         )->get();
     }
 

@@ -14,7 +14,7 @@ class CreateFormsTable extends Migration
     public function up()
     {
         Schema::create(config('filecabinet.models.form.table'), function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->uuid('id')->primary();
 
             $table->string('slug');
             $table->string('name');
@@ -23,7 +23,7 @@ class CreateFormsTable extends Migration
 
             $table->boolean('repeatable')->nullable();
 
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->uuid('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on(config('category.models.category.table'));
 
             $table->softDeletes();

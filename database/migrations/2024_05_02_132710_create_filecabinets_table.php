@@ -14,17 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create(config('filecabinet.models.filecabinet.table'), function (Blueprint $table) {
-            // $table->uuid('id')->primary();
-            $table->id();
+            $table->uuid('id')->primary();
 
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->uuid('parent_id')->nullable();
 
-            $table->unsignedBigInteger('category_id');
+            $table->uuid('category_id');
             $table->foreign('category_id')->references('id')->on(config('category.models.category.table'));
 
             $table->nullableUuidMorphs('filecabinetable', 'filecabinet_filecabinetable');
 
-            $table->unsignedBigInteger('populated_by')->nullable()->index();
+            $table->uuid('populated_by')->nullable()->index();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -36,7 +35,7 @@ return new class extends Migration
         Schema::create(config('filecabinet.models.dossierFilecabinet.table'), function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->unsignedBigInteger('filecabinet_id');
+            $table->uuid('filecabinet_id');
             $table->foreign('filecabinet_id')->references('id')->on(config('filecabinet.models.filecabinet.table'));
 
             $table->uuid('dossier_id');

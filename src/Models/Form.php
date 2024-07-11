@@ -6,7 +6,7 @@ use IlBronza\Buttons\Button;
 use IlBronza\CRUD\Helpers\ModelManagers\Interfaces\ClonableModelInterface;
 use IlBronza\CRUD\Helpers\ModelManagers\Traits\ClonableModelTrait;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
-use IlBronza\CRUD\Traits\Model\CRUDUseUlidKeyTrait;
+use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\Category\Traits\InteractsWithCategoryTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Formrow;
@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
 
 class Form extends BaseFileCabinetModel implements ClonableModelInterface
 {
-	use CRUDUseUlidKeyTrait;
+	use CRUDParentingTrait;
 	use CRUDSluggableTrait;
 	use FormGettersSettersTrait;
 

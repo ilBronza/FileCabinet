@@ -19,6 +19,9 @@ class FormFieldsGroupParametersFile extends FieldsGroupParametersFile
 
                 'name' => 'flat',
                 'slug' => 'flat',
+                'parent' => 'relations.belongsTo',
+                'sorting_index' => 'editor.numeric',
+                'children' => 'relations.hasMany',
                 'repeatable' => 'boolean',
                 'description' => 'flat',
                 'formrows' => 'relations.hasMany',

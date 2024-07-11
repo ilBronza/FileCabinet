@@ -14,12 +14,12 @@ class CreateDossierrowsTable extends Migration
     public function up()
     {
         Schema::create(config('filecabinet.models.dossierrow.table'), function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->uuid('id')->primary();
 
-            $table->ulid('dossier_id');
+            $table->uuid('dossier_id');
             $table->foreign('dossier_id')->references('id')->on(config('filecabinet.models.dossier.table'));
 
-            $table->ulid('formrow_id');
+            $table->uuid('formrow_id');
             $table->foreign('formrow_id')->references('id')->on(config('filecabinet.models.formrow.table'));
 
             $table->timestamp('timestamp')->nullable();

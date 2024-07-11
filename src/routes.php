@@ -47,7 +47,7 @@ Route::group([
 			//DossierUpdateFieldsController
 			Route::get('{dossier}/update-fields', [FileCabinet::getController('dossier', 'updateFields'), 'updateFields'])->name('dossiers.updateFields');
 
-			//DossierUpdateFieldsController
+			//DossierCreateNewInstanceController
 			Route::get('{dossier}/create-new-instance', [FileCabinet::getController('dossier', 'createNewInstance'), 'createNewInstance'])->name('dossiers.createNewInstance');
 
 			//DossierUpdateController

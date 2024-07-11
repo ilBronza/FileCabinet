@@ -3,7 +3,6 @@
 namespace IlBronza\FileCabinet\Models;
 
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
-use IlBronza\CRUD\Traits\Model\CRUDUseUlidKeyTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Form;
@@ -15,7 +14,6 @@ use Illuminate\Support\Str;
 
 class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface
 {
-	use CRUDUseUlidKeyTrait;
 	use CRUDSluggableTrait;
 	use FormrowJsonParametersTrait;
 

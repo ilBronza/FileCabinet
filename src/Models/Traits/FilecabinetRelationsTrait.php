@@ -5,13 +5,25 @@ namespace IlBronza\FileCabinet\Models\Traits;
 use IlBronza\Category\Models\Category;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\DossierFilecabinet;
+use IlBronza\FileCabinet\Models\FilecabinetTemplate;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 
 trait FilecabinetRelationsTrait
 {
-	public function category()
+	public function filecabinetTemplate() : BelongsTo
+	{
+		return $this->belongsTo(FilecabinetTemplate::getProjectClassName());
+	}
+
+	public function getFilecabinetTemplate() : ? FilecabinetTemplate
+	{
+		return $this->filecabinetTemplate;
+	}
+
+	public function category() : BelongsTo
 	{
 		return $this->belongsTo(Category::getProjectClassName());
 	}

@@ -23,7 +23,7 @@ class FormAttachByCategory extends Controller
         $model = $class::findOrFail($key);
         $category = Category::getProjectClassname()::findOrFail($category);
 
-        if(($model->haseRootsFilecabinetByMainCategory($category))&&(! $request->input('force', false)))
+        if(($model->hasRootsFilecabinetByMainCategory($category))&&(! $request->input('force', false)))
             return $this->attachingDisambiguator($model, $category);
 
         $helper = AttachByCategoryTreeHelper::attachByCategory(

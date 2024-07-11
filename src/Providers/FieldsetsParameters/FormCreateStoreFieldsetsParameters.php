@@ -22,6 +22,14 @@ class FormCreateStoreFieldsetsParameters extends FieldsetParametersFile
                         'rules' => 'nullable|exists:' . config('category.models.category.table') . ',id',
                         'relation' => 'category'
                     ],
+                    'parent_id' => [
+                        'type' => 'select',
+                        'label' => 'parentForm',
+                        'multiple' => false,
+                        'rules' => 'nullable|exists:' . config('filecabinet.models.form.table') . ',id',
+                        'relation' => 'parent'
+                    ],
+                    'sorting_index' => ['number' => 'integer|nullable|min:0|max:65535'],
                     'repeatable' => [
                         'type' => 'boolean',
                         'tooltip' => 'filecabinet::fields.repeatableTooltip',

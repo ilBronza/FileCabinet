@@ -77,6 +77,7 @@ class DossierCreatorHelper
     {
         $dossier = Dossier::make();
         $dossier->form()->associate($form);
+        $dossier->sorting_index = $form->getSortingIndex();
         $dossier->save();
 
         foreach($form->getFormrows() as $formrow)

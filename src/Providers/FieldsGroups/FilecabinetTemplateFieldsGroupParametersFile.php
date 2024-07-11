@@ -16,8 +16,14 @@ class FilecabinetTemplateFieldsGroupParametersFile extends FieldsGroupParameters
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
 
-                'name' => 'flat',
-                'mySelfValue' => '_fn_getShowValue',
+                'category' => 'relations.belongsTo',
+                'models' => [
+                    'type' => 'jsonObjects',
+                    'properties' => [
+                        'model' => [],
+                        'event' => []
+                    ]
+                ],
 
                 'mySelfDelete' => 'links.delete'
             ]
