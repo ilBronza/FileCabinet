@@ -21,6 +21,11 @@ Route::group([
 			Route::put('{filecabinetTemplate}', [FileCabinet::getController('filecabinetTemplate', 'edit'), 'update'])->name('filecabinetTemplates.update');
 
 			Route::delete('{filecabinetTemplate}/delete', [FileCabinet::getController('filecabinetTemplate', 'destroy'), 'destroy'])->name('filecabinetTemplates.destroy');
+
+
+
+			Route::get('{filecabinetTemplate}/manage-pdf-template-code', [FileCabinet::getController('filecabinetTemplate', 'pdfTemplate'), 'edit'])->name('filecabinetTemplates.managePdfTemplate');
+			
 		});
 
 

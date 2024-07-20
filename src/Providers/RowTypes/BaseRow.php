@@ -55,7 +55,7 @@ abstract class BaseRow
 		return $this->required;
 	}
 
-	static public function getFormfieldType() : string
+	public function getFormfieldType() : string
 	{
 		return static::$fieldType;
 	}

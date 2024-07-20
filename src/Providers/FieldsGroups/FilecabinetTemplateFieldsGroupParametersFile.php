@@ -17,6 +17,13 @@ class FilecabinetTemplateFieldsGroupParametersFile extends FieldsGroupParameters
                 'mySelfSee' => 'links.see',
 
                 'category' => 'relations.belongsTo',
+
+                'mySelfRenderPdf' => [
+                    'type' => 'links.link',
+                    'function' => 'getEditPdfTemplateUrl',
+                    'icon' => 'file-pdf'
+                ],
+
                 'models' => [
                     'type' => 'jsonObjects',
                     'properties' => [

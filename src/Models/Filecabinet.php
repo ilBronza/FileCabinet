@@ -13,6 +13,7 @@ use IlBronza\FileCabinet\Models\Traits\FilecabinetCompletionTrait;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetRelationsTrait;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetScopesTrait;
 use IlBronza\Menu\Interfaces\NavbarableElementInterface;
+use Illuminate\Support\Collection;
 
 class Filecabinet extends BaseFileCabinetModel implements 
 	RecursiveTreeInterface,
@@ -28,6 +29,11 @@ class Filecabinet extends BaseFileCabinetModel implements
     use FilecabinetCompletionTrait;
 
     use CRUDExtraButtonsTrait;
+
+    public function getContentElements() : Collection
+    {
+    	return $this->getDossiers()->sortBy('sorting_index');
+    }
 
     static $parentKeyName = 'parent_id';
 
@@ -55,7 +61,6 @@ class Filecabinet extends BaseFileCabinetModel implements
 	{
 		return $this->getKey();
 	}
-
 
 	public function getButtonText() : string
 	{

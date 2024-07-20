@@ -10,6 +10,12 @@ use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierShowController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateFieldsController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateCreateStoreController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateDestroyController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateEditUpdateController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateIndexController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplatePdfTemplateController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateShowController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPdfController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPopulateController;
@@ -44,6 +50,7 @@ use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowFieldsGroupParametersFile
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\DossierShowFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FilecabinetTemplateCreateStoreFieldsetsParameters;
+use IlBronza\FileCabinet\Providers\FieldsetsParameters\FilecabinetTemplatePdfTemplateFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormCreateStoreFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormEditUpdateFieldsetsParameters;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\FormShowFieldsetsParameters;
@@ -55,11 +62,6 @@ use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierrowRelationManag
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FilecabinetTemplateRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormrowRelationManager;
-use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateCreateStoreController;
-use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateDestroyController;
-use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateEditUpdateController;
-use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateIndexController;
-use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateShowController;
 
 // use IlBronza\Category\Models\Category;
 // use IlBronza\FileCabinet\Models\Filecabinet;
@@ -208,9 +210,11 @@ return [
                 'show' => FilecabinetTemplateRelationManager::class
             ],
             'parametersFiles' => [
-                'create' => FilecabinetTemplateCreateStoreFieldsetsParameters::class
+                'create' => FilecabinetTemplateCreateStoreFieldsetsParameters::class,
+                'pdfTemplate' => FilecabinetTemplatePdfTemplateFieldsetsParameters::class
             ],
             'controllers' => [
+                'pdfTemplate' => FilecabinetTemplatePdfTemplateController::class,
                 'index' => FilecabinetTemplateIndexController::class,
                 'create' => FilecabinetTemplateCreateStoreController::class,
                 'store' => FilecabinetTemplateCreateStoreController::class,

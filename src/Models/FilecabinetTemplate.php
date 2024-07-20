@@ -29,4 +29,9 @@ class FilecabinetTemplate extends BaseFileCabinetModel
 	{
 		return !! $this->force_consecutiveness;
 	}
+
+	public function getEditPdfTemplateUrl()
+	{
+		return $this->getKeyedRoute('managePdfTemplate');
+	}
 }

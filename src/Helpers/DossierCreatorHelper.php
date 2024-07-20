@@ -98,21 +98,28 @@ class DossierCreatorHelper
         return static::createByForm($model, $form);
     }
 
-    static function createByForm(Model $model, Form $form) : Dossier
+    static function createByForm(Model $model, Form $form, Dossier $parentDossier = null) : Dossier
     {
         $dossier = static::makeByForm($form);
 
         $dossier = $model->dossiers()->save($dossier);
+
+
+        if($parentDossier)
+            $parentDossier->children()->save($dossier);
+
+        foreach($form->getChildren() as $childForm)
+            static::createByForm($model, $childForm, $dossier);
 
         return $dossier;
     }
 
     static function createByDossier(Dossier $dossier) : Dossier
     {
-        $newDossier = static::makeByForm($dossier->getForm());
-
-        //Attach to same model
-        $dossier->getDossierable()->dossiers()->save($newDossier);
+        $newDossier = static::createByForm(
+            $dossier->getDossierable(),
+            $dossier->getForm()
+        );
 
         foreach($dossier->getFilecabinets() as $filecabinet)
             $filecabinet->dossiers()->save($newDossier);

@@ -10,6 +10,11 @@ use Illuminate\Support\Str;
 
 trait FormGettersSettersTrait
 {
+	public function getPossibleModels() : array
+	{
+		return config('app.filecabinet.filecabinetTemplate.applicableToModels', []);
+	}
+
 	public function getUpdatedAt() : ? Carbon
 	{
 		return $this->updated_at;
