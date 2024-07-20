@@ -6,6 +6,7 @@ use IlBronza\Category\Helpers\CategoryExtractorHelper;
 use IlBronza\Category\Models\Category;
 use IlBronza\FileCabinet\Helpers\DossierCreatorHelper;
 use IlBronza\FileCabinet\Models\Dossier;
+use IlBronza\FileCabinet\Models\FilecabinetTemplate;
 use IlBronza\FileCabinet\Models\Form;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -19,6 +20,7 @@ abstract class AttachByCategoryHelper
 
     public Model $model;
     public Category $category;
+    public ? FilecabinetTemplate $filecabinetTemplate;
     public Collection $forms;
     // public Collection $dossiers;
 
@@ -51,11 +53,11 @@ abstract class AttachByCategoryHelper
     //     return $this;
     // }
 
-    public function attachFormToModel(Form $form) : Dossier
+    public function attachFormToModel(Form $form, Dossier $parentDossier = null) : Dossier
     {
-        return DossierCreatorHelper::createByForm(
+        return AttachDossierToModelHelper::attachByFormModel(
+            $form,
             $this->getModel(),
-            $form
         );
     }
 
@@ -85,6 +87,21 @@ abstract class AttachByCategoryHelper
         return $this;
     }
 
+    public function setFilecabinetTemplate(FilecabinetTemplate $filecabinetTemplate) : static
+    {
+        $this->filecabinetTemplate = $filecabinetTemplate;
+
+        return $this;
+    }
+
+    public function getFilecabinetTemplate() : ? FilecabinetTemplate
+    {
+        if(isset($this->filecabinetTemplate))
+            return $this->filecabinetTemplate;
+
+        return null;
+    }
+
     public function getCategory() : Category
     {
         return $this->category;
@@ -93,6 +110,19 @@ abstract class AttachByCategoryHelper
     static function attachByCategory(Model $model, Category $category) : static
     {
         $helper = new static($model, $category);
+
+        return $helper->prepareForms()
+                    ->attachForms();
+    }
+
+    static function attachByFilecabinetTemplate(Model $model, FilecabinetTemplate $filecabinetTemplate) : static
+    {
+        $helper = new static(
+            $model,
+            $filecabinetTemplate->getCategory()
+        );
+
+        $helper->setFilecabinetTemplate($filecabinetTemplate);
 
         return $helper->prepareForms()
                     ->attachForms();

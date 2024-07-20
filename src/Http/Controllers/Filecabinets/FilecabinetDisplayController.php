@@ -2,6 +2,7 @@
 
 namespace IlBronza\FileCabinet\Http\Controllers\Filecabinets;
 
+use IlBronza\FileCabinet\Helpers\FilecabinetGetTreeHelper;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetCRUD;
 use IlBronza\FileCabinet\Models\Filecabinet;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ class FilecabinetDisplayController extends FilecabinetCRUD
 {
     public function setRootFilecabinet() : Filecabinet
     {
-        $this->rootFilecabinet = $this->getModelClass()::getFullTreeWithRelatedElements($this->getModel()->getKey(), ['dossiers']);
+        $this->rootFilecabinet = FilecabinetGetTreeHelper::getDescendantTreeWithForms($this->getModel());
 
         return $this->getRootFilecabinet();
     }
@@ -34,9 +35,10 @@ class FilecabinetDisplayController extends FilecabinetCRUD
         );
     }
 
-    public function display(string $filecabinet)
+    public function display(Filecabinet|string $filecabinet)
     {
-        $filecabinet = $this->findModel($filecabinet);
+        if(is_string($filecabinet))
+            $filecabinet = $this->findModel($filecabinet);
 
         $this->setModel($filecabinet);
 
