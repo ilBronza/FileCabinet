@@ -2,6 +2,7 @@
 
 namespace IlBronza\FileCabinet\Providers\RowTypes;
 
+use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowListInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FormField\FormField;
@@ -16,7 +17,16 @@ abstract class BaseRow
 
 	abstract public function getDefaultRules() : array;
 	abstract public function getFormField() : FormField;
-	
+
+	public function getDossierrowValue(Dossierrow $dossierrow)
+	{
+		$databaseField = $this->getDatabaseField();
+
+		$value = $dossierrow->$databaseField;
+
+		return $this->transformValue($value);
+	}
+
 	public function transformValue(mixed $databaseValue) : mixed
 	{
 		return $databaseValue;
@@ -160,5 +170,14 @@ abstract class BaseRow
 	public function renderValue($value)
 	{
 		dd($this);
+	}
+
+	public function storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
+	{
+		$databaseField = $dossierrow->getDatabaseField();
+
+		$dossierrow->$databaseField = $value;
+
+		return $dossierrow->save();
 	}
 }

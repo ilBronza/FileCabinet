@@ -103,6 +103,8 @@ class DossierPopulatorHelper
                 )
             );
 
+        dd($this->getDossier()->getDossierable()->getDirty());
+
         $this->setDossierPopulated();
     }
 

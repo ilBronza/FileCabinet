@@ -13,11 +13,16 @@ class FilecabinetPopulateController extends FilecabinetDisplayController
         'populate'
     ];
 
+    protected function populationOrderIsCorrect()
+    {
+        return (($previousFilecabinet = FilecabinetConsecutivenessCheckerHelper::checkConsecutiveness($this->filecabinet)) === true);
+    }
+
     public function populate(string $filecabinet)
     {
         $this->filecabinet = $this->findModel($filecabinet);
 
-        if(($previousFilecabinet = FilecabinetConsecutivenessCheckerHelper::checkConsecutiveness($this->filecabinet)) === true)
+        if($this->populationOrderIsCorrect())
             return $this->display($this->filecabinet);
 
         Ukn::e(__('filecabinets::messages.youMustCompletePreviousFilecabinetsBefore'));

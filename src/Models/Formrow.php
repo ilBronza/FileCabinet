@@ -9,6 +9,7 @@ use IlBronza\FileCabinet\Models\Form;
 use IlBronza\FileCabinet\Models\Traits\FormrowJsonParametersTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowNamesTypeHelper;
+use IlBronza\FormField\Casts\JsonFieldCast;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Support\Str;
 
@@ -19,6 +20,10 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	static $modelConfigPrefix = 'formrow';
 	static $deletingRelationships = ['dossierrows'];
+
+	protected $casts = [
+		'parameters' => JsonFieldCast::class
+	];
 
 	public ? BaseRow $rowtype = null;
 

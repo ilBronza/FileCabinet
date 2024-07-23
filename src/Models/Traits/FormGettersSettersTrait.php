@@ -15,6 +15,13 @@ trait FormGettersSettersTrait
 		return config('app.filecabinet.filecabinetTemplate.applicableToModels', []);
 	}
 
+	public function getFullQualifiedModelByName(string $modelName) : string
+	{
+		$models = $this->getPossibleModels();
+
+		return $models[$modelName];
+	}
+
 	public function getUpdatedAt() : ? Carbon
 	{
 		return $this->updated_at;
@@ -76,10 +83,5 @@ trait FormGettersSettersTrait
 
 		$this->interventions = json_encode($interventions);
 		$this->touch();
-	}
-
-	public function getSortingIndex() : ? int
-	{
-		return $this->sorting_index;
 	}
 }

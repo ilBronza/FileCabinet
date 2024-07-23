@@ -53,7 +53,7 @@ class AttachByCategoryTreeHelper extends AttachByCategoryHelper
                 $form
             );
 
-        foreach($node->getChildrenCategories() as $childNode)
+        foreach($node->getChildrenCategories()->sortBy('category.sorting_index') as $childNode)
             $this->_attachFormsByNode($childNode, $filecabinet);
 
         return $filecabinet;
