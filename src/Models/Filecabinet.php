@@ -42,6 +42,14 @@ class Filecabinet extends BaseFileCabinetModel implements
 
 	public bool $showChildrenContent = false;
 
+	public function hasDossiers() : bool
+	{
+		if($this->relationLoaded('dossiers'))
+			return $this->dossiers->count() > 0;
+
+		return $this->dossiers()->count() > 0;
+	}
+
 	public function getPopulateUrl() : string
 	{
 		return $this->getKeyedRoute('populate');

@@ -1,7 +1,16 @@
 <div class="uk-card uk-card-default uk-card-small">
     <div class="uk-card-header">
         <div uk-grid>
-            <span class="uk-h1">{{ $filecabinet->getCategory()->getName() }}</span>        
+            @if($targetModel = $filecabinet->getFilecabinetable())
+            <span class="uk-h1 uk-width-1-1">
+                <a href="{{ $targetModel->getEditUrl() }}">
+                    <i uk-icon="file-edit"></i>
+                </a>
+                
+                {{ $filecabinet->getFilecabinetable()->getLiveDrivemodelName() }}
+            </span>
+            @endif
+            <span class="uk-h2 uk-width-1-1">{{ $filecabinet->getCategory()->getName() }}</span>        
             
             {!! $filecabinet->getPopulationNavbar()->render() !!}
         </div>

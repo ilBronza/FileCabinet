@@ -7,6 +7,7 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\Rows\ModelDatabaseTypes\DatabaseTypeHelper;
+use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersRulesFieldTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
 use IlBronza\FormField\Fields\TextFormField;
 use IlBronza\FormField\FormField;
@@ -18,7 +19,7 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 	protected DatabaseTypeHelper $columnHelper;
 
 	use SpecialParametersTrait;
-	// static $databaseField = 'string';
+	use SpecialParametersRulesFieldTrait;
 
 	public function getSchemaColumnHelper() : DatabaseTypeHelper
 	{
@@ -72,29 +73,17 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 		return $this->columnHelper = DatabaseTypeHelper::createByColumn($schemaColumn);
 	}
 
-	public function getAttributeNameVariable() : string
+	public function getAttributeNameVariable() : ? string
 	{
 		if(isset($this->attributeNameVariable))
 			return $this->attributeNameVariable;
 
 		$parameters = $this->getModel()->getSpecialParameters();
 
-		return $this->attributeNameVariable = $parameters['attribute_name'][0];
-	}
+		if(! isset($parameters['attribute_name']))
+			return null;
 
-	public function getSpecialParametersRuleArray() : array
-	{
-		$parameters = $this->getModel()->getSpecialParameters();
-
-		return $parameters['rules'];
-	}
-
-	public function getSpecialParametersRuleValues() : array
-	{
-		return array_column(
-			$this->getSpecialParametersRuleArray(),
-			'rule'
-		);
+		return $parameters['attribute_name'][0] ?? null;
 	}
 
 	public function getDatabaseField() : string
@@ -102,26 +91,16 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 		return $this->getFormfieldType();
 	}
 
-	public function getFormfieldType() : string
-	{
-		return $this->getSchemaColumnHelper()->getType();
-	}
-
 	public function getDefaultRules() : array
 	{
 		$databaseDefaultParameters = $this->getSchemaColumnHelper()->getDefaultRules();
 
-		$userDefinedRules = $this->getSpecialParametersRuleValues();
+		return $this->mergeSpecialParametersUserDefinedRules($databaseDefaultParameters);
+	}
 
-		if(in_array('required', $userDefinedRules))
-			if (($key = array_search('nullable', $databaseDefaultParameters)) !== false)
-			    unset($databaseDefaultParameters[$key]);
-
-		if(in_array('nullable', $userDefinedRules))
-			if (($key = array_search('required', $databaseDefaultParameters)) !== false)
-			    unset($databaseDefaultParameters[$key]);
-
-		return $databaseDefaultParameters + $userDefinedRules;
+	public function getFormfieldType() : string
+	{
+		return $this->getSchemaColumnHelper()->getType();
 	}
 
 	public function getFormField() : FormField
@@ -193,14 +172,7 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 						'rules' => 'array|nullable|in:' . implode(',', array_keys($this->getPossibleAttributesArray())),
 						'list' => $this->getPossibleAttributesArray()
 					],
-					'rules' => [
-                        'type' => 'json',
-                        'value' => $this->getSpecialParametersRuleArray(),
-                        'fields' => [
-                            'rule' => ['text' => 'string|required|max:1024'],
-                        ],
-                        'rules' => 'array|nullable',
-					],
+					'rules' => $this->getRulesFieldSpecialParametersArray()
 				]
 			]
 		];

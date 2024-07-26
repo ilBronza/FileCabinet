@@ -15,7 +15,7 @@ class FilecabinetPopulateController extends FilecabinetDisplayController
 
     protected function populationOrderIsCorrect()
     {
-        return (($previousFilecabinet = FilecabinetConsecutivenessCheckerHelper::checkConsecutiveness($this->filecabinet)) === true);
+        return (($this->previousFilecabinet = FilecabinetConsecutivenessCheckerHelper::checkConsecutiveness($this->filecabinet)) === true);
     }
 
     public function populate(string $filecabinet)
@@ -23,12 +23,18 @@ class FilecabinetPopulateController extends FilecabinetDisplayController
         $this->filecabinet = $this->findModel($filecabinet);
 
         if($this->populationOrderIsCorrect())
-            return $this->display($this->filecabinet);
+        {
+            if(! $this->filecabinet->hasDossiers()&&($this->filecabinet->isRoot()))
+                if($children = $this->filecabinet->getChildren()->first())
+                    return redirect()->to($children->getPopulateUrl());
 
-        Ukn::e(__('filecabinets::messages.youMustCompletePreviousFilecabinetsBefore'));
+            return $this->display($this->filecabinet);
+        }
+
+        Ukn::e(__('filecabinet::messages.youMustCompletePreviousFilecabinetsBefore', ['name' => $this->previousFilecabinet->getName()]));
 
         return redirect()->to(
-            $previousFilecabinet->getPopulateUrl()
+            $this->previousFilecabinet->getPopulateUrl()
         );
     }
 }

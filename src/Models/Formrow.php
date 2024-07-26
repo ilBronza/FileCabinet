@@ -22,7 +22,9 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	static $deletingRelationships = ['dossierrows'];
 
 	protected $casts = [
-		'parameters' => JsonFieldCast::class
+		'parameters' => JsonFieldCast::class,
+		'roles' => JsonFieldCast::class,
+		'permissions' => JsonFieldCast::class
 	];
 
 	public ? BaseRow $rowtype = null;
@@ -83,7 +85,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isDisabled() : bool
 	{
-		return false;
+		return !! $this->read_only;
 	}
 
 	public function isMultiple() : bool

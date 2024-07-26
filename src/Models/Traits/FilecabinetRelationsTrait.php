@@ -6,6 +6,7 @@ use IlBronza\Category\Models\Category;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\DossierFilecabinet;
 use IlBronza\FileCabinet\Models\FilecabinetTemplate;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -36,6 +37,11 @@ trait FilecabinetRelationsTrait
 	public function filecabinetable() : MorphTo
 	{
 		return $this->morphTo();
+	}
+
+	public function getFilecabinetable() : ? Model
+	{
+		return $this->filecabinetable;
 	}
 
 	public function dossiers() : BelongsToMany

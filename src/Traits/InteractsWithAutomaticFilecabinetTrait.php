@@ -44,7 +44,7 @@ trait InteractsWithAutomaticFilecabinetTrait
         app('crudRouting')->addForcedUrl(
             ForcedUrlData::createByParameters([
                 'url' => $url,
-                'message' => __('filecabinets::messages.pleasePopulateThisElement', ['element' => $filecabinetTemplate->getCategory()->getName()])
+                'message' => __('filecabinet::messages.pleasePopulateThisElement', ['element' => $filecabinetTemplate->getCategory()->getName()])
             ])
         );
     }

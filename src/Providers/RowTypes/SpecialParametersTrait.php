@@ -18,4 +18,15 @@ trait SpecialParametersTrait
 			$this->getSpecialParametersFieldsetParameters()
 		);
 	}
+
+	public function getSpecialParametersSingleAttributeValue(string $attributeName) : ? string
+	{
+		if(isset($this->$attributeName))
+			return $this->$attributeName;
+
+		$parameters = $this->getModel()->getSpecialParameters();
+
+		return $parameters[$attributeName] ?? null;
+	}
+
 }
