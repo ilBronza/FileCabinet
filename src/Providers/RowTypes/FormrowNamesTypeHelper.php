@@ -60,7 +60,7 @@ class FormrowNamesTypeHelper
 
 	static function getByType(string $type) : BaseRow
 	{
-		$className = static::getFormrowsNamespace() . $type;
+		$className = static::getFormrowsNamespace() . ucfirst($type);
 
 		return new $className();
 	}
