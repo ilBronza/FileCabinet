@@ -82,10 +82,10 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getRowType();
 	}
 
-	// public function getDatabaseField()
-	// {
-	// 	return $this->getRowType()->getDatabaseField();
-	// }
+	 public function getDatabaseField()
+	 {
+	 	return $this->getRowType()->getDatabaseField();
+	 }
 
 	public function validateRowValue(mixed $value)
 	{
