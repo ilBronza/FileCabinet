@@ -6,9 +6,11 @@ use IlBronza\Form\Helpers\FieldsetsExtractorHelper;
 
 trait SpecialParametersTrait
 {
+	abstract public function getValidationRulesArrayFromSpecialParametersArray() : array;
+
 	public function addSpecialParametersValidationRules()
 	{
-		foreach($this->getPossibleValuesValidationArray() as $rule)
+		foreach($this->getValidationRulesArrayFromSpecialParametersArray() as $rule)
 			$this->setRule($rule);
 	}
 

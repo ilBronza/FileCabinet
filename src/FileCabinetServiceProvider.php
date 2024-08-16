@@ -4,6 +4,11 @@ namespace IlBronza\FileCabinet;
 
 use App\Observers\DossierObserver;
 use IlBronza\FileCabinet\Models\Dossier;
+use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Models\Filecabinet as FilecabinetModel;
+use IlBronza\FileCabinet\Models\Form;
+use IlBronza\FileCabinet\Models\Formrow;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class FileCabinetServiceProvider extends ServiceProvider
@@ -15,7 +20,15 @@ class FileCabinetServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'filecabinet');
+		Relation::morphMap([
+			'Dossier' => Dossier::getProjectClassname(),
+			'Filecabinet' => FilecabinetModel::getProjectClassname(),
+			'Dossierrow' => Dossierrow::getProjectClassname(),
+			'Form' => Form::getProjectClassname(),
+			'Formrow' => Formrow::getProjectClassname(),
+		]);
+
+		$this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'filecabinet');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'filecabinet');
         $this->loadRoutesFrom(__DIR__.'/routes.php');

@@ -30,8 +30,10 @@ class DossierIndexController extends DossierCRUD
         return $this->getModelClass()::with(
                     'filecabinets',
                     'form',
-                    'dossierable'
-                    // 'dossierrows.formrow'
+                    'dossierable',
+					'dossierrows.formrow',
+					'dossierrows.schedules',
+					'schedules.type'
                 )
                 ->get();
     }

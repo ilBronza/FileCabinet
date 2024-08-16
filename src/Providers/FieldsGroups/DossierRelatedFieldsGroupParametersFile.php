@@ -4,23 +4,32 @@ namespace IlBronza\FileCabinet\Providers\FieldsGroups;
 
 use IlBronza\Datatables\Providers\FieldsGroupParametersFile;
 
-class DossierRelatedFieldsGroupParametersFile extends FieldsGroupParametersFile
+class DossierRelatedFieldsGroupParametersFile extends DossierFieldsGroupParametersFile
 {
 	static function getFieldsGroup() : array
 	{
 		return [
             'translationPrefix' => 'filecabinet::fields',
-            'fields' => 
+            'fields' =>
             [
                 'mySelfPrimary' => 'primary',
-                'mySelfEdit' => 'links.edit',
+				'mySelfPopulate' => [
+					'type' => 'links.edit',
+					'method' => 'getPopulateUrl'
+				],
                 'mySelfSee' => 'links.see',
 
                 'form' => 'relations.belongsTo',
                 'repeatable' => 'boolean',
                 'description' => 'flat',
-                'dossierrows' => 'relations.hasMany',
-                'dossierable' => 'relations.belongsTo',
+				'dossierrows' => 'relations.hasMany',
+				'all_schedules' => [
+					'type' => 'iterators.each',
+					'childParameters' => [
+						'type' => 'utilities.milestone',
+						'property' => 'percentage_validity',
+					]
+				],
                 'mySelfRowValues.dossierrows' => [
                     'type' => 'iterators.each',
                     'childParameters' => [

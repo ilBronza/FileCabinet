@@ -167,17 +167,26 @@ abstract class BaseRow
 		return $this->defaultRules;
 	}
 
-	public function renderValue($value)
-	{
-		dd($this);
-	}
-
-	public function storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
+	public function _storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
 	{
 		$databaseField = $dossierrow->getDatabaseField();
 
 		$dossierrow->$databaseField = $value;
 
 		return $dossierrow->save();
+	}
+
+	public function emptyRowValue(Dossierrow $dossierrow)
+	{
+		$databaseField = $dossierrow->getDatabaseField();
+
+		$dossierrow->$databaseField = null;
+
+		return $dossierrow->save();
+	}
+
+	public function storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
+	{
+		return $this->_storeDossierrow($dossierrow, $value, $validate);
 	}
 }

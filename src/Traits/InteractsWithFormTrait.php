@@ -42,6 +42,20 @@ trait InteractsWithFormTrait
         return true;
     }
 
+	public function getDossiersByForms(Collection $forms) : Collection
+	{
+		return $this->dossiers()
+				->whereIn(
+					'form_id',
+					$forms->pluck('id')
+				)
+				->get();
+	}
+
+	public function getDossiers() : Collection
+	{
+		return $this->dossiers;
+	}
 
     public function dossiers() : MorphMany
     {
@@ -78,4 +92,14 @@ trait InteractsWithFormTrait
     {
         return $this->rootFilecabinets()->byMainCategory($mainCategory)->take(1)->count() > 0;
     }
+
+	public function getRelatedDossiersCollection() : Collection
+	{
+		return $this->dossiers()->with([
+			'filecabinets',
+				'form',
+				'dossierrows.formrow',
+				'dossierrows.schedules',
+		])->get();
+	}
 }

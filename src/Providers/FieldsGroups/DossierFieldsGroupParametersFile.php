@@ -13,7 +13,10 @@ class DossierFieldsGroupParametersFile extends FieldsGroupParametersFile
             'fields' => 
             [
                 'mySelfPrimary' => 'primary',
-                'mySelfEdit' => 'links.edit',
+                'mySelfPopulate' => [
+ 					'type' => 'links.edit',
+					'method' => 'getPopulateUrl'
+				],
                 'mySelfSee' => 'links.see',
 
                 'name' => 'flat',

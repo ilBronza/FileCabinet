@@ -26,7 +26,7 @@ class FormIndexController extends FormCRUD
             'category',
             'parent',
             'children'
-        )->get();
+        )->withCount('dossiers')->get();
     }
 
 }

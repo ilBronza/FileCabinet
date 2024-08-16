@@ -34,7 +34,7 @@ class FormrowModelMethod extends BaseRow implements FormrowWithSpecialParameters
 		// return true;
 	}
 
-	public function getPossibleValuesValidationArray() : array
+	public function getValidationRulesArrayFromSpecialParametersArray() : array
 	{
 		return [];
 	}

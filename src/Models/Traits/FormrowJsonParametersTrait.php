@@ -36,9 +36,9 @@ trait FormrowJsonParametersTrait
 		return json_decode($this->parameters, true) ?? [];
 	}
 
-	public function getSpecialParameter(string $name) : mixed
+	public function getSpecialParameter(string $name, mixed $default = null) : mixed
 	{
-		return $this->getSpecialParameters()[$name] ?? null;
+		return $this->getSpecialParameters()[$name] ?? $default;
 	}
 
 	public function setSpecialParameters(array $parameters, bool $save = true)

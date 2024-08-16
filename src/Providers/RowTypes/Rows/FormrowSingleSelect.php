@@ -35,7 +35,7 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 		return $result;
 	}
 
-	public function getPossibleValuesValidationArray() : array
+	public function getValidationRulesArrayFromSpecialParametersArray() : array
 	{
 		$fields = $this->getPossibleValuesArray();
 

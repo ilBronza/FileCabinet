@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Models;
 
 use IlBronza\Buttons\Button;
+use IlBronza\Category\Models\Category;
 use IlBronza\CRUD\Helpers\ModelManagers\Interfaces\ClonableModelInterface;
 use IlBronza\CRUD\Helpers\ModelManagers\Traits\ClonableModelTrait;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
@@ -10,15 +11,24 @@ use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\Category\Traits\InteractsWithCategoryTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Formrow;
+use IlBronza\FileCabinet\Models\Traits\FormCheckersTrait;
 use IlBronza\FileCabinet\Models\Traits\FormGettersSettersTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+
+use function app;
+use function array_merge;
+use function config;
+use function get_class;
+use function route;
 
 class Form extends BaseFileCabinetModel implements ClonableModelInterface
 {
 	use CRUDParentingTrait;
 	use CRUDSluggableTrait;
 	use FormGettersSettersTrait;
+	use FormCheckersTrait;
 
 	use InteractsWithCategoryTrait;
 
@@ -106,6 +116,12 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 		return route(config('filecabinet.routePrefix') . 'forms.formrows.create', ['form' => $this]);
 	}
 
+	public function getDossiersIndexUrl() : string
+	{
+		return route(config('filecabinet.routePrefix') . 'dossiers.byForm', ['form' => $this]);
+	}
+
+
 	public function getDescription() : ? string
 	{
 		return $this->description;
@@ -114,5 +130,10 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 	public function hasBeenUsed() : bool
 	{
 		return $this->dossiers()->take(1)->count() > 0;
+	}
+
+	public function getShortName()
+	{
+		return Str::limit($this->getName(), 20);
 	}
 }

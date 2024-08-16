@@ -13,8 +13,8 @@ class DossierrowFieldsGroupParametersFile extends FieldsGroupParametersFile
             'fields' => 
             [
                 'mySelfPrimary' => 'primary',
-                'mySelfEdit' => 'links.edit',
-                'mySelfSee' => 'links.see',
+//                'mySelfEdit' => 'links.edit',
+//                'mySelfSee' => 'links.see',
 
                 'name' => 'flat',
                 'mySelfValue' => '_fn_getShowValue',
@@ -23,7 +23,7 @@ class DossierrowFieldsGroupParametersFile extends FieldsGroupParametersFile
                 'formrow' => 'relations.belongsTo',
                 'formrow.type' => 'flat',
 
-                'mySelfDelete' => 'links.delete'
+//                'mySelfDelete' => 'links.delete'
             ]
         ];
 	}

@@ -1,12 +1,23 @@
 <?php
 
+use IlBronza\FileCabinet\Helpers\MediaNameGenerators\FilecabinetDossiervalueNamer;
+use IlBronza\FileCabinet\Helpers\MediaNameGenerators\FilecabinetOriginalFileNameNamer;
+use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorIdFolder;
+use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorIdSingleCharFolder;
+use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorNameFolder;
+use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorSingleFolder;
+use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorSlugFolder;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowAddInstanceController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDeleteMediaController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByFormIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelCategoryController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierEditController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierPopulateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierShowController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateFieldsController;
@@ -39,10 +50,12 @@ use IlBronza\FileCabinet\Models\Filecabinet;
 use IlBronza\FileCabinet\Models\FilecabinetTemplate;
 use IlBronza\FileCabinet\Models\Form;
 use IlBronza\FileCabinet\Models\Formrow;
+use IlBronza\FileCabinet\Providers\FieldsGroups\DossierByFormFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowRelatedFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetTemplateFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormFieldsGroupParametersFile;
@@ -90,7 +103,22 @@ return [
         ]
     ],
 
-    'models' => [
+	'media' => [
+		'mediaPathGenerators' => [
+			'singleFolder' => MediaPathGeneratorSingleFolder::class,
+			'dossierrowIdFolder' => MediaPathGeneratorIdFolder::class,
+			'formrowSlugFolder' => MediaPathGeneratorSlugFolder::class,
+			'nameFolder' => MediaPathGeneratorNameFolder::class,
+			'mediaIdSingleCharFolder' => MediaPathGeneratorIdSingleCharFolder::class,
+		],
+
+		'mediaNameGenerators' => [
+			'originalFilename' => FilecabinetOriginalFileNameNamer::class,
+			'dossierValueRules' => FilecabinetDossiervalueNamer::class,
+		],
+	],
+
+	'models' => [
         'form' => [
             'class' => Form::class,
             'table' => 'filecabinets__forms',
@@ -146,7 +174,8 @@ return [
             'class' => Dossier::class,
             'table' => 'filecabinets__dossiers',
             'fieldsGroupsFiles' => [
-                'index' => DossierFieldsGroupParametersFile::class,
+				'index' => DossierFieldsGroupParametersFile::class,
+				'byForm' => DossierByFormFieldsGroupParametersFile::class,
                 'related' => DossierRelatedFieldsGroupParametersFile::class
             ],
             'relationshipsManagerClasses' => [
@@ -156,7 +185,10 @@ return [
                 'show' => DossierShowFieldsetsParameters::class
             ],
             'controllers' => [
-                'index' => DossierIndexController::class,
+				'byModelCategory' => DossierByModelCategoryController::class,
+				'populate' => DossierPopulateController::class,
+				'index' => DossierIndexController::class,
+				'byForm' => DossierByFormIndexController::class,
                 'show' => DossierShowController::class,
                 'edit' => DossierEditController::class,
                 'update' => DossierUpdateController::class,
@@ -178,6 +210,7 @@ return [
             'controllers' => [
                 'show' => DossierrowShowController::class,
                 'index' => DossierrowIndexController::class,
+				'deleteMedia' => DossierrowDeleteMediaController::class,
                 'addInstance' => DossierrowAddInstanceController::class,
             ],
         ],

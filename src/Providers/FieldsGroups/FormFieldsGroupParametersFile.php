@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Providers\FieldsGroups;
 
 use IlBronza\Datatables\Providers\FieldsGroupParametersFile;
+use IlBronza\FileCabinet\Models\Form;
 
 class FormFieldsGroupParametersFile extends FieldsGroupParametersFile
 {
@@ -19,6 +20,10 @@ class FormFieldsGroupParametersFile extends FieldsGroupParametersFile
 
                 'name' => 'flat',
                 'slug' => 'flat',
+				'mySelfDossiers' => [
+					'type' => 'filecabinet::dossiers.dossiersByForm',
+//					'form' => Form::getProjectClassName()::findCachedField('name', 'Patente')
+				],
                 'parent' => 'relations.belongsTo',
                 'sorting_index' => 'editor.numeric',
                 'children' => 'relations.hasMany',

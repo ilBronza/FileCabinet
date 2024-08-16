@@ -34,7 +34,7 @@ return [
   'must_be_updated' => 'Deve essere sincronizzato',
   'dossier' => 'Scheda',
   'value' => 'Valore',
-  'formrow' => 'Riga valore',
+  'formrow' => 'Tipo',
   'mySelfAll' => 'Tutti',
   'formrow.type' => 'Tipo riga',
   'category_id' => 'Categoria',

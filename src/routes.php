@@ -49,6 +49,12 @@ Route::group([
 
 		Route::group(['prefix' => 'dossiers'], function()
 		{
+			//DossierByModelCategoryController
+			Route::get('model/{model}/{key}/by-category/{category}/table', [FileCabinet::getController('dossier', 'byModelCategory'), 'byModelCategory'])->name('dossiers.byModelCategory');
+
+			//DossierByFormIndexController
+			Route::get('by-form/{form}', [FileCabinet::getController('dossier', 'byForm'), 'index'])->name('dossiers.byForm');
+
 			//DossierUpdateFieldsController
 			Route::get('{dossier}/update-fields', [FileCabinet::getController('dossier', 'updateFields'), 'updateFields'])->name('dossiers.updateFields');
 
@@ -57,6 +63,8 @@ Route::group([
 
 			//DossierUpdateController
 			Route::put('{dossier}/update', [FileCabinet::getController('dossier', 'update'), 'update'])->name('dossiers.update');
+
+			Route::get('{dossier}/populate', [FileCabinet::getController('dossier', 'populate'), 'populate'])->name('dossiers.populate');
 
 			Route::delete('{dossier}/delete', [FileCabinet::getController('dossier', 'destroy'), 'destroy'])->name('dossiers.destroy');
 
@@ -67,6 +75,8 @@ Route::group([
 
 			Route::get('{dossier}/edit', [FileCabinet::getController('dossier', 'edit'), 'edit'])->name('dossiers.edit');
 
+
+			//			Route::get('get-fetcher-by-form/{$form}');
 		});
 
 		Route::group(['prefix' => 'dossierrows'], function()
@@ -76,6 +86,9 @@ Route::group([
 
 			//DossierrowAddInstanceController
 			Route::post('{dossierrow}/add-instance', [FileCabinet::getController('dossierrow', 'addInstance'), 'addInstance'])->name('dossierrows.addInstance');
+
+			Route::delete('dossierrow/{dossierrow}/delete-media/{media}', [FileCabinet::getController('dossierrow', 'deleteMedia'), 'deleteMedia'])
+				->name('dossierrows.deleteMedia');
 
 		});
 

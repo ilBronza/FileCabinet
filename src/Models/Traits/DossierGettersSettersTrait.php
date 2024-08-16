@@ -5,39 +5,65 @@ namespace IlBronza\FileCabinet\Models\Traits;
 use Auth;
 use Carbon\Carbon;
 use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Models\Formrow;
 
 trait DossierGettersSettersTrait
 {
 	public function getRowByName(string $rowName) : Dossierrow
 	{
-		// if(! $this->relationLoaded('dossierrows'))
-		// 	return $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first();
+		 if(! $this->relationLoaded('dossierrows'))
+		 	return $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first();
 
-		$dossierrows = $this->getDossierrows();
+		$formrow = $this->formrows()->where('name', $rowName)->first();
 
-		$formrow = $this->getForm()->getFormrowByName($rowName);
+		if($result = ($this->filterDossierrowsByFormrow($formrow)))
+			return $result;
 
-		return $dossierrows->sortByDesc('created_at')->first(function($item) use($formrow)
-		{
-			return $item->formrow_id == $formrow->getKey();
-		});
+		return $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first();
 	}
 
-	public function setNotPopulated()
+	public function getDossierrowByFormrowSlug(string $formrowSlug)
+	{
+		if(! $this->relationLoaded('dossierrows'))
+			return $this->dossierrows()->byFormrowSlug($formrowSlug)->orderByDesc('created_at')->first();
+
+		$formrow = $this->formrows()->where('slug', $formrowSlug)->first();
+
+		if($result = ($this->filterDossierrowsByFormrow($formrow)))
+			return $result;
+
+		return $this->dossierrows()->byFormrowSlug($formrowSlug)->orderByDesc('created_at')->first();
+	}
+
+	public function getDossierrowByFormrow(Formrow $formrow) : Dossierrow
+	{
+		if($this->relationLoaded('dossierrows'))
+			if($result = $this->getDossierrows()->firstWhere('formrow_id', $formrow->getKey()))
+				return $result;
+
+		return $this->dossierrows()->byFormrow($formrow)->first();
+	}
+
+	public function setNotPopulated(bool $save = true)
 	{
 		$this->populated_at = null;
 		$this->populated_by = null;
-		$this->save();
 
-		foreach($this->getFilecabinets() as $filecabinet)
-			$filecabinet->checkPopulation();		
+		if($save)
+			$this->save();
+
+		if($save)
+			foreach($this->getFilecabinets() as $filecabinet)
+				$filecabinet->checkPopulation();		
 	}
 
-	public function setPopulated()
+	public function setPopulated(bool $save = true)
 	{
 		$this->populated_at = Carbon::now();
 		$this->populated_by = Auth::id();
-		$this->save();
+
+		if($save)
+			$this->save();
 
 		foreach($this->getFilecabinets() as $filecabinet)
 			$filecabinet->checkPopulation();
@@ -81,5 +107,23 @@ trait DossierGettersSettersTrait
 	public function setFieldsUpdated()
 	{
 		return $this->_customSetter('must_be_updated_at', null, true);
+	}
+
+	/**
+	 * @param  \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Relations\HasMany|null  $formrow
+	 *
+	 * @return mixed
+	 */
+	public function filterDossierrowsByFormrow(Formrow $formrow)
+	{
+		return $this->getDossierrows()->sortByDesc('created_at')->first(function ($item) use ($formrow)
+		{
+			return $item->formrow_id == $formrow->getKey();
+		});
+	}
+
+	public function getValueByFormrow(Formrow $formrow)
+	{
+		return $this->getDossierrowByFormrow($formrow)?->getValue();
 	}
 }

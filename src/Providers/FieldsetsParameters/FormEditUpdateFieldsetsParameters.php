@@ -35,6 +35,8 @@ class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
                         'tooltip' => 'filecabinet::fields.repeatableTooltip',
                         'rules' => 'boolean|required'
                     ],
+					'automatically_creatable' => ['boolean' => 'bool|required'],
+					'automatic_creation_checker_method' => ['text' => 'string|nullable|max:255'],
                     'description' => ['texteditor' => 'string|nullable|max:2048'],
                 ],
                 'width' => ['1-3@m']

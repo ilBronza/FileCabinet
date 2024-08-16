@@ -1,5 +1,7 @@
 @if($viewMode == 'populate')
     {!! $dossier->renderAjaxForm() !!}
+@elseif($viewMode == 'edit')
+    {!! $dossier->render() !!}
 @elseif($viewMode == 'show')
     {!! $dossier->show() !!}
 @endif

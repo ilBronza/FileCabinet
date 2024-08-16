@@ -2,6 +2,8 @@
 
 namespace IlBronza\FileCabinet\Models;
 
+use Carbon\Carbon;
+use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Form;
@@ -10,12 +12,17 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FormField\FormField;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
+use IlBronza\Schedules\Traits\InteractsWithSchedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
+use Spatie\MediaLibrary\HasMedia;
 
-class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface
+class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, HasMedia
 {
+	use InteractsWithMedia;
+	use InteractsWithSchedule;
+
 	static $modelConfigPrefix = 'dossierrow';
 	static $deletingRelationships = [];
 
@@ -24,7 +31,15 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		$query->whereHas('formrow', function ($query) use($formrowName)
 		{
 			$query->where('name', $formrowName);
-		});		
+		});
+	}
+
+	public function scopeByFormrowSlug($query, string $formrowSlug)
+	{
+		$query->whereHas('formrow', function ($query) use($formrowSlug)
+		{
+			$query->where('slug', $formrowSlug);
+		});
 	}
 
 	public function getDossierable() : ? Model
@@ -109,6 +124,14 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
         	]));
 	}
 
+	public function emptyRowValue()
+	{
+		return $this->getRowType()
+			->emptyRowValue(
+				$this
+			);
+	}
+
 	public function storeRowValue(mixed $value, bool $validate = false) : bool
 	{
 		if($validate)
@@ -122,21 +145,38 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 			);
 	}
 
+	public function isPopulated() : bool
+	{
+		return $this->getValue() !== null;
+	}
+
+	public function isCompleted() : bool
+	{
+		if(! $this->isFormfieldRequired())
+			return true;
+
+		return $this->getValue() !== null;
+	}
+
 	public function isRepeatable() : bool
 	{
 		return $this->getFormrow()->isRepeatable();
 	}
 
-	// public function getValueAttribute() : mixed
-	// {
-	// 	return $this->getValue();
-	// }
-
 	public function getValue() : mixed
 	{
-		$databaseField = $this->getDatabaseField();
+		return $this->getFormfieldValue();
+	}
 
-		return $this->$databaseField;
+	public function isMissing() : bool
+	{
+		if(! $this->isFormfieldRequired())
+			return false;
+
+		if($this->isPopulated())
+			return false;
+
+		return true;
 	}
 
 	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
@@ -147,9 +187,6 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getShowValue() : mixed
 	{
-		// return $this->getRowType()->getShowValue(
-		// 	$this->getValue()
-		// );
 		return $this->getRowType()->getShowValue(
 			$this->getFormfieldValue()
 		);
@@ -160,10 +197,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getRowType()->getDossierrowValue(
 			$this
 		);
-		// dd($this->getRowType());
-		// return $this->getRowType()->transformValue(
-		// 	$this->getValue()
-		// );
+	}
+
+	public function getCurrentDate() : Carbon
+	{
+		return Carbon::now();
 	}
 
 	// public function getFormField() : FormField
@@ -224,4 +262,8 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	}
 	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
 
+	public function getUpdateUrl(array $data = [])
+	{
+		return $this->getDossier()->getUpdateUrl();
+	}
 }

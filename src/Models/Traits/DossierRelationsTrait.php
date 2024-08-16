@@ -83,6 +83,9 @@ trait DossierRelationsTrait
 		if($force)
 			return $this->dossierrows()->get();
 
+		if(count($this->dossierrows) == 0)
+			return $this->dossierrows()->get();
+
 		return $this->dossierrows;
 	}
 
@@ -104,4 +107,11 @@ trait DossierRelationsTrait
 		return $this->dossierable;
 	}
 
+	public function getDossierrowsSchedules() : Collection
+	{
+		return $this->getDossierrows()->map(function($dossierrow)
+		{
+			return $dossierrow->getSchedules();
+		})->flatten();
+	}
 }

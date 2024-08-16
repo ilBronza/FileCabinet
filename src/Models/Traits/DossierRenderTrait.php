@@ -17,6 +17,17 @@ trait DossierRenderTrait
 		return $ibForm->_renderAjax();
 	}
 
+	public function render()
+	{
+		$ibForm = $this->buildIbForm();
+
+		$ibForm->addNavbarButton(
+			DefaultButtonsCreatorHelper::getShowButton($this)
+		);
+
+		return $ibForm->_render();
+	}
+
 	public function renderForPdf()
 	{
 		return view('filecabinet::pdf.filecabinet._dossier', [

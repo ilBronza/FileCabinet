@@ -9,21 +9,25 @@ use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
 use IlBronza\Form\Form as IbForm;
 use Illuminate\Support\Collection;
 
+use function count;
+use function dd;
+use function get_class_methods;
+
 trait DossierHtmlFormTrait
 {
+	public function getDossierValidationRuleByFormrowSlug(string $formrowSlug)
+	{
+		return $this->getRulesByDossierrows(
+			collect([
+				$this->getDossierrowByFormrowSlug($formrowSlug)
+			])
+		);
+	}
 	public function getDossierValidationRules() : array
 	{
-		$result = [];
-
-		foreach($this->getDossierrows() as $dossierrow)
-		{
-			$fieldname = $dossierrow->getFormfieldName();
-			$rules = FormfieldParametersHelper::getValidationRulesFromModel($dossierrow);
-
-			$result[$fieldname] = $rules;
-		}
-
-		return $result;
+		return $this->getRulesByDossierrows(
+			$this->getDossierrows()
+		);
 	}
 
 	private function getFormFields() : Collection
@@ -94,6 +98,28 @@ trait DossierHtmlFormTrait
 		$this->ibForm = $this->buildIbForm();
 
 		return $this->ibForm;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getRulesByDossierrows(Collection $dossierrows) : array
+	{
+		$result = [];
+
+		foreach ($dossierrows as $dossierrow)
+		{
+			$fieldname = $dossierrow->getFormfieldName();
+			$rules = FormfieldParametersHelper::getValidationRulesFromModel($dossierrow);
+
+			if ($dossierrow->getFormfieldType() == 'file')
+				if (count($dossierrow->getMedia("*")) > 0)
+					$rules = 'nullable';
+
+			$result[$fieldname] = $rules;
+		}
+
+		return $result;
 	}
 
 }

@@ -10,6 +10,24 @@ use Illuminate\Support\Str;
 
 trait FormGettersSettersTrait
 {
+	public function getAutomaticCreationCheckerMethod() : ? string
+	{
+		return $this->automatic_creation_checker_method;
+	}
+
+	public function getAutomaticCreatable() : bool
+	{
+		return !! $this->automatically_creatable;
+	}
+
+	public function getDossiersCount() : int
+	{
+		if(isset($this->dossiers_count))
+			return $this->dossiers_count;
+
+		dd('TODO fai la query di dossiers_count');
+	}
+
 	public function getPossibleModels() : array
 	{
 		return config('app.filecabinet.filecabinetTemplate.applicableToModels', []);

@@ -199,6 +199,13 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	}
 	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
 
+	public function isExpirationDate() : bool
+	{
+		return $this->type == 'expirationDate';
+	}
 
-
+	static function findBySlug($slug) : ? static
+	{
+		return static::where('slug', $slug)->first();
+	}
 }

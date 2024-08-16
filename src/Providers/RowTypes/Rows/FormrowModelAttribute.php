@@ -29,7 +29,7 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 		return $this->_getSchemaColumnHelper();
 	}
 
-	public function getPossibleValuesValidationArray() : array
+	public function getValidationRulesArrayFromSpecialParametersArray() : array
 	{
 		return [];
 	}

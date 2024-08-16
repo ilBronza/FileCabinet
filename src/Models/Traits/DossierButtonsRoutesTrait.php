@@ -6,12 +6,18 @@ use IlBronza\Buttons\Button;
 
 trait DossierButtonsRoutesTrait
 {
+	public function getPopulateUrl()
+	{
+		return $this->getKeyedRoute('populate');
+	}
+
 	public function getEditUrl(array $data = [])
 	{
+//		throw new \Exception('cambiare questa con getPopulateUrl');
 		if($url = $this->getMainFilecabinet()?->getPopulateUrl())
 			return $url;
 
-		return $this->getKeyedRoute('edit');		
+		return $this->getKeyedRoute('edit');
 	}
 
 	public function getShowUrl(array $data = [])

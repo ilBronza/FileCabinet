@@ -7,6 +7,8 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
+use function count;
+
 class DossierPopulatorHelper
 {
     public Request $request;
@@ -15,7 +17,7 @@ class DossierPopulatorHelper
 
     private function validateRequest() : array
     {
-        $rules = $this->getDossier()->getDossierValidationRules();
+        $rules = $this->getDossierValidationRules();
 
         return $this->getRequest()->validate($rules);
     }
@@ -51,14 +53,36 @@ class DossierPopulatorHelper
     {
         $this->request = $request;
 
-        $parameters = $this->validateRequest();
-
-        $this->setBindingParameters($parameters);
-
         return $this;
     }
 
-    protected function setDossierrows() : static
+	public function validateAndBindParameters() : self
+	{
+		$parameters = $this->validateRequest();
+
+		$this->setBindingParameters($parameters);
+
+		return $this;
+	}
+
+	public function validateAndBindSingleParameter() : self
+	{
+		$parameters = $this->validateRequestSingleParameter();
+
+		$this->setBindingParameters($parameters);
+
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDossierValidationRules() : array
+	{
+		return $this->getDossier()->getDossierValidationRules();
+	}
+
+	protected function setDossierrows() : static
     {
         $this->dossierrows = $this->getDossier()->getDossierrows();
 
@@ -94,27 +118,38 @@ class DossierPopulatorHelper
         $this->getDossier()->setPopulated();
     }
 
-    public function populateDossier()
+    public function populate()
     {
         foreach($this->getDossierrows() as $dossierrow)
-            $dossierrow->storeRowValue(
-                $this->getParameter(
-                    $dossierrow
-                )
-            );
+		{
+			if($dossierrow->getFormfieldType() == 'file')
+				if(count($dossierrow->getMedia("*")) > 0)
+					continue;
 
-        dd($this->getDossier()->getDossierable()->getDirty());
+			$dossierrow->storeRowValue(
+				$this->getParameter(
+					$dossierrow
+				)
+			);
+		}
 
         $this->setDossierPopulated();
     }
 
-    static function populateDossierByRequest(Request $request, Dossier $dossier)
+	public function returnResponse()
+	{
+		return $this;
+	}
+
+    static function populateByRequest(Request $request, Dossier $dossier)
     {
         $helper = new static();
         $helper->setDossier($dossier)
-                ->setRequest($request);
+                ->setRequest($request)
+				->validateAndBindParameters()
+				->populate();
 
-        $helper->populateDossier();
+		return $helper->returnResponse();
     }
 
 }
