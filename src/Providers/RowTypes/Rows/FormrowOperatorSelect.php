@@ -21,23 +21,22 @@ class FormrowOperatorSelect extends FormrowSingleSelect
 
 	public function getShowValue(mixed $databaseValue) : mixed
 	{
-		return User::getProjectClassname()::findCached($databaseValue)?->getFullName();
+		return User::getProjectClassName()::findCached($databaseValue)?->getFullName();
 	}
 
 	public function getPossibleValuesArray() : array
 	{
-		if(! $rolesIds = $this->getModel()->getSpecialParameter('roles', []))
-			return ModelSelectQueryHelper::getArrayForSelect(User::getProjectClassname());
+		if (! $rolesIds = $this->getModel()->getSpecialParameter('roles', []))
+			return ModelSelectQueryHelper::getArrayForSelect(User::getProjectClassName());
 
 		return ModelSelectQueryHelper::getArrayForSelectWithScopes(
-			User::getProjectClassname(),
-			['byRolesIds' => $rolesIds]
+			User::getProjectClassName(), ['byRolesIds' => $rolesIds]
 		);
 	}
 
 	public function getSpecialParametersFieldsetParameters() : array
 	{
-		$rolesList = ModelSelectQueryHelper::getArrayForSelect(Role::getProjectClassname());
+		$rolesList = ModelSelectQueryHelper::getArrayForSelect(Role::getProjectClassName());
 
 		return [
 			'parameters' => [

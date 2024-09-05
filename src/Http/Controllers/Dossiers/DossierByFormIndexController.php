@@ -16,30 +16,24 @@ class DossierByFormIndexController extends DossierCRUD
 	public $allowedMethods = ['index'];
 
 	public function getIndexFieldsArray()
-    {
+	{
 		return FormrowsDatatableFieldsGroupsHelper::getDossierFieldsGroupsByFormAndParametersFileName(
-			$this->form,
-			config('filecabinet.models.dossier.fieldsGroupsFiles.index')
+			$this->form, config('filecabinet.models.dossier.fieldsGroupsFiles.byForm')
 		);
 	}
 
 	public function index(Request $request, string $form)
 	{
-		$this->form = Form::getProjectClassname()::find($form);
+		$this->form = Form::getProjectClassName()::find($form);
 
 		return $this->_index($request);
 	}
 
-    public function getIndexElements()
-    {
-        return $this->getModelClass()::byForm($this->form)
-				->with(
-                    'filecabinets',
-                    'dossierable',
-					'dossierrows.formrow',
-					'dossierrows.schedules'
-                )
-                ->get();
-    }
+	public function getIndexElements()
+	{
+		return $this->getModelClass()::byForm($this->form)->with(
+				'filecabinets', 'dossierable', 'dossierrows.formrow', 'dossierrows.schedules'
+			)->get();
+	}
 
 }

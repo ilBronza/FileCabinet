@@ -13,6 +13,8 @@ use IlBronza\FormField\Casts\JsonFieldCast;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Support\Str;
 
+use function cache;
+
 class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface
 {
 	use CRUDSluggableTrait;
@@ -155,7 +157,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function getFormfieldName() : string
 	{
-		return Str::slug($this->getName());
+		return $this->getSlug();
 	}
 
 	public function getFormfieldLabel() : string
@@ -191,6 +193,18 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	public function getFormfieldRelationName() : ? string
 	{
 		return $this->getRelationName();
+	}
+
+	public function getNameForDisplayRelation()
+	{
+		return cache()->remember(
+			$this->cacheKey('getNameForDisplayRelation'),
+			3600 * 24,
+			function()
+			{
+				return "{$this->getName()} {$this->getForm()->getName()}";
+			}
+		);
 	}
 
 	public function getFormfieldRoles() : ? array

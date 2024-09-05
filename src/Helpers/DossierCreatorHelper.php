@@ -100,7 +100,7 @@ class DossierCreatorHelper
 
 	static function automaticallyCreateByForm(Model $model, Form $form, Dossier $parentDossier = null) : ? Dossier
 	{
-		if($form->canAutomaticallyBeCreatedBy($model))
+		if(! $form->canAutomaticallyBeCreatedBy($model))
 			return null;
 
 		return static::createByForm($model, $form, $parentDossier);

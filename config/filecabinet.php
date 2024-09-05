@@ -134,7 +134,8 @@ return [
                 'show' => FormRelationManager::class
             ],
             'controllers' => [
-                'index' => FormIndexController::class,
+	            'index' => FormIndexController::class,
+	            'attachByModel' => FormAttachByModelIndexController::class,
                 'create' => FormCreateStoreController::class,
                 'store' => FormCreateStoreController::class,
                 'show' => FormShowController::class,
@@ -187,7 +188,7 @@ return [
             'controllers' => [
 				'byModelCategory' => DossierByModelCategoryController::class,
 				'populate' => DossierPopulateController::class,
-				'index' => DossierIndexController::class,
+	            'index' => DossierIndexController::class,
 				'byForm' => DossierByFormIndexController::class,
                 'show' => DossierShowController::class,
                 'edit' => DossierEditController::class,

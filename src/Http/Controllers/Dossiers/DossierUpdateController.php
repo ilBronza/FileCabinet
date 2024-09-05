@@ -76,6 +76,11 @@ class DossierUpdateController extends DossierCRUD
 		if(CrudRequestHelper::isEditorUpdateRequest($request))
 			return DossierPopulatorEditorHelper::populateByRequest($request, $this->dossier);
 
+		if(CrudRequestHelper::isEditorReadRequest($request))
+		{
+			dd('eccol');
+		}
+
 		DossierPopulatorHelper::populateByRequest($request, $this->dossier);
 
 		if($request->ajax())

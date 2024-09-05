@@ -34,6 +34,18 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		});
 	}
 
+	public function getNameForDisplayRelation()
+	{
+		return cache()->remember(
+			$this->cacheKey('getNameForDisplayRelation'),
+			3600 * 24,
+			function()
+			{
+				return "{$this->getFormrow()->getNameForDisplayRelation()} - {$this->getDossierable()->getName()}";
+			}
+		);
+	}
+
 	public function scopeByFormrowSlug($query, string $formrowSlug)
 	{
 		$query->whereHas('formrow', function ($query) use($formrowSlug)
@@ -265,5 +277,10 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getUpdateUrl(array $data = [])
 	{
 		return $this->getDossier()->getUpdateUrl();
+	}
+
+	public function getShowUrl(array $data = [])
+	{
+		return $this->getDossier()->getShowUrl();
 	}
 }

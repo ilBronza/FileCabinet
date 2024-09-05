@@ -9,6 +9,8 @@ class FormrowEditUpdateController extends FormrowCRUD
 {
     use CRUDEditUpdateTrait;
 
+	public ? bool $updateEditor = false;
+
     public $allowedMethods = ['edit', 'update'];
 
     public function edit(string $formrow)

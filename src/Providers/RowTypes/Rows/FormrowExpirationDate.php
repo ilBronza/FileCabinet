@@ -14,6 +14,7 @@ use IlBronza\Schedules\Helpers\Applicators\ScheduleApplicatorHelper;
 use IlBronza\Schedules\Models\Type;
 
 use function __;
+use function is_null;
 
 class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParametersInterface
 {
@@ -43,7 +44,8 @@ class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParamet
 
 	public function performAfterStoreAction(Dossierrow $dossierrow, mixed $date)
 	{
-		$scheduleType = Type::find($this->getScheduleTypeId());
+		if(! $scheduleType = Type::find($this->getScheduleTypeId()))
+			throw new \Exception('Schedule type not found for expiration date ' . $this->getName());
 
 //		$dossier = $dossierrow->getDossier();
 
@@ -63,6 +65,9 @@ class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParamet
 
 	public function transformValue(mixed $databaseValue) : mixed
 	{
+		if(is_null($databaseValue))
+			return null;
+
 		return substr($databaseValue, 0, 10);
 	}
 

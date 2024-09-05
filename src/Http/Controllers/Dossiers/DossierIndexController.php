@@ -6,6 +6,8 @@ use IlBronza\CRUD\Traits\CRUDIndexTrait;
 use IlBronza\CRUD\Traits\CRUDPlainIndexTrait;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierCRUD;
 
+use function ini_set;
+
 class DossierIndexController extends DossierCRUD
 {
     use CRUDPlainIndexTrait;
@@ -27,7 +29,10 @@ class DossierIndexController extends DossierCRUD
 
     public function getIndexElements()
     {
-        return $this->getModelClass()::with(
+		ini_set('max_execution_time', 60);
+		ini_set('memory_limit', - 1);
+
+		return $this->getModelClass()::with(
                     'filecabinets',
                     'form',
                     'dossierable',

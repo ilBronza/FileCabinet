@@ -8,6 +8,6 @@ class FilecabinetGetTreeHelper
 {
 	static function getDescendantTreeWithForms(Filecabinet $filecabinet)
 	{
-		return Filecabinet::getProjectClassname()::getFullTreeWithRelatedElements($filecabinet->getKey(), ['dossiers']);
+		return Filecabinet::getProjectClassName()::getFullTreeWithRelatedElements($filecabinet->getKey(), ['dossiers']);
 	}
 }

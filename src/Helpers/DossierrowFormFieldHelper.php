@@ -11,7 +11,7 @@ class DossierrowFormFieldHelper
 {
     static function createFieldFromDossierrow(Dossierrow $dossierrow) : FormField
     {
-        $fieldname = $dossierrow->getFormfieldName();
+        $fieldname = $dossierrow->getKey();
         $parameters = FormfieldParametersHelper::extractFromModel($dossierrow);
 
         $parameters['model'] = $dossierrow;

@@ -15,7 +15,7 @@ class DatatableFieldAttachFormByRoots extends DatatableFieldIterator
 
 	public function __transformValue($value, Category $category)
 	{
-		if(! $value)
+		if (! $value)
 			return [null, null];
 
 		return [
@@ -26,51 +26,51 @@ class DatatableFieldAttachFormByRoots extends DatatableFieldIterator
 
 	public function transformValue($value)
 	{
-        if(! $value)
-            return ;
+		if (! $value)
+			return;
 
-        $result = [];
+		$result = [];
 
-        $categories = Category::getProjectClassname()::getRoots();
+		$categories = Category::getProjectClassName()::getRoots();
 
-        foreach($categories as $category)
-            $result[] = $this->__transformValue($value, $category);
+		foreach ($categories as $category)
+			$result[] = $this->__transformValue($value, $category);
 
-        return [
-            'separator' => $this->separator,
-            'elements' => $result,
+		return [
+			'separator' => $this->separator,
+			'elements' => $result,
 
-        ];
+		];
 	}
 
-    public function getFilterColumnDef()
-    {
-        return "
+	public function getFilterColumnDef()
+	{
+		return "
             let result = '';
 
             Object.keys(elements).forEach(key => {
                 result = result + elements[key][1];
             });
         ";
-    }
+	}
 
-    public function getDisplayColumnDef()
-    {
-        // if(isset($this->table->modelClass))
-        //     return "
+	public function getDisplayColumnDef()
+	{
+		// if(isset($this->table->modelClass))
+		//     return "
 
-        //         let result = '';
-        //         let urlRelation = '" . $this->getRelationModelSprintFShowRoute() . "';
+		//         let result = '';
+		//         let urlRelation = '" . $this->getRelationModelSprintFShowRoute() . "';
 
-        //         urlRelation = urlRelation.replace('%f', data.father);
+		//         urlRelation = urlRelation.replace('%f', data.father);
 
-        //         Object.keys(elements).forEach(key => {
+		//         Object.keys(elements).forEach(key => {
 
-        //             result = result + '<a href=\"' + urlRelation.replace('%s', elements[key].id) + '\">' + elements[key].name + '</a><br />';
-        //         });
-        //     ";
+		//             result = result + '<a href=\"' + urlRelation.replace('%s', elements[key].id) + '\">' + elements[key].name + '</a><br />';
+		//         });
+		//     ";
 
-        return "
+		return "
             let result = '';
 
             Object.keys(elements).forEach(key => {
@@ -78,6 +78,6 @@ class DatatableFieldAttachFormByRoots extends DatatableFieldIterator
                 result = result + '<a href=\"' + elements[key][0] + '\">' + elements[key][1] + '</a><br />';
             });
         ";
-    }
+	}
 
 }

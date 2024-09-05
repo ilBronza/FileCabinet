@@ -45,6 +45,7 @@ class DossierPopulatorEditorHelper extends DossierPopulatorHelper
 		$updateParameters['success'] = true;
 		$updateParameters[$this->getFormrowSlug()] = $this->getRequest()->value;
 		$updateParameters['update-editor'] = true;
+		$updateParameters['field'] = $this->getFormrowSlug();
 		$updateParameters['model-id'] = $this->dossierrow->getKey();
 		$updateParameters['value'] = $this->getRequest()->value;
 

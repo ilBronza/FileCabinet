@@ -2,6 +2,7 @@
 
 use IlBronza\FileCabinet\Facades\FileCabinet;
 
+use IlBronza\FileCabinet\Models\Dossierrow;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -84,16 +85,27 @@ Route::group([
 			//DossierrowShowController
 			Route::get('{dossierrow}', [FileCabinet::getController('dossierrow', 'show'), 'show'])->name('dossierrows.show');
 
+			Route::get('{dossierrow}/edit', function($dossierrow)
+			{
+				$dossier = Dossierrow::with('dossier')->find($dossierrow)->dossier;
+
+				return redirect()->to($dossier->getPopulateUrl());
+			})->name('dossierrows.edit');
+
 			//DossierrowAddInstanceController
 			Route::post('{dossierrow}/add-instance', [FileCabinet::getController('dossierrow', 'addInstance'), 'addInstance'])->name('dossierrows.addInstance');
 
 			Route::delete('dossierrow/{dossierrow}/delete-media/{media}', [FileCabinet::getController('dossierrow', 'deleteMedia'), 'deleteMedia'])
 				->name('dossierrows.deleteMedia');
 
+			Route::get('', [FileCabinet::getController('dossierrow', 'index'), 'index'])->name('dossierrows.index');
 		});
 
 		Route::group(['prefix' => 'forms'], function()
 		{
+			Route::get('attach-to-model/model/{class}/id/{id}', [FileCabinet::getController('form', 'attachByModel'), 'index'])
+			     ->name('forms.attachByModel.index');
+
 			Route::get('{form}/clone', [FileCabinet::getController('form', 'clone'), 'clone'])
 				->name('forms.clone');
 

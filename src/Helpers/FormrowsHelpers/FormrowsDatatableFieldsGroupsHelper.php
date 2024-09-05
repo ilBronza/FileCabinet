@@ -50,7 +50,7 @@ class FormrowsDatatableFieldsGroupsHelper
 	{
 		$helper = new FieldsGroupsMergerHelper();
 
-		$helper->addFieldsGroupParameters(config('filecabinet.models.dossier.fieldsGroupsFiles.index')::getFieldsGroup());
+		$helper->addFieldsGroupParameters($parametersFileName::getFieldsGroup());
 
 		$formParameters = (new static($form))->getFieldsGroup();
 

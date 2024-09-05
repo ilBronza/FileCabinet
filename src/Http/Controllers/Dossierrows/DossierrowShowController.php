@@ -2,6 +2,8 @@
 
 namespace IlBronza\FileCabinet\Http\Controllers\Dossierrows;
 
+use IlBronza\CRUD\Traits\CRUDRelationshipTrait;
+use IlBronza\CRUD\Traits\CRUDShowTrait;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowCRUD;
 
 class DossierrowShowController extends DossierrowCRUD

@@ -4,7 +4,7 @@ namespace IlBronza\FileCabinet\Providers\DatatablesFields\Dossiers;
 
 use IlBronza\Datatables\DatatablesFields\DatatableField;
 
-class DatatableFieldDossierStatus  extends DatatableField
+class DatatableFieldDossierStatus extends DatatableField
 {
 	//TODO fare na roba fatta bene col fetcher
 

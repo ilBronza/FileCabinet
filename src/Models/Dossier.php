@@ -2,6 +2,7 @@
 
 namespace IlBronza\FileCabinet\Models;
 
+use IlBronza\Buttons\Button;
 use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\FileCabinet\Helpers\DossierStatusHelper;
 use IlBronza\FileCabinet\Models\Traits\DossierButtonsRoutesTrait;
@@ -13,12 +14,14 @@ use IlBronza\FileCabinet\Models\Traits\DossierRenderTrait;
 use IlBronza\FileCabinet\Models\Traits\DossierScopesTrait;
 use IlBronza\Menu\Interfaces\NavbarableElementInterface;
 use IlBronza\Schedules\Traits\InteractsWithSchedule;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 use function _;
 use function dd;
 use function get_class_methods;
 use function json_encode;
+use function route;
 
 class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 {
@@ -83,6 +86,15 @@ class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 	public function getStatus()
 	{
 		return DossierStatusHelper::getStatus($this);
+	}
+
+	public function getAssociateButton(Model $model) : Button
+	{
+		return Button::create([
+			'href' => app() route(pluralClass(static::class) . '.index'),
+			'translatedText' => static::getTranslation('goToList'),
+			'icon' => 'list'
+		]);
 	}
 
 	public static function boot() {
