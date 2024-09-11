@@ -91,7 +91,7 @@ class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 	public function getAssociateButton(Model $model) : Button
 	{
 		return Button::create([
-			'href' => app() route(pluralClass(static::class) . '.index'),
+			'href' => 'asdasd',
 			'translatedText' => static::getTranslation('goToList'),
 			'icon' => 'list'
 		]);

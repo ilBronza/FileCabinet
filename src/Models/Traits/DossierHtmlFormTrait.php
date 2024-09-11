@@ -64,6 +64,8 @@ trait DossierHtmlFormTrait
 
 		$ibForm->setTitle($this->getName());
 
+		$ibForm->setUpdateEditor(true);
+
 		if($description = $this->getDescription())
 			$ibForm->setIntro($description);
 
