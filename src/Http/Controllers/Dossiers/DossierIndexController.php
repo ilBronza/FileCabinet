@@ -10,37 +10,37 @@ use function ini_set;
 
 class DossierIndexController extends DossierCRUD
 {
-    use CRUDPlainIndexTrait;
-    use CRUDIndexTrait;
+	use CRUDPlainIndexTrait;
+	use CRUDIndexTrait;
 
-    public $allowedMethods = ['index'];
+	public $allowedMethods = ['index'];
 
-    public function getIndexFieldsArray()
-    {
-        //DossierFieldsGroupParametersFile
-        return config('filecabinet.models.dossier.fieldsGroupsFiles.index')::getFieldsGroup();
-    }
+	public function getIndexFieldsArray()
+	{
+		//DossierFieldsGroupParametersFile
+		return config('filecabinet.models.dossier.fieldsGroupsFiles.index')::getFieldsGroup();
+	}
 
-    public function getRelatedFieldsArray()
-    {
-        //DossierRelatedFieldsGroupParametersFile
-        return config('filecabinet.models.dossier.fieldsGroupsFiles.related')::getFieldsGroup();
-    }
+	public function getRelatedFieldsArray()
+	{
+		//DossierRelatedFieldsGroupParametersFile
+		return config('filecabinet.models.dossier.fieldsGroupsFiles.related')::getFieldsGroup();
+	}
 
-    public function getIndexElements()
-    {
+	public function getIndexElements()
+	{
 		ini_set('max_execution_time', 60);
 		ini_set('memory_limit', - 1);
 
 		return $this->getModelClass()::with(
-                    'filecabinets',
-                    'form',
-                    'dossierable',
-					'dossierrows.formrow',
-					'dossierrows.schedules',
-					'schedules.type'
-                )
-                ->get();
-    }
+			'filecabinets',
+			'form',
+			'schedules',
+			'dossierable',
+			'dossierrows.formrow',
+			'dossierrows.schedules',
+			'schedules.type'
+		)->get();
+	}
 
 }

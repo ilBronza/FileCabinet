@@ -21,6 +21,7 @@ use function app;
 use function array_merge;
 use function config;
 use function get_class;
+use function ini_set;
 use function route;
 
 class Form extends BaseFileCabinetModel implements ClonableModelInterface
@@ -74,9 +75,14 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 
 	public function getRelatedDossiers() : Collection
 	{
+		ini_set('max_execution_time', 60);
+		ini_set('memory_limit', -1);
+
 		return $this->dossiers()->with(
 			'form',
 			'dossierrows.formrow',
+			'schedules',
+			'dossierrows.schedules',
 			'filecabinets',
 			'dossierable'
 		)->get();

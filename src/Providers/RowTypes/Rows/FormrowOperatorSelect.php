@@ -7,6 +7,7 @@ use IlBronza\AccountManager\Models\User;
 use IlBronza\CRUD\Helpers\QueryHelpers\ModelSelectQueryHelper;
 use IlBronza\FormField\Fields\SelectFormField;
 use IlBronza\FormField\FormField;
+use IlBronza\Operators\Models\Operator;
 
 class FormrowOperatorSelect extends FormrowSingleSelect
 {
@@ -27,11 +28,13 @@ class FormrowOperatorSelect extends FormrowSingleSelect
 	public function getPossibleValuesArray() : array
 	{
 		if (! $rolesIds = $this->getModel()->getSpecialParameter('roles', []))
-			return ModelSelectQueryHelper::getArrayForSelect(User::getProjectClassName());
+			return Operator::gpc()::getSelfPossibleList();
 
-		return ModelSelectQueryHelper::getArrayForSelectWithScopes(
-			User::getProjectClassName(), ['byRolesIds' => $rolesIds]
-		);
+		$userIdArray = User::gpc()::select('id')->byRolesIds($rolesIds)->get();
+
+		Operator::with('user.userdata')->whereIn('user_id', $userIdArray)->get();
+
+		return Operator::gpc()::buildElementsArryForSelect($elements);
 	}
 
 	public function getSpecialParametersFieldsetParameters() : array

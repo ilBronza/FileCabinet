@@ -129,7 +129,7 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
  
         if ($validator->fails())
         	throw new \Exception(implode(" . ", [
-        		'errore in questo campo: ' . $this->getName(),
+        		'errore in questo campo del dossier: ' . $this->getName(),
         		'valore' . json_encode($value),
         		json_encode($validator->getMessageBag()->getMessages()),
         		json_encode($rules)

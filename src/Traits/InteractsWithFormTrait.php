@@ -3,10 +3,15 @@
 namespace IlBronza\FileCabinet\Traits;
 
 use IlBronza\Category\Models\Category;
+use IlBronza\FileCabinet\Helpers\DossierrowProviderHelper;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Filecabinet;
+use IlBronza\FileCabinet\Models\Form;
+use IlBronza\FileCabinet\Models\Formrow;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
+
+use function json_encode;
 
 trait InteractsWithFormTrait
 {
@@ -49,6 +54,21 @@ trait InteractsWithFormTrait
 		return $this->dossiers()->whereIn(
 				'form_id', $forms->pluck('id')
 			)->get();
+	}
+
+	public function getDossierValueByNames(string $formName, string $formrowName) : mixed
+	{
+		$form = Form::gpc()::findCachedByField('name', $formName);
+		$formrow = Formrow::gpc()::where('name', $formrowName)->where('form_id', $form->getKey())->first();
+
+		if(! $dossierrow = DossierrowProviderHelper::getFromModelFormFormrow(
+			$this,
+			$form,
+			$formrow
+		))
+			return null;
+
+		return $dossierrow->getValue();
 	}
 
 	public function getDossiers() : Collection

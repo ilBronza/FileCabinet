@@ -73,7 +73,7 @@ class DossierCreatorHelper
         return $dossier;        
     }
 
-    static function makeByForm(Form $form) : Dossier
+    static function makeByForm(Form $form, bool $withDossierrows = false) : Dossier
     {
         $dossier = Dossier::make();
         $dossier->form()->associate($form);
@@ -87,15 +87,23 @@ class DossierCreatorHelper
                 )
             );
 
+		if($withDossierrows)
+			$dossier->dossierrows()->get();
+
         return $dossier;
     }
 
-    static function getOrCreateByForm(Model $model, Form $form) : Dossier
+    static function getOrCreateByForm(Model $model, Form $form, bool $withDossierrows = false) : Dossier
     {
-        if($dossier = $model->dossiers()->byForm($form)->first())
+		$query = $model->dossiers()->byForm($form);
+
+		if($withDossierrows)
+			$query->with('dossierrows');
+
+        if($dossier = $query->first())
             return $dossier;
 
-        return static::createByForm($model, $form);
+        return static::createByForm($model, $form, null, $withDossierrows);
     }
 
 	static function automaticallyCreateByForm(Model $model, Form $form, Dossier $parentDossier = null) : ? Dossier
@@ -106,9 +114,9 @@ class DossierCreatorHelper
 		return static::createByForm($model, $form, $parentDossier);
 	}
 
-    static function createByForm(Model $model, Form $form, Dossier $parentDossier = null) : Dossier
+    static function createByForm(Model $model, Form $form, Dossier $parentDossier = null, bool $withDossierrows = false) : Dossier
     {
-        $dossier = static::makeByForm($form);
+        $dossier = static::makeByForm($form, $withDossierrows);
 
         $dossier = $model->dossiers()->save($dossier);
 
