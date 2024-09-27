@@ -12,7 +12,12 @@ trait DossierGettersSettersTrait
 	public function getRowByName(string $rowName) : Dossierrow
 	{
 		 if(! $this->relationLoaded('dossierrows'))
-		 	return $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first();
+		 {
+			 if($result = $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first())
+				 return $result;
+
+			 dd($rowName);
+		 }
 
 		$formrow = $this->formrows()->where('name', $rowName)->first();
 
