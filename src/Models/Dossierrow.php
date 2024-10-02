@@ -144,6 +144,16 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 			);
 	}
 
+	public function pushRowValue(mixed $value, bool $validate = false) : bool
+	{
+		if(! $this->getValue())
+			return $this->storeRowValue($value, $validate);
+
+		$newDossierrow = $this->replicate();
+
+		return $newDossierrow->storeRowValue($value, $validate);
+	}
+
 	public function storeRowValue(mixed $value, bool $validate = false) : bool
 	{
 		if($validate)

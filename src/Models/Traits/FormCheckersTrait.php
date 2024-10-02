@@ -26,6 +26,6 @@ trait FormCheckersTrait
 		if(! $this->hasAutomaticCreationCheckerMethod())
 			return $this->isAutomaticallyCreatable();
 
-		return $target->{$this->getAutomaticCreationCheckerMethod()}();
+		return !! $target->{$this->getAutomaticCreationCheckerMethod()}();
 	}
 }

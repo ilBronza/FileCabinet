@@ -136,5 +136,10 @@ trait DossierGettersSettersTrait
 	{
 		return $this->getDossierrowByFormrow($formrow)->storeRowValue($value, true);
 	}
+
+	public function pushValueByFormrow(Formrow $formrow, mixed $value, bool $validate = false)
+	{
+		return $this->getDossierrowByFormrow($formrow)->pushRowValue($value, true);
+	}
 }
 

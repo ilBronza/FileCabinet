@@ -6,6 +6,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowListInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
+use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FormField\Fields\SelectFormField;
 use IlBronza\FormField\FormField;
 
@@ -23,16 +24,9 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 		];
 	}
 
-	public function getPossibleValuesArray() : array
+	public function getFormField() : FormField
 	{
-		$array = $this->getModel()->getSpecialParameter('possibleValues', []);
-
-		$result = [];
-
-		foreach($array as $element)
-			$result[$element['value']] = $element['value'];
-
-		return $result;
+		return new SelectFormField();
 	}
 
 	public function getValidationRulesArrayFromSpecialParametersArray() : array
@@ -42,6 +36,18 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 		return [
 			'in:' . implode(",", array_keys($fields))
 		];
+	}
+
+	public function getPossibleValuesArray(Dossierrow $dossierrow = null) : array
+	{
+		$array = $this->getModel()->getSpecialParameter('possibleValues', []);
+
+		$result = [];
+
+		foreach ($array as $element)
+			$result[$element['value']] = $element['value'];
+
+		return $result;
 	}
 
 	public function getSpecialParametersFieldsetParameters() : array
@@ -61,10 +67,5 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 				]
 			]
 		];
-	}
-
-	public function getFormField() : FormField
-	{
-		return new SelectFormField();
 	}
 }

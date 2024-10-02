@@ -5,27 +5,18 @@ namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 use IlBronza\AccountManager\Models\Role;
 use IlBronza\AccountManager\Models\User;
 use IlBronza\CRUD\Helpers\QueryHelpers\ModelSelectQueryHelper;
-use IlBronza\FormField\Fields\SelectFormField;
-use IlBronza\FormField\FormField;
+use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Providers\RowTypes\BaseModelRelationRow;
 use IlBronza\Operators\Models\Operator;
 
-class FormrowOperatorSelect extends FormrowSingleSelect
+class FormrowOperatorSelect extends BaseModelRelationRow
 {
-	static $databaseField = 'text';
-
-	public function getDefaultRules() : array
-	{
-		return [
-			'string'
-		];
-	}
-
 	public function getShowValue(mixed $databaseValue) : mixed
 	{
 		return User::getProjectClassName()::findCached($databaseValue)?->getFullName();
 	}
 
-	public function getPossibleValuesArray() : array
+	public function getPossibleValuesArray(Dossierrow $dossierrow = null) : array
 	{
 		if (! $rolesIds = $this->getModel()->getSpecialParameter('roles', []))
 			return Operator::gpc()::getSelfPossibleList();
@@ -55,10 +46,5 @@ class FormrowOperatorSelect extends FormrowSingleSelect
 				]
 			]
 		];
-	}
-
-	public function getFormField() : FormField
-	{
-		return new SelectFormField();
 	}
 }

@@ -3,7 +3,6 @@
 namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowMultipleValuesTrait;
-use IlBronza\FileCabinet\Providers\RowTypes\Rows\FormrowOperatorSelect;
 
 class FormrowOperatorsSelect extends FormrowOperatorSelect
 {
