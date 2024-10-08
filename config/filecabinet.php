@@ -94,6 +94,12 @@ return [
     'enabled' => true,
     'routePrefix' => 'ibFilecabinet',
 
+	'formfields' => [
+		'status' => [
+			'showMilestones' => true
+		]
+	],
+
     'defaultRules' => [
         'textarea' => [
             'max' => 2048

@@ -15,6 +15,8 @@ class DossierStatusFormField extends FormField implements FormFieldInterface
 	use SingleValueFormFieldTrait;
 	use FilecabinetBaseFormFieldTrait;
 
+	public ? bool $showMilestones = null;
+
 	static string $viewFilename = '_dossierStatus';
 
 //	public function renderShow()
@@ -38,4 +40,9 @@ class DossierStatusFormField extends FormField implements FormFieldInterface
 	}
 
 	public $htmlClasses = [];
+
+	public function showMilestones() : bool
+	{
+		return $this->showMilestones ?? config('filecabinet.formfields.status.showMilestones', true);
+	}
 }

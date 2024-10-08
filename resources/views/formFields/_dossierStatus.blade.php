@@ -21,12 +21,16 @@
 				@if(! $status['populated'])
 					Da popolare <br/>
 				@endif
-
-				@include('filecabinet::formfields._dossierStatusSchedules')
 			</div>
 		</div>
 
-		@include('filecabinet::formfields.__dossierStatusAlerts')
+		@include('filecabinet::formFields.__dossierStatusAlerts')
+
+		@if($field->showMilestones())
+		<div class="uk-width-1-1">
+			@include('filecabinet::formFields._dossierStatusSchedules')
+		</div>
+			@endif
 
 	</div>
 @else
