@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Http\Controllers\Filecabinets;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use IlBronza\FileCabinet\Models\Filecabinet;
 
 class FilecabinetPdfController extends FilecabinetDisplayController
 {
@@ -20,6 +21,11 @@ class FilecabinetPdfController extends FilecabinetDisplayController
         $this->setModel($this->setRootFilecabinet());
     }
 
+    public function getPdfFilename(Filecabinet $filecabinet)
+    {
+        return $filecabinet->filecabinetable->getPdfFilename();
+    }
+
     public function generateTotalPdf(string $filecabinet)
     {
         $filecabinet = $this->findModel($filecabinet);
@@ -28,22 +34,22 @@ class FilecabinetPdfController extends FilecabinetDisplayController
 
         $this->assignPdfModel();
 
-        $navbar = $this->buildNavbar()->setViewFolder('pdf');
+		if($filecabinet->getFilecabinetTemplate()->mustPrintMenu())
+            $navbar = $this->buildNavbar()->setViewFolder('pdf');
 
         $view = $this->getView();
 
-        // return view($view, [
-        //     'filecabinet' => $this->getModel(),
-        //     'navbar' => $navbar
-        // ]);
-
         $pdf = Pdf::loadView($view, [
             'filecabinet' => $this->getModel(),
-            'navbar' => $navbar
+            'navbar' => $navbar ?? null
         ]);
+
+	    $pdf->set_option('isRemoteEnabled', true);
 
         $pdf->setPaper('a4', 'portrait');
 
-        return $pdf->stream();
+        $filename = $this->getPdfFilename($filecabinet);
+
+        return $pdf->stream($filename);
     }
 }

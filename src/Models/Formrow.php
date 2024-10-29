@@ -2,7 +2,9 @@
 
 namespace IlBronza\FileCabinet\Models;
 
+use IlBronza\CRUD\Interfaces\CrudReorderableModelInterface;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
+use IlBronza\CRUD\Traits\Model\CRUDReorderableStandardTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Form;
@@ -11,12 +13,14 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowNamesTypeHelper;
 use IlBronza\FormField\Casts\JsonFieldCast;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 use function cache;
 
-class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface
+class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, CrudReorderableModelInterface
 {
+	use CRUDReorderableStandardTrait;
 	use CRUDSluggableTrait;
 	use FormrowJsonParametersTrait;
 
@@ -90,9 +94,16 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return !! $this->read_only;
 	}
 
-	public function isMultiple() : bool
+	public function isMultiple(Dossierrow $dossierrow = null) : bool
 	{
-		return $this->getRowType()->isMultiple();
+		$rowType = $this->getRowType();
+
+		$rowType->setDossierrow($dossierrow);
+
+		if(! $dossierrow)
+			throw new \Exception('asd');
+
+		return $rowType->isMultiple();
 	}
 
 	public function isRepeatable() : bool
@@ -160,8 +171,29 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return $this->getSlug();
 	}
 
+	public function getPlaceholder() : ? string
+	{
+		return $this->placeholder;
+	}
+
+	public function getPlaceholderGetterMethod() : ? string
+	{
+		return $this->placeholder_getter_method;
+	}
+
 	public function getFormfieldLabel() : string
 	{
+		return $this->getName();
+	}
+
+	public function getFormfieldPlaceholder(Model $model) : ? string
+	{
+		if($placeholder = $this->getPlaceholder())
+			return $placeholder;
+
+		if($method = $this->getPlaceholderGetterMethod())
+			return $model->{$method}();
+
 		return $this->getName();
 	}
 
@@ -175,9 +207,9 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return !! $this->isDisabled();
 	}
 
-	public function getFormfieldRules() : array
+	public function getFormfieldRules(Dossierrow $dossierrow = null) : array
 	{
-		return $this->getRowType()->buildRules($this);
+		return $this->getRowType()->buildRules($this, $dossierrow);
 	}
 
 	public function getFormfieldRepeatable() : bool
@@ -187,7 +219,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isFormfieldMultiple() : bool
 	{
-		return $this->isMultiple();
+		return $this->isMultiple($this->dossierrow);
 	}
 
 	public function getFormfieldRelationName() : ? string

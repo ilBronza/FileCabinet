@@ -10,7 +10,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseModelRelationRow;
 use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\Operators\Models\Operator;
 
-class FormrowOperatorSelect extends BaseModelRelationRow
+class FormrowUserSelect extends BaseModelRelationRow
 {
 	use StandardCheckFieldValidityParametersTrait;
 
@@ -21,14 +21,14 @@ class FormrowOperatorSelect extends BaseModelRelationRow
 
 	public function getPossibleValuesArray() : array
 	{
-		if (! $rolesIds = $this->getModel()->getSpecialParameter('roles', []))
-			return Operator::gpc()::getSelfPossibleList();
+		if (! $rolesIds = $this->getModel()->getSpecialParameter('user_roles', []))
+			return User::gpc()::getSelfPossibleList();
 
-		$userIdArray = User::gpc()::select('id')->byRolesIds($rolesIds)->get();
+		$userIds = User::gpc()::select('id')->byRolesIds($rolesIds)->pluck('id');
 
-		Operator::with('user.userdata')->whereIn('user_id', $userIdArray)->get();
+		$elements = User::with('userdata')->whereIn('id', $userIds)->get();
 
-		return Operator::gpc()::buildElementsArryForSelect($elements);
+		return User::gpc()::buildElementsArryForSelect($elements);
 	}
 
 	public function getSpecialParametersFieldsetParameters() : array
@@ -39,12 +39,12 @@ class FormrowOperatorSelect extends BaseModelRelationRow
 			'parameters' => [
 				'translationPrefix' => 'filecabinet::fields',
 				'fields' => [
-					'roles' => [
+					'user_roles' => [
 						'type' => 'select',
 						'multiple' => true,
 						'rules' => 'array|nullable|in:' . implode(',', array_keys($rolesList)),
 						'list' => $rolesList,
-						'value' => $this->getModel()->getSpecialParameter('roles', [])
+						'value' => $this->getModel()->getSpecialParameter('user_roles', [])
 					]
 				]
 			]

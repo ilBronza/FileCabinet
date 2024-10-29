@@ -2,6 +2,8 @@
 
 namespace IlBronza\FileCabinet\Models\Traits;
 
+use function dd;
+
 trait FormrowJsonParametersTrait
 {
 	private function parseSpecialParametersFields()
@@ -14,6 +16,15 @@ trait FormrowJsonParametersTrait
 		$parameters = $this->getSpecialParameters();
 
 		foreach($specialParametersFields as $name => $fieldParameters)
+		{
+			$parameters[$name] = $this->$name;
+
+			unset($this[$name]);
+		}
+
+		$validationParametersFields = $this->getRowType()->getCheckFieldValidityParametersFields();
+
+		foreach($validationParametersFields as $name => $fieldParameters)
 		{
 			$parameters[$name] = $this->$name;
 

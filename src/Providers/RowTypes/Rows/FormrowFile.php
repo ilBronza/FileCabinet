@@ -14,6 +14,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterfac
 use IlBronza\FileCabinet\Providers\RowTypes\Rows\ModelDatabaseTypes\DatabaseTypeHelper;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersRulesFieldTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\FileFormField;
 use IlBronza\FormField\Fields\SelectFormField;
 use IlBronza\FormField\Fields\TextFormField;
@@ -27,6 +28,8 @@ use function implode;
 
 class FormrowFile extends BaseRow implements FormrowWithSpecialParametersInterface
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	use SpecialParametersTrait;
 
 	static $fieldType = 'file';
@@ -38,18 +41,6 @@ class FormrowFile extends BaseRow implements FormrowWithSpecialParametersInterfa
 			'string'
 		];
 	}
-
-//	public function getPossibleValuesArray() : array
-//	{
-//		$array = $this->getModel()->getSpecialParameter('possibleValues', null);
-//
-//		$result = [];
-//
-//		foreach($array as $element)
-//			$result[$element['value']] = $element['value'];
-//
-//		return $result;
-//	}
 
 	protected function getAvailableDisks() : array
 	{

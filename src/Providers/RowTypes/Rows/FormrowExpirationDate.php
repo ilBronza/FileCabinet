@@ -8,6 +8,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithEventTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\DateFormField;
 use IlBronza\FormField\FormField;
 use IlBronza\Schedules\Helpers\Applicators\ScheduleApplicatorHelper;
@@ -18,6 +19,8 @@ use function is_null;
 
 class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParametersInterface
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	use SpecialParametersTrait;
 	use FormrowWithEventTrait;
 

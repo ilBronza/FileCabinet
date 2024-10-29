@@ -7,11 +7,14 @@ use IlBronza\FileCabinet\Providers\RowTypes\FormrowListInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
 use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\SelectFormField;
 use IlBronza\FormField\FormField;
 
 class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParametersInterface, FormrowListInterface
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	use SpecialParametersTrait;
 
 	static $fieldType = 'select';
@@ -38,7 +41,7 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 		];
 	}
 
-	public function getPossibleValuesArray(Dossierrow $dossierrow = null) : array
+	public function getPossibleValuesArray() : array
 	{
 		$array = $this->getModel()->getSpecialParameter('possibleValues', []);
 

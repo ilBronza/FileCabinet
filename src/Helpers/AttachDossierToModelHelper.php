@@ -1,4 +1,4 @@
-te<?php
+<?php
 
 namespace IlBronza\FileCabinet\Helpers;
 

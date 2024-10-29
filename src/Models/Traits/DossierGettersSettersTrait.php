@@ -9,15 +9,23 @@ use IlBronza\FileCabinet\Models\Formrow;
 
 trait DossierGettersSettersTrait
 {
+	public function hasUpdateEditor() : bool
+	{
+		if(isset($this->updateEditor))
+			return $this->updateEditor;
+
+		return config('filecabinet.updateEditor', true);
+	}
+
 	public function getRowByName(string $rowName) : Dossierrow
 	{
-		 if(! $this->relationLoaded('dossierrows'))
-		 {
-			 if($result = $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first())
-				 return $result;
+		if(! $this->relationLoaded('dossierrows'))
+		{
+			if($result = $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first())
+				return $result;
 
-			 dd($rowName);
-		 }
+			dd($rowName);
+		}
 
 		$formrow = $this->formrows()->where('name', $rowName)->first();
 

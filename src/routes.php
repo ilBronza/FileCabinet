@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Registry\CrudDrivemodelController;
 use IlBronza\FileCabinet\Facades\FileCabinet;
 
 use IlBronza\FileCabinet\Models\Dossierrow;
@@ -22,7 +23,9 @@ Route::group([
 			Route::put('{filecabinetTemplate}', [FileCabinet::getController('filecabinetTemplate', 'edit'), 'update'])->name('filecabinetTemplates.update');
 
 			Route::delete('{filecabinetTemplate}/delete', [FileCabinet::getController('filecabinetTemplate', 'destroy'), 'destroy'])->name('filecabinetTemplates.destroy');
-
+			
+			Route::delete('filecabinetTemplate/{filecabinetTemplate}/delete-media/{media}', [FileCabinet::getController('filecabinetTemplate', 'deleteMedia'), 'deleteMedia'])
+			     ->name('filecabinetTemplates.deleteMedia');
 
 
 			Route::get('{filecabinetTemplate}/manage-pdf-template-code', [FileCabinet::getController('filecabinetTemplate', 'pdfTemplate'), 'edit'])->name('filecabinetTemplates.managePdfTemplate');
@@ -130,6 +133,8 @@ Route::group([
 
 		Route::group(['prefix' => 'formrows'], function()
 		{
+			Route::post('reorder', [FileCabinet::getController('formrow', 'reorder'), 'storeMassReorder'])->name('formrows.storeMassReorder');
+
 			Route::get('', [FileCabinet::getController('formrow', 'index'), 'index'])->name('formrows.index');
 
 			Route::get('{formrow}', [FileCabinet::getController('formrow', 'show'), 'show'])->name('formrows.show');

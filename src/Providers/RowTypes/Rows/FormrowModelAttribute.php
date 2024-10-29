@@ -9,12 +9,15 @@ use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterfac
 use IlBronza\FileCabinet\Providers\RowTypes\Rows\ModelDatabaseTypes\DatabaseTypeHelper;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersRulesFieldTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\TextFormField;
 use IlBronza\FormField\FormField;
 use Illuminate\Database\Eloquent\Model;
 
 class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParametersInterface
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	public string $attributeNameVariable;
 	protected DatabaseTypeHelper $columnHelper;
 
@@ -55,6 +58,9 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 	protected function getPlaceholderModel() : Model
 	{
 		$modelName = $this->getModelname();
+
+		if($modelName == "")
+			dd($this);
 
 		$modelClass = $this->getModel()->getForm()->getFullQualifiedModelByName(
 			$modelName
@@ -105,13 +111,6 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 
 	public function getFormField() : FormField
 	{
-		dd(
-			ModelSchemaHelper::getFieldTypeByModel(
-				$this->getModel()
-			)
-		);
-
-		dd('cossa xe');
 		return new TextFormField();
 	}
 

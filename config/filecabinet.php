@@ -21,6 +21,7 @@ use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierPopulateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierShowController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateFieldsController;
+use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetDeleteMediaController;
 use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateEditUpdateController;
@@ -36,6 +37,7 @@ use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowReorderController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormCloneController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormCreateStoreController;
@@ -59,6 +61,7 @@ use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetFieldsGroupParameters
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetTemplateFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowByFormFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\DossierShowFieldsetsParameters;
@@ -92,6 +95,9 @@ use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormrowRelationManager;
 
 return [
     'enabled' => true,
+
+    'updateEditor' => true,
+    
     'routePrefix' => 'ibFilecabinet',
 
 	'formfields' => [
@@ -156,7 +162,8 @@ return [
             'class' => Formrow::class,
             'table' => 'filecabinets__formrows',
             'controllers' => [
-                'index' => FormrowIndexController::class,
+	            'reorder' => FormrowReorderController::class,
+	            'index' => FormrowIndexController::class,
                 'create' => FormrowCreateStoreController::class,
                 'store' => FormrowCreateStoreController::class,
                 'show' => FormrowShowController::class,
@@ -168,6 +175,7 @@ return [
                 'show' => FormrowRelationManager::class
             ],
             'fieldsGroupsFiles' => [
+                'byForm' => FormrowByFormFieldsGroupParametersFile::class,
                 'index' => FormrowFieldsGroupParametersFile::class,
                 'related' => FormrowRelatedFieldsGroupParametersFile::class
             ],
@@ -255,6 +263,7 @@ return [
             ],
             'controllers' => [
                 'pdfTemplate' => FilecabinetTemplatePdfTemplateController::class,
+	            'deleteMedia' => FilecabinetDeleteMediaController::class,
                 'index' => FilecabinetTemplateIndexController::class,
                 'create' => FilecabinetTemplateCreateStoreController::class,
                 'store' => FilecabinetTemplateCreateStoreController::class,

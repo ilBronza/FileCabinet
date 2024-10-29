@@ -13,7 +13,13 @@ class FormRelationManager Extends RelationshipsManager
 		return [
 			'show' => [
 				'relations' => [
-					'formrows' => config('filecabinet.models.formrow.controllers.index'),
+					'formrows' => [
+						'controller' => config('filecabinet.models.formrow.controllers.index'),
+						//FormrowByFormFieldsGroupParametersFile
+						'fieldsGroupsParametersFile' => config('filecabinet.models.formrow.fieldsGroupsFiles.byForm'),
+						'sorting' => true
+
+					],
 					'dossiers' => [
 						//DossierIndexController
 						'controller' =>  config('filecabinet.models.dossier.controllers.index'),

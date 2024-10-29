@@ -4,6 +4,8 @@ namespace IlBronza\FileCabinet\Models;
 
 use Carbon\Carbon;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
+use IlBronza\FileCabinet\Helpers\DossierrowStatusHelper;
+use IlBronza\FileCabinet\Helpers\DossierStatusHelper;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Form;
@@ -41,7 +43,13 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 			3600 * 24,
 			function()
 			{
-				return "{$this->getFormrow()->getNameForDisplayRelation()} - {$this->getDossierable()->getName()}";
+				if(! $this->getDossierable())
+					return null;
+
+				if(! $this->getFormrow())
+					return null;
+
+				return "{$this->getFormrow()?->getNameForDisplayRelation()} - {$this->getDossierable()->getName()}";
 			}
 		);
 	}
@@ -248,6 +256,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getFormfieldLabel();
 	}
 
+	public function getFormfieldPlaceholder(Model $model) : ? string
+	{
+		return $this->getFormrow()->getFormfieldPlaceholder($this->getDossierable());
+	}
+
 	public function isFormfieldRequired() : bool
 	{
 		return $this->getFormrow()->isFormfieldRequired();
@@ -260,7 +273,7 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getFormfieldRules() : array
 	{
-		return $this->getFormrow()->getFormfieldRules();
+		return $this->getFormrow()->getFormfieldRules($this);
 	}
 
 	public function getFormfieldRepeatable() : bool
@@ -270,7 +283,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function isFormfieldMultiple() : bool
 	{
-		return $this->getFormrow()->isFormfieldMultiple();
+		$formrow = $this->getFormrow();
+
+		$formrow->dossierrow = $this;
+
+		return $formrow->isFormfieldMultiple();
 	}
 
 	public function getFormfieldRelationName() : ? string
@@ -292,5 +309,10 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getShowUrl(array $data = [])
 	{
 		return $this->getDossier()->getShowUrl();
+	}
+
+	public function getStatus()
+	{
+		return DossierrowStatusHelper::getStatus($this);
 	}
 }

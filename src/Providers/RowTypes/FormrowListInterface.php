@@ -6,5 +6,5 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 
 interface FormrowListInterface
 {
-	public function getPossibleValuesArray(Dossierrow $dossierrow = null) : array;
+	public function getPossibleValuesArray() : array;
 }

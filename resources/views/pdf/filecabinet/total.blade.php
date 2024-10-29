@@ -3,9 +3,31 @@
 @section('content')
 
 
-{!! $navbar->render() !!}
+<style type="text/css">
+.dossiertable th
+{
+	width: 30%;
+}
 
-@include('filecabinet::pdf.filecabinet._filecabinet')
+.dossiertable td
+{
+	width: 20%;
+}
 
+.dossiertitle
+{
+	display: block;
+	margin-top: 10px;
+	text-transform: uppercase;
+}
+
+</style>
+
+	@if($navbar)
+		{!! $navbar->render() !!}
+	@endif
+
+
+	@include('filecabinet::pdf.filecabinet._filecabinet')
 
 @endsection

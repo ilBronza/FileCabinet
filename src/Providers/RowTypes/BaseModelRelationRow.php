@@ -12,6 +12,11 @@ abstract class BaseModelRelationRow extends FormrowSingleSelect
 
 	public function getDefaultRules() : array
 	{
+		if($this->isMultiple())
+			return [
+				'array'
+			];
+
 		return [
 			'string'
 		];

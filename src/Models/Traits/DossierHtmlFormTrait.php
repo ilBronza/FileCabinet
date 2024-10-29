@@ -47,6 +47,8 @@ trait DossierHtmlFormTrait
 			$repeating = ($previousFormrowId == $dossierrow->getFormrowId());
 			$previousFormrowId = $dossierrow->getFormrowId();
 
+//			dd($dossierrow->getStatus());
+
 			$result->push($formField);
 		}
 
@@ -64,7 +66,7 @@ trait DossierHtmlFormTrait
 
 		$ibForm->setTitle($this->getName());
 
-		$ibForm->setUpdateEditor(true);
+		$ibForm->setUpdateEditor($this->hasUpdateEditor());
 
 		if($description = $this->getDescription())
 			$ibForm->setIntro($description);
@@ -83,6 +85,8 @@ trait DossierHtmlFormTrait
 
 		$ibForm->setAction($this->getUpdateUrl());
 		$ibForm->setMethod('PUT');
+
+		$ibForm->hasShowLink(false);
 
 		$ibFormFields = $this->getFormFields();
 
@@ -112,6 +116,7 @@ trait DossierHtmlFormTrait
 		foreach ($dossierrows as $dossierrow)
 		{
 			$fieldname = $dossierrow->getFormfieldName();
+
 			$rules = FormfieldParametersHelper::getValidationRulesFromModel($dossierrow);
 
 			if ($dossierrow->getFormfieldType() == 'file')

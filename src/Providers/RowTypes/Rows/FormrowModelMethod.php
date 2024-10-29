@@ -7,11 +7,14 @@ use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersRulesFieldTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\TextFormField;
 use IlBronza\FormField\FormField;
 
 class FormrowModelMethod extends BaseRow implements FormrowWithSpecialParametersInterface
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	use SpecialParametersTrait;
 	use SpecialParametersRulesFieldTrait;
 

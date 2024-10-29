@@ -102,7 +102,7 @@ trait DossierRelationsTrait
 		return $this->morphTo();
 	}
 
-	public function getDossierable() : Model
+	public function getDossierable() : ? Model
 	{
 		return $this->dossierable;
 	}

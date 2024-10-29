@@ -3,8 +3,6 @@
 namespace IlBronza\FileCabinet\Providers\RowTypes;
 
 use IlBronza\FileCabinet\Models\Dossierrow;
-use IlBronza\FileCabinet\Providers\RowTypes\FormrowListInterface;
-use IlBronza\FileCabinet\Providers\RowTypes\FormrowWithSpecialParametersInterface;
 use IlBronza\FormField\FormField;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -12,15 +10,20 @@ use Illuminate\Database\Eloquent\Model;
 abstract class BaseRow
 {
 	public Model $model;
+	public ? Dossierrow $dossierrow;
 	public bool $required;
 	public array $defaultRules;
 
 	abstract public function getDefaultRules() : array;
+	abstract public function getCheckFieldValidityParametersFieldsetParameters() : array;
 	abstract public function getFormField() : FormField;
+
 
 	public function getDossierrowValue(Dossierrow $dossierrow)
 	{
 		$databaseField = $this->getDatabaseField();
+
+		$this->setDossierrow($dossierrow);
 
 		$value = $dossierrow->$databaseField;
 
@@ -91,6 +94,16 @@ abstract class BaseRow
 		$this->model = $model;
 	}
 
+	public function setDossierrow(Dossierrow $dossierrow = null)
+	{
+		$this->dossierrow = $dossierrow;
+	}
+
+	public function getDossierrow(): ? Dossierrow
+	{
+		return $this->dossierrow;
+	}
+
 	public function getModel() : Model
 	{
 		return $this->model;
@@ -152,14 +165,16 @@ abstract class BaseRow
 		}
 	}
 
-	public function buildRules(FormfieldModelCompatibilityInterface $model) : array
+	public function buildRules(FormfieldModelCompatibilityInterface $model, Dossierrow $dossierrow = null) : array
 	{
 		$this->setModel($model);
+
+		if($dossierrow)
+			$this->setDossierrow($dossierrow);
 
 		$this->defaultRules = $this->getDefaultRules();
 
 		$this->manageRequiredRule();
-
 
 		if($this->hasSpecialParameters())
 			$this->addSpecialParametersValidationRules();

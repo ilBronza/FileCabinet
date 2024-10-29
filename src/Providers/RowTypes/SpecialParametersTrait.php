@@ -14,6 +14,13 @@ trait SpecialParametersTrait
 			$this->setRule($rule);
 	}
 
+	public function getCheckFieldValidityParametersFields() : array
+	{
+		return FieldsetsExtractorHelper::getFieldsParametersByFieldsetsParametersArray(
+			$this->getCheckFieldValidityParametersFieldsetParameters()
+		);
+	}
+
 	public function getSpecialParametersFields() : array
 	{
 		return FieldsetsExtractorHelper::getFieldsParametersByFieldsetsParametersArray(

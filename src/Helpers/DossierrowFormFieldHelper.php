@@ -7,6 +7,8 @@ use IlBronza\FormField\FormField;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormFieldsProvider;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
 
+use function stripos;
+
 class DossierrowFormFieldHelper
 {
     static function createFieldFromDossierrow(Dossierrow $dossierrow) : FormField

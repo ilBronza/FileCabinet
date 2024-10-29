@@ -3,11 +3,13 @@
 namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\DateFormField;
 use IlBronza\FormField\FormField;
 
 class FormrowDate extends BaseRow
 {
+	use StandardCheckFieldValidityParametersTrait;
 	static $fieldType = 'date';
 	static $databaseField = 'timestamp';
 

@@ -19,7 +19,7 @@
 		<div class="uk-width-expand">
 			<div>
 				@if(! $status['populated'])
-					Da popolare <br/>
+					@lang('filecabinet::dossiers.toPopulate') <br/>
 				@endif
 			</div>
 		</div>
@@ -27,10 +27,10 @@
 		@include('filecabinet::formFields.__dossierStatusAlerts')
 
 		@if($field->showMilestones())
-		<div class="uk-width-1-1">
-			@include('filecabinet::formFields._dossierStatusSchedules')
-		</div>
-			@endif
+			<div class="uk-width-1-1">
+				@include('filecabinet::formFields._dossierStatusSchedules')
+			</div>
+		@endif
 
 	</div>
 @else

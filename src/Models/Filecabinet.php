@@ -125,4 +125,12 @@ class Filecabinet extends BaseFileCabinetModel implements
 
 		return "{$iconString} {$this->getName()}";
 	}
+
+	public function getPdfTitle()
+	{
+		if($title = $this->getCategory()->getPdfTitle())
+			return $title;
+
+		return $this->getName();
+	}
 }

@@ -3,11 +3,14 @@
 namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\TextareaFormField;
 use IlBronza\FormField\FormField;
 
 class FormrowTextarea extends BaseRow
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	static $fieldType = 'textarea';
 	static $databaseField = 'text';
 

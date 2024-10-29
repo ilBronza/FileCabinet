@@ -3,11 +3,14 @@
 namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
+use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\NumberFormField;
 use IlBronza\FormField\FormField;
 
 class FormrowInteger extends BaseRow
 {
+	use StandardCheckFieldValidityParametersTrait;
+
 	static $fieldType = 'number';
 	static $databaseField = 'decimal';
 

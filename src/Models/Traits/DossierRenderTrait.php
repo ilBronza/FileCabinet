@@ -10,9 +10,9 @@ trait DossierRenderTrait
 	{
 		$ibForm = $this->buildIbForm();
 
-		$ibForm->addNavbarButton(
-			DefaultButtonsCreatorHelper::getShowButton($this)
-		);
+		// $ibForm->addNavbarButton(
+		// 	DefaultButtonsCreatorHelper::getShowButton($this)
+		// );
 
 		return $ibForm->_renderAjax();
 	}
@@ -21,9 +21,9 @@ trait DossierRenderTrait
 	{
 		$ibForm = $this->buildIbForm();
 
-		$ibForm->addNavbarButton(
-			DefaultButtonsCreatorHelper::getShowButton($this)
-		);
+		// $ibForm->addNavbarButton(
+		// 	DefaultButtonsCreatorHelper::getShowButton($this)
+		// );
 
 		return $ibForm->_render();
 	}

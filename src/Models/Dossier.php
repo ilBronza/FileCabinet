@@ -36,6 +36,8 @@ class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 	use DossierCheckersTrait;
 	use DossierScopesTrait;
 
+	public ? bool $updateEditor;
+
 	protected $casts = [
 		'populated_at' => 'date',
 		'must_be_updated_at' => 'date'
@@ -46,7 +48,10 @@ class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 
 	public function getButtonUrl() : string
 	{
-		return '#dossier' . $this->getKey();
+		if($parent = $this->getParent())
+			return $parent->getMainFilecabinet()?->getPopulateUrl() . '#dossier' . $this->getKey();
+
+		return $this->getMainFilecabinet()?->getPopulateUrl() . '#dossier' . $this->getKey();
 	}
 
 	public function getButtonText() : string

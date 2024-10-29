@@ -13,7 +13,7 @@ class FilecabinetTemplateEditUpdateController extends FilecabinetTemplateCRUD
 
     public function getGenericParametersFile() : ? string
     {
-        return config('filecabinetTemplates.models.filecabinetTemplate.parametersFiles.create');
+        return config('filecabinet.models.filecabinetTemplate.parametersFiles.create');
     }
 
     public function edit(string $filecabinetTemplate)
