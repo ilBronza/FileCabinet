@@ -100,6 +100,12 @@ return [
     
     'routePrefix' => 'ibFilecabinet',
 
+    'filecabinet' => [
+        'buttons' => [
+            'showPrintPartialPdf' => true
+        ]
+    ],
+
 	'formfields' => [
 		'status' => [
 			'showMilestones' => true

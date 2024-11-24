@@ -7,7 +7,7 @@
         {!! $navbar->render() !!}
     </div>
     <div class="uk-width-expand">
-        @include('filecabinet::filecabinet._populate')
+        @include('filecabinet::filecabinet._populate', ['level' => 1])
     </div>    
 </div>
 

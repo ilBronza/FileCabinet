@@ -24,11 +24,6 @@ class FormShowController extends FormCRUD
         return config("filecabinet.models.{$this->configModelClassName}.relationshipsManagerClasses.show");
     }
 
-    public function setShowButtons()
-    {
-        $this->showButtons[] = $this->getModel()->getCreateFormrowButton();
-    }
-
     public function show(string $form)
     {
         $form = $this->findModel($form);

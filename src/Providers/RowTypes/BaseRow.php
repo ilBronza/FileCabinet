@@ -10,67 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 abstract class BaseRow
 {
 	public Model $model;
-	public ? Dossierrow $dossierrow;
+	public ?Dossierrow $dossierrow;
 	public bool $required;
 	public array $defaultRules;
 
-	abstract public function getDefaultRules() : array;
-	abstract public function getCheckFieldValidityParametersFieldsetParameters() : array;
-	abstract public function getFormField() : FormField;
+	public ?bool $multiple;
 
-
-	public function getDossierrowValue(Dossierrow $dossierrow)
+	static function getTranslatedName() : string
 	{
-		$databaseField = $this->getDatabaseField();
-
-		$this->setDossierrow($dossierrow);
-
-		$value = $dossierrow->$databaseField;
-
-		return $this->transformValue($value);
-	}
-
-	public function transformValue(mixed $databaseValue) : mixed
-	{
-		return $databaseValue;
-	}
-
-	public function getShowValue(mixed $databaseValue) : mixed
-	{
-		return $this->transformValue($databaseValue);
-	}
-
-	public function renderValueForView($value) : ? string
-	{
-		return $this->getFormField()->renderValueForView($value);
-	}
-
-	public function hasSpecialParameters() : bool
-	{
-		if(! $this instanceof FormrowWithSpecialParametersInterface)
-			return false;
-
-		return count($this->getSpecialParametersFieldsetParameters());
-	}
-
-	public function hasValuesList() : bool
-	{
-		return $this instanceof FormrowListInterface;
-	}
-
-	public function setRequired(bool $required) : bool
-	{
-		return $this->required = $required;
-	}
-
-	public function isRequired() : bool
-	{
-		return $this->required;
-	}
-
-	public function getFormfieldType() : string
-	{
-		return static::$fieldType;
+		return __('filecabinet::formrowstypes.' . static::getType());
 	}
 
 	static function getType() : string
@@ -84,29 +32,17 @@ abstract class BaseRow
 		return lcfirst(str_replace("Formrow", "", $filename));
 	}
 
-	static function getTranslatedName() : string
-	{
-		return __('filecabinet::formrowstypes.' . static::getType());
-	}
+	abstract public function getCheckFieldValidityParametersFieldsetParameters() : array;
 
-	public function setModel(Model $model)
+	public function getDossierrowValue(Dossierrow $dossierrow)
 	{
-		$this->model = $model;
-	}
+		$databaseField = $this->getDatabaseField();
 
-	public function setDossierrow(Dossierrow $dossierrow = null)
-	{
-		$this->dossierrow = $dossierrow;
-	}
+		$this->setDossierrow($dossierrow);
 
-	public function getDossierrow(): ? Dossierrow
-	{
-		return $this->dossierrow;
-	}
+		$value = $dossierrow->$databaseField;
 
-	public function getModel() : Model
-	{
-		return $this->model;
+		return $this->transformValue($value);
 	}
 
 	public function getDatabaseField() : string
@@ -114,38 +50,78 @@ abstract class BaseRow
 		return static::$databaseField;
 	}
 
-	public function unsetRule(string $rule)
+	public function transformValue(mixed $databaseValue) : mixed
 	{
-		$key = array_search($rule, $this->defaultRules);
-
-		if($key !== false)
-			unset($this->defaultRules[$key]);
+		return $databaseValue;
 	}
 
-	public function setRule(string $rule)
+	public function getShowValue(mixed $databaseValue) : mixed
 	{
-		$key = array_search($rule, $this->defaultRules);
+		return $this->transformValue($databaseValue);
+	}
 
-		if($key === false)
-			$this->defaultRules[] = $rule;
+	public function renderValueForView($value) : ?string
+	{
+		return $this->getFormField()->renderValueForView($value);
+	}
+
+	abstract public function getFormField() : FormField;
+
+	public function hasValuesList() : bool
+	{
+		return $this instanceof FormrowListInterface;
+	}
+
+	public function getFormfieldType() : string
+	{
+		return static::$fieldType;
+	}
+
+	public function getDossierrow() : ?Dossierrow
+	{
+		return $this->dossierrow;
+	}
+
+	public function setDossierrow(Dossierrow $dossierrow = null)
+	{
+		$this->dossierrow = $dossierrow;
 	}
 
 	public function isMultiple() : bool
 	{
-		return $this->acceptsArray();
-	}
+		if (isset($this->multiple))
+			return $this->multiple;
 
-	public function isRepeatable() : bool
-	{
-		return $this->getModel()->getFormfieldRepeatable();
+		return $this->acceptsArray();
 	}
 
 	public function acceptsArray() : bool
 	{
-		return in_array('array', $this->buildRules(
+		return in_array(
+			'array', $this->buildRules(
 			$this->getModel()
-		));
+		)
+		);
 	}
+
+	public function buildRules(FormfieldModelCompatibilityInterface $model, Dossierrow $dossierrow = null) : array
+	{
+		$this->setModel($model);
+
+		if ($dossierrow)
+			$this->setDossierrow($dossierrow);
+
+		$this->defaultRules = $this->getDefaultRules();
+
+		$this->manageRequiredRule();
+
+		if ($this->hasSpecialParameters())
+			$this->addSpecialParametersValidationRules();
+
+		return $this->defaultRules;
+	}
+
+	abstract public function getDefaultRules() : array;
 
 	private function manageRequiredRule()
 	{
@@ -153,7 +129,7 @@ abstract class BaseRow
 			$this->getModel()->isRequired()
 		);
 
-		if(! $this->isRequired())
+		if (! $this->isRequired())
 		{
 			$this->unsetRule('required');
 			$this->setRule('nullable');
@@ -165,30 +141,53 @@ abstract class BaseRow
 		}
 	}
 
-	public function buildRules(FormfieldModelCompatibilityInterface $model, Dossierrow $dossierrow = null) : array
+	public function isRequired() : bool
 	{
-		$this->setModel($model);
-
-		if($dossierrow)
-			$this->setDossierrow($dossierrow);
-
-		$this->defaultRules = $this->getDefaultRules();
-
-		$this->manageRequiredRule();
-
-		if($this->hasSpecialParameters())
-			$this->addSpecialParametersValidationRules();
-
-		return $this->defaultRules;
+		return $this->required;
 	}
 
-	public function _storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
+	public function setRequired(bool $required) : bool
 	{
-		$databaseField = $dossierrow->getDatabaseField();
+		return $this->required = $required;
+	}
 
-		$dossierrow->$databaseField = $value;
+	public function getModel() : Model
+	{
+		return $this->model;
+	}
 
-		return $dossierrow->save();
+	public function setModel(Model $model)
+	{
+		$this->model = $model;
+	}
+
+	public function unsetRule(string $rule)
+	{
+		$key = array_search($rule, $this->defaultRules);
+
+		if ($key !== false)
+			unset($this->defaultRules[$key]);
+	}
+
+	public function setRule(string $rule)
+	{
+		$key = array_search($rule, $this->defaultRules);
+
+		if ($key === false)
+			$this->defaultRules[] = $rule;
+	}
+
+	public function hasSpecialParameters() : bool
+	{
+		if (! $this instanceof FormrowWithSpecialParametersInterface)
+			return false;
+
+		return count($this->getSpecialParametersFieldsetParameters());
+	}
+
+	public function isRepeatable() : bool
+	{
+		return $this->getModel()->getFormfieldRepeatable();
 	}
 
 	public function emptyRowValue(Dossierrow $dossierrow)
@@ -203,5 +202,14 @@ abstract class BaseRow
 	public function storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
 	{
 		return $this->_storeDossierrow($dossierrow, $value, $validate);
+	}
+
+	public function _storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
+	{
+		$databaseField = $dossierrow->getDatabaseField();
+
+		$dossierrow->$databaseField = $value;
+
+		return $dossierrow->save();
 	}
 }

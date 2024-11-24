@@ -126,6 +126,9 @@ class DossierPopulatorHelper
 				if(count($dossierrow->getMedia("*")) > 0)
 					continue;
 
+            if($dossierrow->isFormfieldReadOnly())
+                    continue;
+
 			$dossierrow->storeRowValue(
 				$this->getParameter(
 					$dossierrow

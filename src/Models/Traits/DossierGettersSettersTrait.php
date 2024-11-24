@@ -4,6 +4,7 @@ namespace IlBronza\FileCabinet\Models\Traits;
 
 use Auth;
 use Carbon\Carbon;
+use IlBronza\FileCabinet\Helpers\DossierCreatorHelper;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Formrow;
 
@@ -54,7 +55,16 @@ trait DossierGettersSettersTrait
 			if($result = $this->getDossierrows()->firstWhere('formrow_id', $formrow->getKey()))
 				return $result;
 
-		return $this->dossierrows()->byFormrow($formrow)->first();
+		if($result = $this->dossierrows()->byFormrow($formrow)->first())
+			return $result;
+
+		$this->dossierrows()->save(
+			$dossierrow = DossierCreatorHelper::makeDossierrowFromFormrow(
+				$formrow
+			)
+		);
+
+		return $dossierrow;
 	}
 
 	public function setNotPopulated(bool $save = true)

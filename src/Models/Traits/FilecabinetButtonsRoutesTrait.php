@@ -42,9 +42,10 @@ trait FilecabinetButtonsRoutesTrait
 		);
 
 		if(! $this->isRoot())
-			$this->addNavbarButton(
-				$this->getGeneratePartialPdfButton()
-			);
+			if($this->canGeneratePartialPdf())
+				$this->addNavbarButton(
+					$this->getGeneratePartialPdfButton()
+				);
 
 		return $this->getButtonsNavbar()->setSmall();
 	}

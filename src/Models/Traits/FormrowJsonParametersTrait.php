@@ -39,6 +39,22 @@ trait FormrowJsonParametersTrait
 		return $this->getRowType()->hasSpecialParameters();
 	}
 
+	public function getRolesParameters() : array
+	{
+		if(is_array($this->roles))
+			return $this->roles;
+
+		return json_decode($this->roles, true) ?? [];
+	}
+
+	public function getPermissionsParameters() : array
+	{
+		if(is_array($this->permissions))
+			return $this->permissions;
+
+		return json_decode($this->permissions, true) ?? [];
+	}
+
 	public function getSpecialParameters() : array
 	{
 		if(is_array($this->parameters))

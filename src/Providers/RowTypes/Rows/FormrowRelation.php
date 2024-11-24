@@ -85,7 +85,7 @@ class FormrowRelation extends BaseModelRelationRow
 				'fields' => [
 					'relation_name' => [
 						'type' => 'text',
-						'rules' => 'string|required|max:64',
+						'rules' => 'string|required|max:64|notIn:permissions,roles',
 						'value' => $this->getRelationName()
 					]
 				]

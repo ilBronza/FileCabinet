@@ -49,17 +49,6 @@ class DossierPopulatorEditorHelper extends DossierPopulatorHelper
 		$updateParameters['model-id'] = $this->dossierrow->getKey();
 		$updateParameters['value'] = $this->getRequest()->value;
 
-//		$fieldExtraData = $request->input('fieldExtraData', []);
-//
-//		if($fieldExtraData['refreshrow'] ?? null)
-//		{
-//			$updateParameters['ibaction'] = true;
-//			$updateParameters['action'] = 'refreshRow';
-//		}
-//
-//		if($fieldExtraData['ibaction'] ?? null)
-//			$updateParameters['ibaction'] = $fieldExtraData['ibaction'];
-
 		return $updateParameters;
 	}
 

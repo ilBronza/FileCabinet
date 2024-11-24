@@ -10,20 +10,6 @@ use function implode;
 
 class FilecabinetTemplateCreateStoreFieldsetsParameters extends FieldsetParametersFile
 {
-	public function getModelsArray() : array
-	{
-		return config('app.filecabinet.filecabinetTemplate.applicableToModels');
-	}
-
-	public function getEventsArray() : array
-	{
-		return config('app.filecabinet.filecabinetTemplate.events', [
-			'created' => 'created',
-			'updated' => 'updated',
-			'saved' => 'saved'
-		]);
-	}
-
 	public function _getFieldsetsParameters() : array
 	{
 		return [
@@ -37,7 +23,6 @@ class FilecabinetTemplateCreateStoreFieldsetsParameters extends FieldsetParamete
 						'rules' => 'nullable|exists:' . config('category.models.category.table') . ',id',
 						'relation' => 'category'
 					],
-
 
 					'models' => [
 						'type' => 'json',
@@ -92,7 +77,7 @@ class FilecabinetTemplateCreateStoreFieldsetsParameters extends FieldsetParamete
 					'pdf_image' => [
 						'type' => 'file',
 						'multiple' => false,
-						'rules' =>'file|nullable|max:255'
+						'rules' => 'file|nullable|max:255'
 					],
 					'pdf_title' => ['textarea' => 'string|nullable|max:255'],
 					'pdf_description' => [
@@ -101,11 +86,25 @@ class FilecabinetTemplateCreateStoreFieldsetsParameters extends FieldsetParamete
 						'tooltip' => 'Leave empty',
 						'rules' => 'string|nullable'
 					],
-					'pdf_show_menu' => ['boolean' => 'bool|required'],
-					'pdf_print_fields_when_empty' => ['boolean' => 'bool|required'],
+					'pdf_show_menu' => ['boolean' => 'bool|nullable'],
+					'pdf_print_fields_when_empty' => ['boolean' => 'bool|nullable'],
 				],
 				'width' => ['large@m']
 			]
 		];
+	}
+
+	public function getModelsArray() : array
+	{
+		return config('app.filecabinet.filecabinetTemplate.applicableToModels');
+	}
+
+	public function getEventsArray() : array
+	{
+		return config('app.filecabinet.filecabinetTemplate.events', [
+			'created' => 'created',
+			'updated' => 'updated',
+			'saved' => 'saved'
+		]);
 	}
 }

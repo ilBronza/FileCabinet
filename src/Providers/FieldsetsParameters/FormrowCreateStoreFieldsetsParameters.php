@@ -12,25 +12,6 @@ use function implode;
 
 class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 {
-	protected function getPossibleActions()
-	{
-		return [
-			'edit' => trans('filecabinet::actions.edit'),
-			'create' => trans('filecabinet::actions.create'),
-			'delete' => trans('filecabinet::actions.delete'),
-		];
-	}
-
-	protected function getPossibleRoles() : array
-	{
-		return Role::getProjectClassName()::all()->pluck('name', 'id')->toArray();
-	}
-
-	protected function getPossiblePermissions() : array
-	{
-		return Permission::getProjectClassName()::all()->pluck('name', 'id')->toArray();
-	}
-
 	public function _getFieldsetsParameters() : array
 	{
 		$rowTypes = FormrowNamesTypeHelper::getPossibleTypesArray();
@@ -69,7 +50,7 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 					],
 					'description' => [
 						'type' => 'texteditor',
-						'rules'=> 'string|nullable|max:2048',
+						'rules' => 'string|nullable|max:2048',
 						'vertical' => true
 					],
 					'placeholder' => ['text' => 'string|nullable|max:64'],
@@ -88,8 +69,11 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 						'max' => '2048',
 						'rules' => 'string|nullable'
 					],
-					'pdf_show_menu' => ['boolean' => 'bool|required'],
-					'pdf_print_fields_when_empty' => ['boolean' => 'bool|required'],
+					'pdf_show_menu' => ['boolean' => 'bool|nullable'],
+					'pdf_print_fields_when_empty' => ['boolean' => 'bool|nullable'],
+
+					'pdf_print_label' => ['boolean' => 'bool|nullable'],
+					'pdf_label' => ['text' => 'string|nullable|max:255'],
 				],
 				'width' => ['large@l']
 			],
@@ -98,8 +82,10 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 				'fields' => [
 					'roles' => [
 						'type' => 'json',
+						'value' => $this->getRolesValue(),
 						'fields' => [
 							'action' => [
+								'translatedLabel' => 'masscio',
 								'type' => 'select',
 								'multiple' => false,
 								'select2' => false,
@@ -111,7 +97,7 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 								'multiple' => true,
 								'select2' => false,
 								'list' => $this->getPossibleRoles(),
-								'rules' => 'string|nullable|in:' . implode(',', array_keys($this->getPossibleRoles()))
+								'rules' => 'array|nullable|in:' . implode(',', array_keys($this->getPossibleRoles()))
 							],
 						],
 						'rules' => 'array|nullable',
@@ -119,6 +105,7 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 
 					'permissions' => [
 						'type' => 'json',
+						'value' => $this->getPermissionsValue(),
 						'fields' => [
 							'action' => [
 								'type' => 'select',
@@ -132,7 +119,7 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 								'multiple' => true,
 								'select2' => false,
 								'list' => $this->getPossiblePermissions(),
-								'rules' => 'string|nullable|in:' . implode(',', array_keys($this->getPossiblePermissions()))
+								'rules' => 'array|nullable|in:' . implode(',', array_keys($this->getPossiblePermissions()))
 							],
 						],
 						'rules' => 'array|nullable',
@@ -141,5 +128,34 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 				'width' => ['large@l']
 			]
 		];
+	}
+
+	public function getRolesValue()
+	{
+		return $this->getModel()->getRolesParameters();
+	}
+
+	protected function getPossibleActions()
+	{
+		return [
+			'edit' => trans('filecabinet::actions.edit'),
+			'create' => trans('filecabinet::actions.create'),
+			'delete' => trans('filecabinet::actions.delete'),
+		];
+	}
+
+	protected function getPossibleRoles() : array
+	{
+		return Role::getProjectClassName()::all()->pluck('name', 'id')->toArray();
+	}
+
+	public function getPermissionsValue()
+	{
+		return $this->getModel()->getPermissionsParameters();
+	}
+
+	protected function getPossiblePermissions() : array
+	{
+		return Permission::getProjectClassName()::all()->pluck('name', 'id')->toArray();
 	}
 }

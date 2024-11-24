@@ -94,7 +94,10 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getFormrow() : ? Formrow
 	{
-		return $this->formrow;
+		if($this->formrow)
+			return $this->formrow;
+
+		throw new \Exception('manca la formrow con questo id: ' . $this->formrow_id);
 	}
 
 	public function getFormrowId() : string
@@ -271,6 +274,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->isFormfieldDisabled();
 	}
 
+	public function isFormfieldReadOnly() : bool
+	{
+		return $this->getFormrow()->isReadOnly();		
+	}
+
 	public function getFormfieldRules() : array
 	{
 		return $this->getFormrow()->getFormfieldRules($this);
@@ -279,6 +287,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getFormfieldRepeatable() : bool
 	{
 		return $this->getFormrow()->getFormfieldRepeatable();
+	}
+
+	public function getFormfieldTranslatedTooltip() : ? string
+	{
+		return $this->getFormrow()->getFormfieldTranslatedTooltip();
 	}
 
 	public function isFormfieldMultiple() : bool

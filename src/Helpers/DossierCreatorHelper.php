@@ -142,4 +142,14 @@ class DossierCreatorHelper
 
         return $newDossier;
     }
+
+	static function getDossierrowByTargetFormFormrow(Model $targetModel, Form $form, Formrow $formrow) : Dossierrow
+	{
+		$dossier = static::getOrCreateByForm($targetModel, $form);
+
+		if($dossierrow = $dossier->dossierrows()->byFormrow($formrow)->first())
+			return $dossierrow;
+
+		return static::addFormrowToDossier($dossier, $formrow);
+	}
 }

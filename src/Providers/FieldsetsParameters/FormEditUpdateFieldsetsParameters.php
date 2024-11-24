@@ -22,6 +22,13 @@ class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
 						'rules' => 'nullable|exists:' . config('category.models.category.table') . ',id',
 						'relation' => 'category'
 					],
+					'parent_id' => [
+						'type' => 'select',
+						'label' => 'parentForm',
+						'multiple' => false,
+						'rules' => 'nullable|exists:' . config('filecabinet.models.form.table') . ',id',
+						'relation' => 'parent'
+					],
 					'categories' => [
 						'type' => 'select',
 						'multiple' => true,
@@ -52,12 +59,11 @@ class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
 						'rules' => 'string|nullable',
 						'tooltip' => true,
 					],
-					'pdf_show_menu' => ['boolean' => 'bool|required'],
-					'pdf_print_fields_when_empty' => ['boolean' => 'bool|required'],
+					'pdf_show_menu' => ['boolean' => 'bool|nullable'],
+					'pdf_print_fields_when_empty' => ['boolean' => 'bool|nullable'],
 				],
 				'width' => ['1-3@m']
 			],
-
 
 			//            'interventions' => [
 			//                'translationPrefix' => 'filecabinet::fields',

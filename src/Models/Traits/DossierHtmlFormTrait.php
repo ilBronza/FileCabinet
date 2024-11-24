@@ -47,8 +47,6 @@ trait DossierHtmlFormTrait
 			$repeating = ($previousFormrowId == $dossierrow->getFormrowId());
 			$previousFormrowId = $dossierrow->getFormrowId();
 
-//			dd($dossierrow->getStatus());
-
 			$result->push($formField);
 		}
 

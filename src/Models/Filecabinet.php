@@ -133,4 +133,9 @@ class Filecabinet extends BaseFileCabinetModel implements
 
 		return $this->getName();
 	}
+
+	public function canGeneratePartialPdf() : bool
+	{
+		return config('filecabinet.filecabinet.buttons.showPrintPartialPdf', true);
+	}
 }

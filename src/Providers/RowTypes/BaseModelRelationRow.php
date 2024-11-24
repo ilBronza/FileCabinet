@@ -10,18 +10,6 @@ abstract class BaseModelRelationRow extends FormrowSingleSelect
 {
 	static $databaseField = 'text';
 
-	public function getDefaultRules() : array
-	{
-		if($this->isMultiple())
-			return [
-				'array'
-			];
-
-		return [
-			'string'
-		];
-	}
-
 	public function getFormField() : FormField
 	{
 		return new SelectFormField();

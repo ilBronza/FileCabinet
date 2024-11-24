@@ -17,14 +17,16 @@ class FormRelationManager Extends RelationshipsManager
 						'controller' => config('filecabinet.models.formrow.controllers.index'),
 						//FormrowByFormFieldsGroupParametersFile
 						'fieldsGroupsParametersFile' => config('filecabinet.models.formrow.fieldsGroupsFiles.byForm'),
-						'sorting' => true
-
+						'sorting' => true,
+						'buttons' => [
+							$this->getModel()->getCreateFormrowButton()
+						]
 					],
-					'dossiers' => [
-						//DossierIndexController
-						'controller' =>  config('filecabinet.models.dossier.controllers.index'),
-						'elementGetterMethod' => 'getRelatedDossiers'
-					],
+//					'dossiers' => [
+//						//DossierIndexController
+//						'controller' =>  config('filecabinet.models.dossier.controllers.index'),
+//						'elementGetterMethod' => 'getRelatedDossiers'
+//					],
 				]
 			]
 		];

@@ -61,4 +61,5 @@ return [
 	'parent' => 'Elemento padre',
 	'children' => 'Elementi figli',
 	'categorizables_count' => 'Elementi',
+	'relation_name' => 'Nome relazione'
 ];

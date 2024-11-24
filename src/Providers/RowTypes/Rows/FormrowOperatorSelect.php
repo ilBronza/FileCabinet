@@ -12,6 +12,8 @@ use IlBronza\Operators\Models\Operator;
 
 class FormrowOperatorSelect extends BaseModelRelationRow
 {
+	public ? bool $multiple = false;
+	
 	use StandardCheckFieldValidityParametersTrait;
 
 	public function getShowValue(mixed $databaseValue) : mixed

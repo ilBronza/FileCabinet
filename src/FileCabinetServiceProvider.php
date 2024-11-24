@@ -2,7 +2,6 @@
 
 namespace IlBronza\FileCabinet;
 
-use App\Observers\DossierObserver;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Filecabinet as FilecabinetModel;
@@ -22,9 +21,9 @@ class FileCabinetServiceProvider extends ServiceProvider
 	public function boot() : void
 	{
 		Relation::morphMap([
-			'Dossier' => Dossier::gpc(),
 			'Filecabinet' => FilecabinetModel::gpc(),
 			'FilecabinetTemplate' => FilecabinetTemplate::gpc(),
+			'Dossier' => Dossier::gpc(),
 			'Dossierrow' => Dossierrow::gpc(),
 			'Form' => Form::gpc(),
 			'Formrow' => Formrow::gpc(),

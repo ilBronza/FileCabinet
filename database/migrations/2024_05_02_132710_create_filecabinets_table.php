@@ -21,6 +21,7 @@ return new class extends Migration
             $table->uuid('category_id');
             $table->foreign('category_id')->references('id')->on(config('category.models.category.table'));
 
+            $table->unsignedInteger('sorting_index')->nullable();
             $table->nullableUuidMorphs('filecabinetable', 'filecabinet_filecabinetable');
 
             $table->uuid('populated_by')->nullable()->index();

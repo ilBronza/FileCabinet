@@ -91,7 +91,12 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isDisabled() : bool
 	{
-		return !! $this->read_only;
+		return $this->isReadOnly();
+	}
+
+	public function isReadOnly() : bool
+	{
+		return !! $this->read_only;		
 	}
 
 	public function isMultiple(Dossierrow $dossierrow = null) : bool
@@ -215,6 +220,11 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	public function getFormfieldRepeatable() : bool
 	{
 		return $this->isRepeatable();
+	}
+
+	public function getFormfieldTranslatedTooltip() : ? string
+	{
+		return $this->description;
 	}
 
 	public function isFormfieldMultiple() : bool
