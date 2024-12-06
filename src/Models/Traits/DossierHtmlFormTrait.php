@@ -3,12 +3,11 @@
 namespace IlBronza\FileCabinet\Models\Traits;
 
 use IlBronza\FileCabinet\Helpers\DossierrowFormFieldHelper;
-use IlBronza\FileCabinet\Providers\FieldsetsParameters\DossierTempFieldsetsParameters;
-use IlBronza\FormField\Helpers\FormFieldsProvider\FormFieldsProvider;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
 use IlBronza\Form\Form as IbForm;
 use Illuminate\Support\Collection;
 
+use function collect;
 use function count;
 use function dd;
 use function get_class_methods;
@@ -23,6 +22,15 @@ trait DossierHtmlFormTrait
 			])
 		);
 	}
+	public function getDossierValidationRuleByDossierrowId(string $dossierrowId)
+	{
+		return $this->getRulesByDossierrows(
+			collect([
+				$this->getDossierrowByDossierrowId($dossierrowId)
+			])
+		);
+	}
+
 	public function getDossierValidationRules() : array
 	{
 		return $this->getRulesByDossierrows(
@@ -35,23 +43,20 @@ trait DossierHtmlFormTrait
 		$result = collect();
 
 		$previousFormrowId = null;
-		$repeating = false;
 
 		foreach($this->getSortedDossierrows() as $dossierrow)
 		{
-			if(($repeating)&&($previousFormrowId != $dossierrow->getFormrowId()))
+			if(($previousFormrowId)&&($previousFormrowId != $dossierrow->getFormrowId()))
 				$formField->setLastOfType();
 
 			$formField = DossierrowFormFieldHelper::createFieldFromDossierrow($dossierrow);
 
-			$repeating = ($previousFormrowId == $dossierrow->getFormrowId());
 			$previousFormrowId = $dossierrow->getFormrowId();
 
 			$result->push($formField);
 		}
 
-		if($repeating)
-			$formField->setLastOfType();
+		$formField->setLastOfType();
 
 		return $result;
 	}
@@ -62,7 +67,7 @@ trait DossierHtmlFormTrait
 
 		$ibForm->setModel($this);
 
-		$ibForm->setTitle($this->getName());
+		$ibForm->setTitle(trim($this->getDisplaySortingIndex() . ' ' . $this->getName()));
 
 		$ibForm->setUpdateEditor($this->hasUpdateEditor());
 

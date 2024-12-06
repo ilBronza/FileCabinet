@@ -5,8 +5,16 @@ namespace IlBronza\FileCabinet\Helpers;
 
 use IlBronza\FileCabinet\Models\Dossier;
 
+use IlBronza\FileCabinet\Models\Dossierrow;
+
+use Illuminate\Support\Collection;
+
+use function dd;
+
 class DossierStatusHelper
 {
+	public Collection $dossierrows;
+
 	static function getStatus(Dossier $dossier) : array
 	{
 		$schedulesResult = [];
@@ -38,5 +46,49 @@ class DossierStatusHelper
 			'schedules' => $schedulesResult,
 			'alerts' => $alerts,
 		];
+	}
+
+	public function __construct()
+	{
+		$this->dossierrows = collect();
+	}
+
+	public function getDossierrows() : Collection
+	{
+		return $this->dossierrows;
+	}
+
+	static function checkDossierrowComplianceProblems(Dossierrow $dossierrow) : static
+	{
+		$helper = new static();
+
+		$helper->addDossierrow($dossierrow);
+
+		return $helper->getDossierrowsProblems();
+	}
+
+	public function addDossierrow(Dossierrow $dossierrow) : static
+	{
+		$this->dossierrows->push($dossierrow);
+
+		return $this;
+	}
+
+	public function getDossierrowsProblems()
+	{
+		foreach($this->getDossierrows() as $dossierrow)
+			$this->checkDossierrowProblems($dossierrow);
+	}
+
+	public function checkDossierrowProblems(Dossierrow $dossierrow)
+	{
+		$formrow = $dossierrow->getFormrow();
+
+		$rules = $formrow->getValueComplianceRules();
+
+		foreach($rules as $rule)
+			$this->addProblems($rule->getProblems($dossierrow));
+
+		dd($this->problems);
 	}
 }

@@ -30,41 +30,74 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function scopeByFormrowName($query, string $formrowName)
 	{
-		$query->whereHas('formrow', function ($query) use($formrowName)
+		$query->whereHas('formrow', function ($query) use ($formrowName)
 		{
 			$query->where('name', $formrowName);
 		});
 	}
 
+	public function getCreateNewInstanceUrl() : string
+	{
+		return $this->getKeyedRoute('createNewInstance');
+	}
+
 	public function getNameForDisplayRelation()
 	{
 		return cache()->remember(
-			$this->cacheKey('getNameForDisplayRelation'),
-			3600 * 24,
-			function()
-			{
-				if(! $this->getDossierable())
-					return null;
+			$this->cacheKey('getNameForDisplayRelation'), 3600 * 24, function ()
+		{
+			if (! $this->getDossierable())
+				return null;
 
-				if(! $this->getFormrow())
-					return null;
+			if (! $this->getFormrow())
+				return null;
 
-				return "{$this->getFormrow()?->getNameForDisplayRelation()} - {$this->getDossierable()->getName()}";
-			}
+			return "{$this->getFormrow()?->getNameForDisplayRelation()} - {$this->getDossierable()->getName()}";
+		}
 		);
+	}
+
+	public function getDossierable() : ?Model
+	{
+		return $this->getDossier()?->getDossierable();
+	}
+
+	public function getDossier() : Dossier
+	{
+		return $this->dossier;
+	}
+
+	public function getFormrow() : ?Formrow
+	{
+		if ($this->formrow)
+			return $this->formrow;
+
+		throw new \Exception('manca la formrow con questo id: ' . $this->formrow_id);
+	}
+
+	public function getName() : ?string
+	{
+		return $this->getFormrow()?->getName() ?? '-';
+	}
+
+	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
+
+	public function getUpdateUrl(array $data = [])
+	{
+		return $this->getDossier()->getUpdateUrl();
+	}
+
+	public function getShowUrl(array $data = [])
+	{
+		return $this->getDossier()->getShowUrl();
 	}
 
 	public function scopeByFormrowSlug($query, string $formrowSlug)
 	{
-		$query->whereHas('formrow', function ($query) use($formrowSlug)
+		$query->whereHas('formrow', function ($query) use ($formrowSlug)
 		{
 			$query->where('slug', $formrowSlug);
 		});
-	}
-
-	public function getDossierable() : ? Model
-	{
-		return $this->getDossier()?->getDossierable();
 	}
 
 	public function scopeByFormrow($query, Formrow $formrow)
@@ -77,12 +110,7 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getKeyedRoute('addInstance');
 	}
 
-	public function getName() : ? string
-	{
-		return $this->getFormrow()?->getName() ?? '-';
-	}
-
-	public function getNameAttribute() : ? string
+	public function getNameAttribute() : ?string
 	{
 		return $this->getName();
 	}
@@ -90,14 +118,6 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function formrow() : BelongsTo
 	{
 		return $this->belongsTo(Formrow::getProjectClassName());
-	}
-
-	public function getFormrow() : ? Formrow
-	{
-		if($this->formrow)
-			return $this->formrow;
-
-		throw new \Exception('manca la formrow con questo id: ' . $this->formrow_id);
 	}
 
 	public function getFormrowId() : string
@@ -110,9 +130,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->belongsTo(Dossier::getProjectClassName());
 	}
 
-	public function getDossier() : Dossier
+	public function getDatabaseField()
 	{
-		return $this->dossier;
+		return $this->getRowType()->getDatabaseField();
 	}
 
 	public function getRowType() : BaseRow
@@ -120,44 +140,16 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getRowType();
 	}
 
-	 public function getDatabaseField()
-	 {
-	 	return $this->getRowType()->getDatabaseField();
-	 }
-
-	public function validateRowValue(mixed $value)
-	{
-		$fieldname = $this->getFormfieldName();
-
-		$rules = FormfieldParametersHelper::getValidationRulesFromModel($this);
-
- 		$validator = Validator::make([
- 			'value' => $value
- 		],
- 		[
-            'value' => $rules
-        ]);
- 
-        if ($validator->fails())
-        	throw new \Exception(implode(" . ", [
-        		'errore in questo campo del dossier: ' . $this->getName(),
-        		'valore' . json_encode($value),
-        		json_encode($validator->getMessageBag()->getMessages()),
-        		json_encode($rules)
-        	]));
-	}
-
 	public function emptyRowValue()
 	{
-		return $this->getRowType()
-			->emptyRowValue(
-				$this
-			);
+		return $this->getRowType()->emptyRowValue(
+			$this
+		);
 	}
 
 	public function pushRowValue(mixed $value, bool $validate = false) : bool
 	{
-		if(! $this->getValue())
+		if (! $this->getValue())
 			return $this->storeRowValue($value, $validate);
 
 		$newDossierrow = $this->replicate();
@@ -165,64 +157,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $newDossierrow->storeRowValue($value, $validate);
 	}
 
-	public function storeRowValue(mixed $value, bool $validate = false) : bool
-	{
-		if($validate)
-			$this->validateRowValue($value);
-
-		return $this->getRowType()
-			->storeDossierrow(
-				$this,
-				$value,
-				$validate
-			);
-	}
-
-	public function isPopulated() : bool
-	{
-		return $this->getValue() !== null;
-	}
-
-	public function isCompleted() : bool
-	{
-		if(! $this->isFormfieldRequired())
-			return true;
-
-		return $this->getValue() !== null;
-	}
-
-	public function isRepeatable() : bool
-	{
-		return $this->getFormrow()->isRepeatable();
-	}
-
 	public function getValue() : mixed
 	{
 		return $this->getFormfieldValue();
-	}
-
-	public function isMissing() : bool
-	{
-		if(! $this->isFormfieldRequired())
-			return false;
-
-		if($this->isPopulated())
-			return false;
-
-		return true;
-	}
-
-	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
-	public function getFormfieldType() : string
-	{
-		return $this->getFormrow()->getFormfieldType();
-	}
-
-	public function getShowValue() : mixed
-	{
-		return $this->getRowType()->getShowValue(
-			$this->getFormfieldValue()
-		);
 	}
 
 	public function getFormfieldValue() : mixed
@@ -232,26 +169,41 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		);
 	}
 
-	public function getCurrentDate() : Carbon
+	public function storeRowValue(mixed $value, bool $validate = false) : bool
 	{
-		return Carbon::now();
+		if ($validate)
+			$this->validateRowValue($value);
+
+		return $this->getRowType()->storeDossierrow(
+			$this, $value, $validate
+		);
 	}
 
-	// public function getFormField() : FormField
-	// {
-	// 	return $this->getRowType()->getFormField();
-	// }
-
-	public function renderFormfieldValue() : ? string
+	public function validateRowValue(mixed $value)
 	{
-		return $this->getRowType()->renderValueForView(
-			$this->getFormfieldValue()
-		);
+		$fieldname = $this->getFormfieldName();
+
+		$rules = FormfieldParametersHelper::getValidationRulesFromModel($this);
+
+		$validator = Validator::make([
+			'value' => $value
+		], [
+			'value' => $rules
+		]);
+
+		if ($validator->fails())
+			throw new \Exception(implode(" . ", [
+				'errore in questo campo del dossier: ' . $this->getName(),
+				'valore' . json_encode($value),
+				json_encode($validator->getMessageBag()->getMessages()),
+				json_encode($rules)
+			]));
 	}
 
 	public function getFormfieldName() : string
 	{
-		return $this->getFormrow()->getFormfieldName();
+		return $this->getKey();
+		//		return $this->getFormrow()->getFormfieldName();
 	}
 
 	public function getFormfieldLabel() : string
@@ -259,9 +211,17 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getFormfieldLabel();
 	}
 
-	public function getFormfieldPlaceholder(Model $model) : ? string
+	public function getFormfieldPlaceholder(Model $model) : ?string
 	{
 		return $this->getFormrow()->getFormfieldPlaceholder($this->getDossierable());
+	}
+
+	public function isCompleted() : bool
+	{
+		if (! $this->isFormfieldRequired())
+			return true;
+
+		return $this->getValue() !== null;
 	}
 
 	public function isFormfieldRequired() : bool
@@ -269,14 +229,14 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->isFormfieldRequired();
 	}
 
+	// public function getFormField() : FormField
+	// {
+	// 	return $this->getRowType()->getFormField();
+	// }
+
 	public function isFormfieldDisabled() : bool
 	{
 		return $this->getFormrow()->isFormfieldDisabled();
-	}
-
-	public function isFormfieldReadOnly() : bool
-	{
-		return $this->getFormrow()->isReadOnly();		
 	}
 
 	public function getFormfieldRules() : array
@@ -289,9 +249,18 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getFormfieldRepeatable();
 	}
 
-	public function getFormfieldTranslatedTooltip() : ? string
+	public function getFormfieldTranslatedTooltip() : ?string
 	{
 		return $this->getFormrow()->getFormfieldTranslatedTooltip();
+	}
+
+	public function getFormfieldProblems() : array
+	{
+		$formrow = $this->getFormrow();
+		if($formrow->slug != 'test-decimale')
+			return [];
+
+		return DossierStatusHelper::checkDossierrowComplianceProblems($this);
 	}
 
 	public function isFormfieldMultiple() : bool
@@ -303,25 +272,65 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $formrow->isFormfieldMultiple();
 	}
 
-	public function getFormfieldRelationName() : ? string
+	public function getFormfieldRelationName() : ?string
 	{
 		return $this->getFormrow()->getFormfieldRelationName();
 	}
 
-	public function getFormfieldRoles() : ? array
+	public function getFormfieldRoles() : ?array
 	{
 		return $this->getFormrow()->getFormfieldRoles();
 	}
-	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
 
-	public function getUpdateUrl(array $data = [])
+	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
+	public function getFormfieldType() : string
 	{
-		return $this->getDossier()->getUpdateUrl();
+		return $this->getFormrow()->getFormfieldType();
 	}
 
-	public function getShowUrl(array $data = [])
+	public function isRepeatable() : bool
 	{
-		return $this->getDossier()->getShowUrl();
+		return $this->getFormrow()->isRepeatable();
+	}
+
+	public function isMissing() : bool
+	{
+		if (! $this->isFormfieldRequired())
+			return false;
+
+		if ($this->isPopulated())
+			return false;
+
+		return true;
+	}
+
+	public function isPopulated() : bool
+	{
+		return $this->getValue() !== null;
+	}
+
+	public function getShowValue() : mixed
+	{
+		return $this->getRowType()->getShowValue(
+			$this->getFormfieldValue()
+		);
+	}
+
+	public function getCurrentDate() : Carbon
+	{
+		return Carbon::now();
+	}
+
+	public function renderFormfieldValue() : ?string
+	{
+		return $this->getRowType()->renderValueForView(
+			$this->getFormfieldValue()
+		);
+	}
+
+	public function isFormfieldReadOnly() : bool
+	{
+		return $this->getFormrow()->isReadOnly();
 	}
 
 	public function getStatus()

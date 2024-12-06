@@ -85,7 +85,6 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 						'value' => $this->getRolesValue(),
 						'fields' => [
 							'action' => [
-								'translatedLabel' => 'masscio',
 								'type' => 'select',
 								'multiple' => false,
 								'select2' => false,

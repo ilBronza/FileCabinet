@@ -36,6 +36,15 @@ trait DossierGettersSettersTrait
 		return $this->dossierrows()->byFormrowName($rowName)->orderByDesc('created_at')->first();
 	}
 
+	public function getDossierrowByDossierrowId(string $dossierrowId) : Dossierrow
+	{
+		if($this->relationLoaded('dossierrows'))
+			if($dossierrow = $this->dossierrows->firstWhere('id', $dossierrowId))
+				return $dossierrow;
+
+		return $this->dossierrows()->find($dossierrowId);
+	}
+
 	public function getDossierrowByFormrowSlug(string $formrowSlug)
 	{
 		if(! $this->relationLoaded('dossierrows'))

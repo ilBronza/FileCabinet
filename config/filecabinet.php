@@ -8,6 +8,7 @@ use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorNameFolde
 use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorSingleFolder;
 use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorSlugFolder;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowAddInstanceController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDeleteMediaController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
@@ -231,6 +232,7 @@ return [
             'controllers' => [
                 'show' => DossierrowShowController::class,
                 'index' => DossierrowIndexController::class,
+	            'createNewInstance' => DossierrowCreateNewInstanceController::class,
 				'deleteMedia' => DossierrowDeleteMediaController::class,
                 'addInstance' => DossierrowAddInstanceController::class,
             ],

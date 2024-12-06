@@ -61,5 +61,17 @@ return [
 	'parent' => 'Elemento padre',
 	'children' => 'Elementi figli',
 	'categorizables_count' => 'Elementi',
-	'relation_name' => 'Nome relazione'
+	'relation_name' => 'Nome relazione',
+	'pdf_print_label' => 'Stampa etichetta',
+	'pdf_label' => 'Etichetta per PDF',
+	'decimals' => 'Decimali',
+	'limits' => 'Limiti',
+	'limitType' => 'Tipologia limite',
+	'checkFieldValidityParameters' => 'Parametri di validazione',
+	'limits_limitType' => 'Tipo limite',
+	'limits_value' => 'Valore di limite',
+	'roles_action' => 'Azione',
+	'roles_roles' => 'Ruoli',
+	'permissions_action' => 'Azione',
+	'permissions_permissions' => 'Permessi'
 ];

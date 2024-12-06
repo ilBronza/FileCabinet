@@ -6,6 +6,16 @@ use IlBronza\Buttons\Helpers\DefaultButtonsCreatorHelper;
 
 trait DossierRenderTrait
 {
+	public function setDisplaySortingIndex(int $index)
+	{
+		$this->displaySortingIndex = $index;
+	}
+
+	public function getDisplaySortingIndex() : ? int
+	{
+		return $this->displaySortingIndex ?? null;
+	}
+
 	public function renderAjaxForm()
 	{
 		$ibForm = $this->buildIbForm();

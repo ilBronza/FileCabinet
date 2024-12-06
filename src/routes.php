@@ -88,6 +88,9 @@ Route::group([
 
 		Route::group(['prefix' => 'dossierrows'], function()
 		{
+			Route::get('{dossierrow}/create-new-instance', [FileCabinet::getController('dossierrow', 'createNewInstance'), 'createNewInstance'])->name('dossierrows.createNewInstance')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
+
+
 			//DossierrowShowController
 			Route::get('{dossierrow}', [FileCabinet::getController('dossierrow', 'show'), 'show'])->name('dossierrows.show');
 

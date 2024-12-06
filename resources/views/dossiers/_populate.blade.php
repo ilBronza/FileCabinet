@@ -1,3 +1,9 @@
+@php
+    if(isset($childDossierIndex))
+        $dossier->setDisplaySortingIndex($childDossierIndex)
+
+@endphp
+
 @if($viewMode == 'populate')
     {!! $dossier->renderAjaxForm() !!}
 @elseif($viewMode == 'edit')
@@ -8,8 +14,6 @@
 
 @if($children = $dossier->getChildren())
 <div class="uk-margin-left uk-margin-top">
-    
     @include('filecabinet::dossiers.populate', ['dossiers' => $children])
-
 </div>
 @endif

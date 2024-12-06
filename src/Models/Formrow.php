@@ -8,6 +8,7 @@ use IlBronza\CRUD\Traits\Model\CRUDReorderableStandardTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Form;
+use IlBronza\FileCabinet\Models\Traits\FormrowComplianceTrait;
 use IlBronza\FileCabinet\Models\Traits\FormrowJsonParametersTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowNamesTypeHelper;
@@ -23,6 +24,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	use CRUDReorderableStandardTrait;
 	use CRUDSluggableTrait;
 	use FormrowJsonParametersTrait;
+	use FormrowComplianceTrait;
 
 	static $modelConfigPrefix = 'formrow';
 	static $deletingRelationships = ['dossierrows'];
@@ -225,6 +227,11 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	public function getFormfieldTranslatedTooltip() : ? string
 	{
 		return $this->description;
+	}
+
+	public function getFormfieldProblems() : array
+	{
+		return [];
 	}
 
 	public function isFormfieldMultiple() : bool
