@@ -16,6 +16,11 @@ abstract class BaseRow
 
 	public ?bool $multiple;
 
+	public function getValueType() : string
+	{
+		return static::$valueType;
+	}
+
 	static function getTranslatedName() : string
 	{
 		return __('filecabinet::formrowstypes.' . static::getType());
@@ -50,10 +55,10 @@ abstract class BaseRow
 		return static::$databaseField;
 	}
 
-	public function transformValue(mixed $databaseValue) : mixed
-	{
-		return $databaseValue;
-	}
+//	public function transformValue(mixed $databaseValue) : mixed
+//	{
+//		return $databaseValue;
+//	}
 
 	public function getShowValue(mixed $databaseValue) : mixed
 	{

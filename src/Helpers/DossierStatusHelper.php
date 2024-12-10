@@ -9,6 +9,7 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 
 use Illuminate\Support\Collection;
 
+use function array_merge;
 use function dd;
 
 class DossierStatusHelper
@@ -58,7 +59,7 @@ class DossierStatusHelper
 		return $this->dossierrows;
 	}
 
-	static function checkDossierrowComplianceProblems(Dossierrow $dossierrow) : static
+	static function checkDossierrowComplianceProblems(Dossierrow $dossierrow) : array
 	{
 		$helper = new static();
 
@@ -74,21 +75,27 @@ class DossierStatusHelper
 		return $this;
 	}
 
-	public function getDossierrowsProblems()
+	public function getDossierrowsProblems() : array
 	{
+		$problems = [];
+
 		foreach($this->getDossierrows() as $dossierrow)
-			$this->checkDossierrowProblems($dossierrow);
+			$problems += $this->checkDossierrowProblems($dossierrow);
+
+		return $problems;
 	}
 
-	public function checkDossierrowProblems(Dossierrow $dossierrow)
+	public function checkDossierrowProblems(Dossierrow $dossierrow) : array
 	{
 		$formrow = $dossierrow->getFormrow();
 
 		$rules = $formrow->getValueComplianceRules();
 
-		foreach($rules as $rule)
-			$this->addProblems($rule->getProblems($dossierrow));
+		$problems = [];
 
-		dd($this->problems);
+		foreach($rules as $rule)
+			$problems = array_merge($problems, $rule->getProblems($dossierrow));
+
+		return $problems;
 	}
 }

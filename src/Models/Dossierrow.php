@@ -57,6 +57,23 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		);
 	}
 
+	public function getName() : ?string
+	{
+		return $this->getFormrow()?->getName() ?? '-';
+	}
+
+	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
+
+	public function getUpdateUrl(array $data = [])
+	{
+		return $this->getDossier()->getUpdateUrl();
+	}
+
+	public function getShowUrl(array $data = [])
+	{
+		return $this->getDossier()->getShowUrl();
+	}
+
 	public function getDossierable() : ?Model
 	{
 		return $this->getDossier()?->getDossierable();
@@ -73,23 +90,6 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 			return $this->formrow;
 
 		throw new \Exception('manca la formrow con questo id: ' . $this->formrow_id);
-	}
-
-	public function getName() : ?string
-	{
-		return $this->getFormrow()?->getName() ?? '-';
-	}
-
-	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
-
-	public function getUpdateUrl(array $data = [])
-	{
-		return $this->getDossier()->getUpdateUrl();
-	}
-
-	public function getShowUrl(array $data = [])
-	{
-		return $this->getDossier()->getShowUrl();
 	}
 
 	public function scopeByFormrowSlug($query, string $formrowSlug)
@@ -169,6 +169,87 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		);
 	}
 
+	public function getFormfieldName() : string
+	{
+		return $this->getKey();
+		//		return $this->getFormrow()->getFormfieldName();
+	}
+
+	public function getFormfieldLabel() : string
+	{
+		return $this->getFormrow()->getFormfieldLabel();
+	}
+
+	public function getFormfieldPlaceholder(Model $model) : ?string
+	{
+		return $this->getFormrow()->getFormfieldPlaceholder($this->getDossierable());
+	}
+
+	public function isFormfieldRequired() : bool
+	{
+		return $this->getFormrow()->isFormfieldRequired();
+	}
+
+	public function isFormfieldDisabled() : bool
+	{
+		return $this->getFormrow()->isFormfieldDisabled();
+	}
+
+	public function getFormfieldRules() : array
+	{
+		return $this->getFormrow()->getFormfieldRules($this);
+	}
+
+	public function getFormfieldRepeatable() : bool
+	{
+		return $this->getFormrow()->getFormfieldRepeatable();
+	}
+
+	// public function getFormField() : FormField
+	// {
+	// 	return $this->getRowType()->getFormField();
+	// }
+
+	public function getFormfieldTranslatedTooltip() : ?string
+	{
+		return $this->getFormrow()->getFormfieldTranslatedTooltip();
+	}
+
+	public function getFormfieldProblems() : array
+	{
+		$formrow = $this->getFormrow();
+
+		if ($formrow->slug != 'test-decimale')
+			return [];
+
+		return DossierStatusHelper::checkDossierrowComplianceProblems($this);
+	}
+
+	public function isFormfieldMultiple() : bool
+	{
+		$formrow = $this->getFormrow();
+
+		$formrow->dossierrow = $this;
+
+		return $formrow->isFormfieldMultiple();
+	}
+
+	public function getFormfieldRelationName() : ?string
+	{
+		return $this->getFormrow()->getFormfieldRelationName();
+	}
+
+	public function getFormfieldRoles() : ?array
+	{
+		return $this->getFormrow()->getFormfieldRoles();
+	}
+
+	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
+	public function getFormfieldType() : string
+	{
+		return $this->getFormrow()->getFormfieldType();
+	}
+
 	public function storeRowValue(mixed $value, bool $validate = false) : bool
 	{
 		if ($validate)
@@ -200,92 +281,12 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 			]));
 	}
 
-	public function getFormfieldName() : string
-	{
-		return $this->getKey();
-		//		return $this->getFormrow()->getFormfieldName();
-	}
-
-	public function getFormfieldLabel() : string
-	{
-		return $this->getFormrow()->getFormfieldLabel();
-	}
-
-	public function getFormfieldPlaceholder(Model $model) : ?string
-	{
-		return $this->getFormrow()->getFormfieldPlaceholder($this->getDossierable());
-	}
-
 	public function isCompleted() : bool
 	{
 		if (! $this->isFormfieldRequired())
 			return true;
 
 		return $this->getValue() !== null;
-	}
-
-	public function isFormfieldRequired() : bool
-	{
-		return $this->getFormrow()->isFormfieldRequired();
-	}
-
-	// public function getFormField() : FormField
-	// {
-	// 	return $this->getRowType()->getFormField();
-	// }
-
-	public function isFormfieldDisabled() : bool
-	{
-		return $this->getFormrow()->isFormfieldDisabled();
-	}
-
-	public function getFormfieldRules() : array
-	{
-		return $this->getFormrow()->getFormfieldRules($this);
-	}
-
-	public function getFormfieldRepeatable() : bool
-	{
-		return $this->getFormrow()->getFormfieldRepeatable();
-	}
-
-	public function getFormfieldTranslatedTooltip() : ?string
-	{
-		return $this->getFormrow()->getFormfieldTranslatedTooltip();
-	}
-
-	public function getFormfieldProblems() : array
-	{
-		$formrow = $this->getFormrow();
-		if($formrow->slug != 'test-decimale')
-			return [];
-
-		return DossierStatusHelper::checkDossierrowComplianceProblems($this);
-	}
-
-	public function isFormfieldMultiple() : bool
-	{
-		$formrow = $this->getFormrow();
-
-		$formrow->dossierrow = $this;
-
-		return $formrow->isFormfieldMultiple();
-	}
-
-	public function getFormfieldRelationName() : ?string
-	{
-		return $this->getFormrow()->getFormfieldRelationName();
-	}
-
-	public function getFormfieldRoles() : ?array
-	{
-		return $this->getFormrow()->getFormfieldRoles();
-	}
-
-	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
-	public function getFormfieldType() : string
-	{
-		return $this->getFormrow()->getFormfieldType();
 	}
 
 	public function isRepeatable() : bool

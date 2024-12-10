@@ -31,6 +31,11 @@ class FormrowUserSelect extends BaseModelRelationRow
 		return User::gpc()::buildElementsArryForSelect($elements);
 	}
 
+		public function transformValue(mixed $databaseValue) : ? string
+		{
+			return $databaseValue;
+		}
+
 	public function getSpecialParametersFieldsetParameters() : array
 	{
 		$rolesList = ModelSelectQueryHelper::getArrayForSelect(Role::getProjectClassName());

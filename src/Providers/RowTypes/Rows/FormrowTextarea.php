@@ -31,4 +31,10 @@ class FormrowTextarea extends BaseRow
 	{
 		return new TextareaFormField();
 	}
+
+	public function transformValue(mixed $databaseValue) : ? string
+	{
+		return $databaseValue;
+	}
+
 }

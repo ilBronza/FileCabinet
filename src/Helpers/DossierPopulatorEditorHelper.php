@@ -42,6 +42,8 @@ class DossierPopulatorEditorHelper extends DossierPopulatorHelper
 
 	public function returnResponse()
 	{
+		$problems = $this->dossierrow->getFormfieldProblems();
+
 		$updateParameters = [];
 
 		$updateParameters['success'] = true;
@@ -52,6 +54,9 @@ class DossierPopulatorEditorHelper extends DossierPopulatorHelper
 		$updateParameters['value'] = $this->getRequest()->value;
 
 		$updateParameters['message'] = trans('filecabinet::messages.fieldUpdatedSuccessfully', ['field' => $this->dossierrow->getName()]);
+
+		$updateParameters['problems'] = $problems;
+		$updateParameters['problemsView'] = view('formfield::uikit.utilities._problems', ['problems' => $problems])->render();
 
 		return $updateParameters;
 	}

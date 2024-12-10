@@ -11,6 +11,7 @@ use IlBronza\FileCabinet\Models\Formrow;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
+use function in_array;
 use function json_encode;
 
 trait InteractsWithFormTrait
@@ -51,8 +52,16 @@ trait InteractsWithFormTrait
 
 	public function getDossiersByForms(Collection $forms) : Collection
 	{
+		$formIds = $forms->pluck('id')->toArray();
+
+		if($this->relationLoaded('dossiers'))
+			return $this->dossiers->filter(function($item) use($formIds)
+			{
+				return in_array($item->form_id, $formIds);
+			});
+
 		return $this->dossiers()->whereIn(
-				'form_id', $forms->pluck('id')
+				'form_id', $formIds
 			)->get();
 	}
 

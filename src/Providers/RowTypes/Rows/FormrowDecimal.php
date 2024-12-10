@@ -10,23 +10,27 @@ use IlBronza\FormField\Fields\NumberFormField;
 use IlBronza\FormField\FormField;
 
 use function array_keys;
+use function floatval;
 use function implode;
+use function number_format;
 
 class FormrowDecimal extends BaseRow implements FormrowWithSpecialParametersInterface
 {
 	use StandardCheckFieldValidityParametersTrait;
 
 	use SpecialParametersTrait;
+
+	static $valueType = 'numeric';
 	static $fieldType = 'number';
 	static $databaseField = 'decimal';
 
-	public int $min = -999999999999;
+	public int $min = - 999999999999;
 	public int $max = 999999999999;
 
 	public function getDefaultRules() : array
 	{
 		return [
-			'numeric',
+			static::$valueType,
 			'min:' . $this->min,
 			'max:' . $this->max
 		];
@@ -39,14 +43,14 @@ class FormrowDecimal extends BaseRow implements FormrowWithSpecialParametersInte
 		return new NumberFormField();
 	}
 
-	public function transformValue(mixed $databaseValue) : mixed
+	public function transformValue(mixed $databaseValue) : float
 	{
 		$decimals = $this->getDecimals();
 
-		return number_format($databaseValue, $decimals, '.', '');
+		return floatval(number_format($databaseValue, $decimals, '.', ''));
 	}
 
-	public function getDecimals() : ? int
+	public function getDecimals() : ?int
 	{
 		return $this->getModel()->getSpecialParameter('decimals', null);
 	}
@@ -100,7 +104,7 @@ class FormrowDecimal extends BaseRow implements FormrowWithSpecialParametersInte
 				'fields' => [
 					'decimals' => [
 						'type' => 'number',
-						'rules'=> 'integer|min:1|max:4',
+						'rules' => 'integer|min:1|max:4',
 						'value' => $this->getDecimals()
 					]
 				]

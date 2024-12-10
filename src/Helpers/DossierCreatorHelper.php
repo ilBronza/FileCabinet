@@ -95,6 +95,10 @@ class DossierCreatorHelper
 
     static function getOrCreateByForm(Model $model, Form $form, bool $withDossierrows = false) : Dossier
     {
+		if($model->relationLoaded('dossiers'))
+			if($dossier = $model->dossiers->firstWhere('form_id', $form->getKey()))
+				return $dossier;
+
 		$query = $model->dossiers()->byForm($form);
 
 		if($withDossierrows)

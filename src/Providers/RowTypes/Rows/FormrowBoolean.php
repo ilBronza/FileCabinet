@@ -21,6 +21,11 @@ class FormrowBoolean extends BaseRow
 		];
 	}
 
+	public function transformValue(mixed $databaseValue) : ? boolean
+	{
+		return $databaseValue;
+	}
+
 	public function getFormField() : FormField
 	{
 		return new BooleanFormField();
