@@ -3,14 +3,11 @@
 namespace IlBronza\FileCabinet\Models;
 
 use IlBronza\Buttons\Button;
-use IlBronza\Category\Models\Category;
 use IlBronza\CRUD\Helpers\ModelManagers\Interfaces\ClonableModelInterface;
 use IlBronza\CRUD\Helpers\ModelManagers\Traits\ClonableModelTrait;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
 use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\Category\Traits\InteractsWithCategoryTrait;
-use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
-use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\FileCabinet\Models\Traits\FormCheckersTrait;
 use IlBronza\FileCabinet\Models\Traits\FormGettersSettersTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;

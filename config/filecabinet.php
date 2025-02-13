@@ -14,6 +14,7 @@ use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByFormIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelCategoryController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelFormController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierEditController;
@@ -208,6 +209,7 @@ return [
             ],
             'controllers' => [
 				'byModelCategory' => DossierByModelCategoryController::class,
+	            'byModelForm' => DossierByModelFormController::class,
 				'populate' => DossierPopulateController::class,
 	            'index' => DossierIndexController::class,
 				'byForm' => DossierByFormIndexController::class,

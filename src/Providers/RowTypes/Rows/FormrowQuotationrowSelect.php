@@ -11,6 +11,11 @@ class FormrowQuotationrowSelect extends BaseModelRelationRow
 {
 	use StandardCheckFieldValidityParametersTrait;
 
+	public function transformValue(mixed $databaseValue) : mixed
+	{
+		return $databaseValue;
+	}
+
 	public function getShowValue(mixed $databaseValue) : mixed
 	{
 		return Quotationrow::gpc()::find($databaseValue)?->getName();

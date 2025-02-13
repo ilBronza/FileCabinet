@@ -7,6 +7,8 @@ use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaPackagesTrait;
 use IlBronza\FileCabinet\Traits\InteractsWithFormTrait;
 use Illuminate\Database\Eloquent\Model;
 
+use function app;
+
 class FileCabinet implements RoutedObjectInterface
 {
     use IlBronzaPackagesTrait;
@@ -47,14 +49,21 @@ class FileCabinet implements RoutedObjectInterface
             'href' => app('filecabinet')->route('filecabinets.index'),
         ]);
 
-        $formsButton = $menu->createButton([
-            'name' => 'forms',
-            'icon' => 'box-archive',
-            'text' => 'filecabinet::forms.index',
-            'href' => app('filecabinet')->route('forms.index'),
-        ]);
+	    $formsButton = $menu->createButton([
+		    'name' => 'forms',
+		    'icon' => 'box-archive',
+		    'text' => 'filecabinet::forms.index',
+		    'href' => app('filecabinet')->route('forms.index'),
+	    ]);
 
-        // $rolesButton = $menu->createButton([
+	    $formrowsButton = $menu->createButton([
+		    'name' => 'formrows',
+		    'icon' => 'box-archive',
+		    'text' => 'filecabinet::formrows.index',
+		    'href' => app('filecabinet')->route('formrows.index'),
+	    ]);
+
+	    // $rolesButton = $menu->createButton([
         //     'name' => 'roles.index',
         //     'text' => 'account-manager.roles',
         //     'icon' => 'graduation-cap',
@@ -74,7 +83,9 @@ class FileCabinet implements RoutedObjectInterface
 
         $containerButton->addChild($filecabinetButton);
         $containerButton->addChild($filecabinetTemplateButton);
-        $containerButton->addChild($formsButton);
+	    $containerButton->addChild($formsButton);
+	    $containerButton->addChild($formrowsButton);
+
         // $containerButton->addChild($rolesButton);
         // $containerButton->addChild($permissionsButton);
     }

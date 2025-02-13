@@ -23,4 +23,10 @@ class DossierrowFormFieldHelper
                 $parameters
             );
     }
+
+
+	static function getPossibleSelectValues(Dossierrow $dossierrow) : array
+	{
+
+	}
 }

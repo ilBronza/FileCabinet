@@ -2,6 +2,7 @@
 
 namespace IlBronza\FileCabinet;
 
+use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaServiceProviderPackagesTrait;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Filecabinet as FilecabinetModel;
@@ -13,6 +14,8 @@ use Illuminate\Support\ServiceProvider;
 
 class FileCabinetServiceProvider extends ServiceProvider
 {
+	use IlBronzaServiceProviderPackagesTrait;
+	
 	/**
 	 * Perform post-registration booting of services.
 	 *

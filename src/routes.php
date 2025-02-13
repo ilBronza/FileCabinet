@@ -56,6 +56,12 @@ Route::group([
 			//DossierByModelCategoryController
 			Route::get('model/{model}/{key}/by-category/{category}/table', [FileCabinet::getController('dossier', 'byModelCategory'), 'byModelCategory'])->name('dossiers.byModelCategory');
 
+			//DossierByModelCategoryController
+			Route::get('model/{model}/{key}/by-category/{category}/populate', [FileCabinet::getController('dossier', 'byModelCategory'), 'populateByModelCategory'])->name('dossiers.byModelCategory.populate');
+
+			//DossierByModelFormController
+			Route::get('model/{model}/{key}/by-form/{form}/table', [FileCabinet::getController('dossier', 'byModelForm'), 'byModelForm'])->name('dossiers.byModelForm');
+
 			//DossierByFormIndexController
 			Route::get('by-form/{form}', [FileCabinet::getController('dossier', 'byForm'), 'index'])->name('dossiers.byForm');
 
@@ -71,14 +77,14 @@ Route::group([
 			//DossierUpdateController
 			Route::put('{dossier}/update', [FileCabinet::getController('dossier', 'update'), 'update'])->name('dossiers.update')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
 
-			Route::get('{dossier}/populate', [FileCabinet::getController('dossier', 'populate'), 'populate'])->name('dossiers.populate')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
+			Route::get('{dossier}/populate', [FileCabinet::getController('dossier', 'populate'), 'populate'])->name('dossiers.populate')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|areaManager');
 
 			Route::delete('{dossier}/delete', [FileCabinet::getController('dossier', 'destroy'), 'destroy'])->name('dossiers.destroy');
 
 
 			Route::get('', [FileCabinet::getController('dossier', 'index'), 'index'])->name('dossiers.index');
 
-			Route::get('{dossier}', [FileCabinet::getController('dossier', 'show'), 'show'])->name('dossiers.show')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
+			Route::get('{dossier}', [FileCabinet::getController('dossier', 'show'), 'show'])->name('dossiers.show')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|areaManager');
 
 			Route::get('{dossier}/edit', [FileCabinet::getController('dossier', 'edit'), 'edit'])->name('dossiers.edit')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
 
@@ -139,8 +145,10 @@ Route::group([
 
 		Route::group(['prefix' => 'formrows'], function()
 		{
+			//FormrowReorderController
 			Route::post('reorder', [FileCabinet::getController('formrow', 'reorder'), 'storeMassReorder'])->name('formrows.storeMassReorder');
 
+			//FormrowIndexController
 			Route::get('', [FileCabinet::getController('formrow', 'index'), 'index'])->name('formrows.index');
 
 			Route::get('{formrow}', [FileCabinet::getController('formrow', 'show'), 'show'])->name('formrows.show');

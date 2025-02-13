@@ -21,6 +21,11 @@ class FormrowOperatorSelect extends BaseModelRelationRow
 		return User::getProjectClassName()::findCached($databaseValue)?->getFullName();
 	}
 
+		public function transformValue(mixed $databaseValue) : mixed
+		{
+			return $databaseValue;
+		}
+
 	public function getPossibleValuesArray() : array
 	{
 		if (! $rolesIds = $this->getModel()->getSpecialParameter('roles', []))

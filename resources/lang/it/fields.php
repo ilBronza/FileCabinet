@@ -23,7 +23,7 @@ return [
 	'name' => 'Nome',
 	'sorting_index' => 'Ordinamento',
 	'type' => 'Tipo',
-	'package' => 'pacchetto',
+	'package' => 'Anagrafica',
 	'interventions' => 'Modifiche avvenute',
 	'stats' => 'Statistiche',
 	'slug' => 'Slug',
@@ -73,5 +73,6 @@ return [
 	'roles_action' => 'Azione',
 	'roles_roles' => 'Ruoli',
 	'permissions_action' => 'Azione',
-	'permissions_permissions' => 'Permessi'
+	'permissions_permissions' => 'Permessi',
+	'form.name' => 'Form',
 ];

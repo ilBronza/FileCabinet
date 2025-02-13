@@ -15,11 +15,13 @@ class MediaPathGeneratorSlugFolder extends FilecabinetMediaPathGenerator
     protected function getBasePath(Media $media): string
     {
 		$dossierrow = $media->model()->first();
-		$folderName = $dossierrow->getFormrow()->getModel()->getSpecialParameter('folderName', null);
+		$formRow = $dossierrow->getFormrow();
+
+		$folderName = $formRow->getModel()->getSpecialParameter('folderName', null);
 
 		if($folderName)
-			return $folderName . '_' . $dossierrow->getSlug();
+			return $folderName . '_' . $formRow->getSlug();
 
-		return $dossierrow->getSlug();
+		return $formRow->getSlug();
 	}
 }

@@ -20,7 +20,7 @@ class FormrowByFormFieldsGroupParametersFile extends FieldsGroupParametersFile
                 'slug' => 'flat',
                 'sorting_index' => 'utilities.sorting',
                 'description' => 'flat',
-                'required' => 'boolean',
+                'required' => 'editor.toggle',
                 'form' => 'relations.belongsTo',
                 'type' => 'filecabinet::rowType',
 

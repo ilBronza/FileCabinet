@@ -43,8 +43,9 @@ class DossierUpdateController extends DossierCRUD
 			'multiple' => 'boolean|nullable'
 		]);
 
-		$formrow = Formrow::findBySlug($fieldname);
-		$dossierrow = $this->dossier->getDossierrowByFormrow($formrow);
+		$dossierrow = $this->dossier->dossierrows()->where('id', $fieldname)->first();
+
+		$formrow = $dossierrow->getFormrow();
 
 		if(! $mediaNameGeneratorHelperKey = $formrow->getSpecialParameter('nameType'))
 			throw new \Exception('La riga non è configurata correttamente. Scegliere un tipo di generatore di nomi per i file');
@@ -62,8 +63,6 @@ class DossierUpdateController extends DossierCRUD
 		}
 
 		return MediaAssociatorHelper::associateFromRequest($dossierrow, 'file', $fieldname, null, $parameters);
-
-		//			return $this->_uploadFile($request, 'update', 'string');
 	}
 
     public function update(Request $request, string $dossier)

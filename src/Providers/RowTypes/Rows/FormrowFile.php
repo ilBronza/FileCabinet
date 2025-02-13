@@ -71,6 +71,11 @@ class FormrowFile extends BaseRow implements FormrowWithSpecialParametersInterfa
 		];
 	}
 
+	public function transformValue(mixed $databaseValue) : mixed
+	{
+		return $databaseValue;
+	}
+
 	protected function getAvailableNameTypes() : array
 	{
 		$possibleValues = config('filecabinet.media.mediaNameGenerators', []);

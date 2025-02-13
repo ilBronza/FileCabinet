@@ -5,6 +5,8 @@ namespace IlBronza\FileCabinet\Http\Controllers\Forms;
 use IlBronza\CRUD\Traits\CRUDEditUpdateTrait;
 use Illuminate\Http\Request;
 
+use function dd;
+
 class FormEditUpdateController extends FormCRUD
 {
     use CRUDEditUpdateTrait;
@@ -28,6 +30,6 @@ class FormEditUpdateController extends FormCRUD
     {
         $form = $this->findModel($form);
 
-        return $this->_update($request, $form);
+	    return $this->_update($request, $form);
     }
 }

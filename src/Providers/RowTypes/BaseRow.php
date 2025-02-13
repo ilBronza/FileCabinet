@@ -55,10 +55,10 @@ abstract class BaseRow
 		return static::$databaseField;
 	}
 
-//	public function transformValue(mixed $databaseValue) : mixed
-//	{
-//		return $databaseValue;
-//	}
+	public function transformValue(mixed $databaseValue) : mixed
+	{
+		return $databaseValue;
+	}
 
 	public function getShowValue(mixed $databaseValue) : mixed
 	{

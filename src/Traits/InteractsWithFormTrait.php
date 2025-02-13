@@ -50,6 +50,36 @@ trait InteractsWithFormTrait
 		return true;
 	}
 
+	public function getDossiersByForm(Form $form) : Collection
+	{
+		$formId = $form->getKey();
+
+		if($this->relationLoaded('dossiers'))
+			return $this->dossiers->filter(function($item) use($formId)
+			{
+				return $item->form_id == $formId;
+			});
+
+		return $this->dossiers()->where(
+			'form_id', $formId
+		)->get();
+	}
+
+	public function getValidDossierByForm(Form $form) : ? Dossier
+	{
+		$formId = $form->getKey();
+
+		if($this->relationLoaded('dossiers'))
+			return $this->dossiers->filter(function($item) use($formId)
+			{
+				return $item->form_id == $formId;
+			})->sortByDesc('created_at')->first();
+
+		return $this->dossiers()->orderByDesc('created_at')->where(
+			'form_id', $formId
+		)->first();
+	}
+
 	public function getDossiersByForms(Collection $forms) : Collection
 	{
 		$formIds = $forms->pluck('id')->toArray();
@@ -61,8 +91,8 @@ trait InteractsWithFormTrait
 			});
 
 		return $this->dossiers()->whereIn(
-				'form_id', $formIds
-			)->get();
+			'form_id', $formIds
+		)->get();
 	}
 
 	public function getDossierValueByNames(string $formName, string $formrowName) : mixed

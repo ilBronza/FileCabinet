@@ -27,6 +27,11 @@ class FormrowSingleSelect extends BaseRow implements FormrowWithSpecialParameter
 		];
 	}
 
+	public function transformValue(mixed $databaseValue) : mixed
+	{
+		return $databaseValue;
+	}
+
 	public function getFormField() : FormField
 	{
 		return new SelectFormField();

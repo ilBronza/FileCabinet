@@ -7,6 +7,8 @@ use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
 use IlBronza\Form\Form as IbForm;
 use Illuminate\Support\Collection;
 
+use Illuminate\Support\Str;
+
 use function collect;
 use function count;
 use function dd;
@@ -51,6 +53,12 @@ trait DossierHtmlFormTrait
 
 			$formField = DossierrowFormFieldHelper::createFieldFromDossierrow($dossierrow);
 
+			$formField->addRowHtmlClass(
+				Str::slug(
+					$dossierrow->getFormrow()->getName()
+				)
+			);
+
 			$previousFormrowId = $dossierrow->getFormrowId();
 
 			$result->push($formField);
@@ -66,6 +74,10 @@ trait DossierHtmlFormTrait
 		$ibForm = new IbForm;
 
 		$ibForm->setModel($this);
+
+		$ibForm->addHtmlClass(
+			Str::slug($this->getName())
+		);
 
 		$ibForm->setTitle(trim($this->getDisplaySortingIndex() . ' ' . $this->getName()));
 
