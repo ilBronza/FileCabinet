@@ -77,6 +77,21 @@ class FormrowCreateStoreFieldsetsParameters extends FieldsetParametersFile
 				],
 				'width' => ['large@l']
 			],
+			'tableSettings' => [
+				'translationPrefix' => 'filecabinet::fields',
+				'fields' => [
+					'table_show' => ['boolean' => 'bool|nullable'],
+					'table_title' => ['textarea' => 'string|nullable|max:255'],
+					'table_description' => [
+						'type' => 'texteditor',
+						'tooltip' => 'Leave empty',
+						'vertical' => true,
+						'max' => '2048',
+						'rules' => 'string|nullable'
+					],
+				],
+				'width' => ['large@l']
+			],
 			'rolesAndPermissions' => [
 				'translationPrefix' => 'filecabinet::fields',
 				'fields' => [

@@ -11,6 +11,7 @@ class FormrowDatetime extends FormrowDate
 	use StandardCheckFieldValidityParametersTrait;
 
 	static $fieldType = 'datetime';
+	static public $datatableFieldString = 'dates.datetime';
 
 	public function transformValue(mixed $databaseValue) : mixed
 	{

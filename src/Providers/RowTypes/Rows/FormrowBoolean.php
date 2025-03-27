@@ -9,6 +9,7 @@ use IlBronza\FormField\FormField;
 
 class FormrowBoolean extends BaseRow
 {
+	static public $datatableFieldString = 'boolean';
 	use StandardCheckFieldValidityParametersTrait;
 
 	static $fieldType = 'boolean';

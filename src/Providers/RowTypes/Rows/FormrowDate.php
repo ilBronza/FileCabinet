@@ -12,6 +12,7 @@ class FormrowDate extends BaseRow
 	use StandardCheckFieldValidityParametersTrait;
 	static $fieldType = 'date';
 	static $databaseField = 'timestamp';
+	static public $datatableFieldString = 'dates.fromString.date';
 
 	public function getDefaultRules() : array
 	{

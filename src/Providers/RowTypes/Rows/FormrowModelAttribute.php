@@ -60,7 +60,7 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 		$modelName = $this->getModelname();
 
 		if($modelName == "")
-			dd($this);
+			dd($this->getModel());
 
 		$modelClass = $this->getModel()->getForm()->getFullQualifiedModelByName(
 			$modelName
@@ -155,7 +155,8 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 
 		// $value = $dossierrow->$databaseField;
 
-		return $this->transformValue($model->{$fieldname});
+		if($model)
+			return $this->transformValue($model->{$fieldname});
 	}
 
 	public function getSpecialParametersFieldsetParameters() : array

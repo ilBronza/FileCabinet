@@ -6,13 +6,9 @@ use Carbon\Carbon;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
 use IlBronza\FileCabinet\Helpers\DossierrowStatusHelper;
 use IlBronza\FileCabinet\Helpers\DossierStatusHelper;
-use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
-use IlBronza\FileCabinet\Models\Dossier;
-use IlBronza\FileCabinet\Models\Form;
-use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
-use IlBronza\FormField\FormField;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
+use IlBronza\FormField\Interfaces\DatatableFieldModelCompatibilityInterface;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use IlBronza\Schedules\Traits\InteractsWithSchedule;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use Spatie\MediaLibrary\HasMedia;
 
-class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, HasMedia
+class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, DatatableFieldModelCompatibilityInterface, HasMedia
 {
 	use InteractsWithMedia;
 	use InteractsWithSchedule;
@@ -243,6 +239,15 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	{
 		return $this->getFormrow()->getFormfieldRoles();
 	}
+
+	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
+
+	public function getDatatableFieldTypeString() : string
+	{
+		return $this->getFormrow()->getDatatableFieldTypeString();
+	}
+
+	/** END INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
 	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
 	public function getFormfieldType() : string

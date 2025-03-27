@@ -7,7 +7,7 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-	'middleware' => ['web', 'auth', 'role:administrator'],
+	'middleware' => ['web', 'auth', 'role:administrator|documents'],
 	'prefix' => 'filecabinet-manager',
 	'as' => config('filecabinet.routePrefix')
 	],
@@ -75,7 +75,7 @@ Route::group([
 
 
 			//DossierUpdateController
-			Route::put('{dossier}/update', [FileCabinet::getController('dossier', 'update'), 'update'])->name('dossiers.update')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
+			Route::put('{dossier}/update', [FileCabinet::getController('dossier', 'update'), 'update'])->name('dossiers.update')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|documents');
 
 			Route::get('{dossier}/populate', [FileCabinet::getController('dossier', 'populate'), 'populate'])->name('dossiers.populate')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|areaManager');
 

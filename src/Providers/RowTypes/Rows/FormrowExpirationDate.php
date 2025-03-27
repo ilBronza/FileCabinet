@@ -35,6 +35,11 @@ class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParamet
 		];
 	}
 
+	public function getName()
+	{
+		return $this->getDossierrow()->getFormrow()->getName();
+	}
+
 	public function performBeforeStoreAction(Dossierrow $dossierrow, mixed $value)
 	{
 
@@ -48,7 +53,10 @@ class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParamet
 	public function performAfterStoreAction(Dossierrow $dossierrow, mixed $date)
 	{
 		if(! $scheduleType = Type::find($this->getScheduleTypeId()))
+		{
+			return null;
 			throw new \Exception('Schedule type not found for expiration date ' . $this->getName());
+		}
 
 //		$dossier = $dossierrow->getDossier();
 

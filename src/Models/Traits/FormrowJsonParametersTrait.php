@@ -6,7 +6,7 @@ use function dd;
 
 trait FormrowJsonParametersTrait
 {
-	private function parseSpecialParametersFields()
+	public function parseSpecialParametersFields()
 	{
 		if(! $this->hasSpecialParameters())
 			return;

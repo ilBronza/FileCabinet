@@ -5,21 +5,18 @@ namespace IlBronza\FileCabinet\Models;
 use IlBronza\CRUD\Interfaces\CrudReorderableModelInterface;
 use IlBronza\CRUD\Traits\CRUDSluggableTrait;
 use IlBronza\CRUD\Traits\Model\CRUDReorderableStandardTrait;
-use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
-use IlBronza\FileCabinet\Models\Dossierrow;
-use IlBronza\FileCabinet\Models\Form;
 use IlBronza\FileCabinet\Models\Traits\FormrowComplianceTrait;
 use IlBronza\FileCabinet\Models\Traits\FormrowJsonParametersTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowNamesTypeHelper;
 use IlBronza\FormField\Casts\JsonFieldCast;
+use IlBronza\FormField\Interfaces\DatatableFieldModelCompatibilityInterface;
 use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 use function cache;
 
-class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, CrudReorderableModelInterface
+class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, DatatableFieldModelCompatibilityInterface, CrudReorderableModelInterface
 {
 	use CRUDReorderableStandardTrait;
 	use CRUDSluggableTrait;
@@ -158,9 +155,14 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		});
 	}
 
+	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
+	public function getDatatableFieldTypeString() : string
+	{
+		return $this->getRowType()->getDatatableFieldTypeString();
+	}
 
-
+	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
 	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
 	public function getFormfieldType() : string
@@ -270,5 +272,10 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	static function findBySlug($slug) : ? static
 	{
 		return static::where('slug', $slug)->first();
+	}
+
+	public function canBeViewedInTable() : bool
+	{
+		return !! $this->table_show;
 	}
 }

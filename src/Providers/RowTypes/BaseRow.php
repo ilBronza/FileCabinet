@@ -9,12 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRow
 {
+	static public $datatableFieldString = 'flat';
 	public Model $model;
 	public ?Dossierrow $dossierrow;
 	public bool $required;
 	public array $defaultRules;
 
 	public ?bool $multiple;
+
+	public function getDatatableFieldTypeString() : string
+	{
+		return static::$datatableFieldString;
+	}
 
 	public function getValueType() : string
 	{

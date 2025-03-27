@@ -5,9 +5,6 @@ namespace IlBronza\FileCabinet\Helpers\FormrowsHelpers;
 use IlBronza\Datatables\Providers\FieldsGroupsMergerHelper;
 use IlBronza\FileCabinet\Models\Form;
 
-use function config;
-use function dd;
-
 class FormrowsDatatableFieldsGroupsHelper
 {
 	public Form $form;
@@ -15,6 +12,23 @@ class FormrowsDatatableFieldsGroupsHelper
 	public function __construct(Form $form)
 	{
 		$this->setForm($form);
+	}
+
+	static function getDossierFieldsGroupsByFormAndParametersFileName(Form $form, string $parametersFileName)
+	{
+		$helper = new FieldsGroupsMergerHelper();
+
+		$helper->addFieldsGroupParameters($parametersFileName::getFieldsGroup());
+
+		$formParameters = (new static($form))->getFieldsGroup();
+
+		$helper->addFieldsGroupParameters(
+			$formParameters
+		);
+
+		$helper->moveFieldToEnd('mySelfDelete');
+
+		return $helper->getMergedFieldsGroups();
 	}
 
 	public function getForm() : Form
@@ -33,33 +47,24 @@ class FormrowsDatatableFieldsGroupsHelper
 
 		foreach ($this->getForm()->getFormrows() as $formrow)
 		{
+			if(! $formrow->canBeViewedInTable())
+				continue;
+
+			// if(! $formrow->public_frontpage)
+			// 	continue;
+
 			$fields['mySelf' . $formrow->getSlug()] = [
-				'type' => 'function',
+				'type' => $formrow->getDatatableFieldTypeString(),
+				'overridingValueMethod' => 'getValueByFormrow',
+//				'renderAs' => $formrow->getDatatableFieldTypeString(),
 				'translatedName' => $formrow->getName(),
-				'function' => 'getValueByFormrow',
-				'staticVariableValue' => $formrow
+//				'function' => 'getValueByFormrow',
+				'staticVariableValue' => $formrow,
 			];
 		}
 
 		return [
 			'fields' => $fields
 		];
-	}
-
-	static function getDossierFieldsGroupsByFormAndParametersFileName(Form $form, string $parametersFileName)
-	{
-		$helper = new FieldsGroupsMergerHelper();
-
-		$helper->addFieldsGroupParameters($parametersFileName::getFieldsGroup());
-
-		$formParameters = (new static($form))->getFieldsGroup();
-
-		$helper->addFieldsGroupParameters(
-			$formParameters
-		);
-
-		$helper->moveFieldToEnd('mySelfDelete');
-
-		return $helper->getMergedFieldsGroups();
 	}
 }

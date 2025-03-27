@@ -75,7 +75,7 @@ trait DossierRelationsTrait
 
 	public function dossierrows() : HasMany
 	{
-		return $this->hasMany(Dossierrow::getProjectClassName())->with('formrow');
+		return $this->hasMany(Dossierrow::gpc())->with('formrow');
 	}
 
 	public function getDossierrows(bool $force = false) : Collection
