@@ -35,10 +35,13 @@ use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPdfController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPopulateController;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetShowController;
 use IlBronza\FileCabinet\Http\Controllers\FormAttaching\FormAttachByCategory;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowMoveController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowReorderController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormCloneController;
@@ -46,6 +49,7 @@ use IlBronza\FileCabinet\Http\Controllers\Forms\FormCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Forms\FormMoveIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormShowController;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\DossierFilecabinet;
@@ -63,7 +67,9 @@ use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetFieldsGroupParameters
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetTemplateFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FormMoveFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowByFormFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowCondenseFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsetsParameters\DossierShowFieldsetsParameters;
@@ -99,6 +105,13 @@ return [
     'enabled' => true,
 
     'updateEditor' => true,
+
+    'roles' => [
+        'general' => [
+            'administrator',
+            'documents'
+        ]
+    ],
     
     'routePrefix' => 'ibFilecabinet',
 
@@ -143,7 +156,8 @@ return [
             'class' => Form::class,
             'table' => 'filecabinets__forms',
             'fieldsGroupsFiles' => [
-                'index' => FormFieldsGroupParametersFile::class
+	            'index' => FormFieldsGroupParametersFile::class,
+                'moveIndex' => FormMoveFieldsGroupParametersFile::class
             ],
             'parametersFiles' => [
                 'create' => FormCreateStoreFieldsetsParameters::class,
@@ -171,7 +185,11 @@ return [
             'table' => 'filecabinets__formrows',
             'controllers' => [
 	            'reorder' => FormrowReorderController::class,
-	            'index' => FormrowIndexController::class,
+                'index' => FormrowIndexController::class,
+	            'condenseIndex' => FormrowCondenseIndexController::class,
+	            'condense' => FormrowCondenseController::class,
+	            'moveIndex' => FormMoveIndexController::class,
+	            'move' => FormrowMoveController::class,
                 'create' => FormrowCreateStoreController::class,
                 'store' => FormrowCreateStoreController::class,
                 'show' => FormrowShowController::class,
@@ -184,7 +202,8 @@ return [
             ],
             'fieldsGroupsFiles' => [
                 'byForm' => FormrowByFormFieldsGroupParametersFile::class,
-                'index' => FormrowFieldsGroupParametersFile::class,
+	            'index' => FormrowFieldsGroupParametersFile::class,
+	            'condense' => FormrowCondenseFieldsGroupParametersFile::class,
                 'related' => FormrowRelatedFieldsGroupParametersFile::class
             ],
             'parametersFiles' => [

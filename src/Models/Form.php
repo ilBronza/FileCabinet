@@ -19,6 +19,7 @@ use function array_merge;
 use function config;
 use function get_class;
 use function ini_set;
+use function request;
 use function route;
 
 class Form extends BaseFileCabinetModel implements ClonableModelInterface
@@ -138,5 +139,13 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 	public function getShortName()
 	{
 		return Str::limit($this->getName(), 20);
+	}
+
+	public function getMoveUrl()
+	{
+		return $this->getKeyedRoute('move', [
+			'formrow' => request()->formrow,
+			'form' => $this->getKey()
+		]);
 	}
 }

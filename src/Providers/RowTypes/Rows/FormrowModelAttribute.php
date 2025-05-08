@@ -60,7 +60,7 @@ class FormrowModelAttribute extends BaseRow implements FormrowWithSpecialParamet
 		$modelName = $this->getModelname();
 
 		if($modelName == "")
-			dd($this->getModel());
+			throw new \Exception('Manca il campo attributo attribute_name sulla riga ' . $this->getModel()->getName() . ' del form ' . $this->getModel()->getForm()->getName());
 
 		$modelClass = $this->getModel()->getForm()->getFullQualifiedModelByName(
 			$modelName

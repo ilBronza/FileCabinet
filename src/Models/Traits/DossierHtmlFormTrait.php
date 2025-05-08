@@ -64,7 +64,8 @@ trait DossierHtmlFormTrait
 			$result->push($formField);
 		}
 
-		$formField->setLastOfType();
+		if($formField ?? null)
+			$formField->setLastOfType();
 
 		return $result;
 	}

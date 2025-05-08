@@ -4,7 +4,7 @@ namespace IlBronza\FileCabinet\Providers\FieldsGroups;
 
 use IlBronza\Datatables\Providers\FieldsGroupParametersFile;
 
-class FormrowFieldsGroupParametersFile extends FieldsGroupParametersFile
+class FormrowCondenseFieldsGroupParametersFile extends FieldsGroupParametersFile
 {
 	static function getFieldsGroup() : array
 	{
@@ -12,26 +12,17 @@ class FormrowFieldsGroupParametersFile extends FieldsGroupParametersFile
 			'translationPrefix' => 'filecabinet::fields',
 			'fields' => [
 				'mySelfPrimary' => 'primary',
-				'mySelfEdit' => 'links.edit',
-				'mySelfSee' => 'links.see',
 				'mySelfCondense' => [
 					'type' => 'links.link',
+					'confirmMessage' => 'Sei sicuro di voler condensare questo oggetto?',
 					'faIcon' => 'arrows-to-dot',
-					'function' => 'getCondenseIndexUrl'
-				],
-				'mySelfMove' => [
-					'type' => 'links.link',
-					'faIcon' => 'up-down-left-right',
-					'function' => 'getMoveIndexUrl'
+					'function' => 'getCondenseUrl'
 				],
 				'name' => 'flat',
 				'slug' => 'flat',
 				'description' => 'flat',
-				'required' => 'boolean',
 				'form' => 'relations.belongsTo',
 				'type' => 'filecabinet::rowType',
-
-				'mySelfDelete' => 'links.delete'
 			]
 		];
 	}

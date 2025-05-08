@@ -74,7 +74,9 @@ class FormrowRelation extends BaseModelRelationRow
 		if (method_exists($dossierable, $getterMethodName))
 			return $dossierable->$getterMethodName();
 
-		return $dossierable->_getRelationshipPossibleValuesArray($this->getRelationName());
+		return $dossierable->_getRelationshipPossibleValuesArray(
+			$this->getRelationName()
+		);
 	}
 
 	public function getSpecialParametersFieldsetParameters() : array

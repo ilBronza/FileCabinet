@@ -160,9 +160,16 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getFormfieldValue() : mixed
 	{
-		return $this->getRowType()->getDossierrowValue(
-			$this
-		);
+		try
+		{
+			return $this->getRowType()->getDossierrowValue(
+				$this
+			);			
+		}
+		catch(\TypeError $e)
+		{
+			return $e->getMessage();
+		}
 	}
 
 	public function getFormfieldName() : string

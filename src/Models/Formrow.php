@@ -15,6 +15,7 @@ use IlBronza\FormField\Interfaces\FormfieldModelCompatibilityInterface;
 use Illuminate\Database\Eloquent\Model;
 
 use function cache;
+use function request;
 
 class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, DatatableFieldModelCompatibilityInterface, CrudReorderableModelInterface
 {
@@ -25,14 +26,51 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	static $modelConfigPrefix = 'formrow';
 	static $deletingRelationships = ['dossierrows'];
-
+	public ?BaseRow $rowtype = null;
 	protected $casts = [
 		'parameters' => JsonFieldCast::class,
 		'roles' => JsonFieldCast::class,
 		'permissions' => JsonFieldCast::class
 	];
 
-	public ? BaseRow $rowtype = null;
+	public static function boot()
+	{
+		parent::boot();
+
+		self::saving(function ($model)
+		{
+			$model->parseSpecialParametersFields();
+		});
+
+		self::deleting(function ($model)
+		{
+			$model->getForm()->setHistoryIntervention(
+				__('filecabinet::messages.removedRow', ['element' => $model->getName(), 'type' => $model->getType()])
+			);
+		});
+
+		self::created(function ($model)
+		{
+			$model->getForm()->setHistoryIntervention(
+				__('filecabinet::messages.addedRow', ['element' => $model->getName(), 'type' => $model->getType()])
+			);
+		});
+	}
+
+	public function getNameForDisplayRelation()
+	{
+		return cache()->remember(
+			$this->cacheKey('getNameForDisplayRelation'), 3600 * 24, function ()
+		{
+			return "{$this->getName()} {$this->getForm()->getName()}";
+		}
+		);
+	}
+
+	static function findBySlug($slug) : ?static
+	{
+		return static::where('slug', $slug)->first();
+	}
 
 	public function dossierrows()
 	{
@@ -61,7 +99,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function getRowType() : BaseRow
 	{
-		if($this->rowtype)
+		if ($this->rowtype)
 			return $this->rowtype;
 
 		$this->rowtype = FormrowNamesTypeHelper::getByType(
@@ -85,7 +123,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isRequired() : bool
 	{
-		return !! $this->required;
+		return ! ! $this->required;
 	}
 
 	public function isDisabled() : bool
@@ -95,7 +133,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isReadOnly() : bool
 	{
-		return !! $this->read_only;		
+		return ! ! $this->read_only;
 	}
 
 	public function isMultiple(Dossierrow $dossierrow = null) : bool
@@ -104,7 +142,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 		$rowType->setDossierrow($dossierrow);
 
-		if(! $dossierrow)
+		if (! $dossierrow)
 			throw new \Exception('asd');
 
 		return $rowType->isMultiple();
@@ -112,47 +150,24 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isRepeatable() : bool
 	{
-		return !! $this->repeatable;
+		return ! ! $this->repeatable;
 	}
 
-	public function getRelationName() : ? string
+	public function getRelationName() : ?string
 	{
 		return null;
 	}
 
-	public function getRoles() : ? array
+	public function getRoles() : ?array
 	{
 		return null;
 	}
+
+	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
 	public function getDefaultValue()
 	{
 		return null;
-	}
-
-
-	public static function boot()
-	{
-		parent::boot();
-
-		self::saving(function($model)
-		{
-			$model->parseSpecialParametersFields();
-		});
-
-		self::deleting(function($model)
-		{
-			$model->getForm()->setHistoryIntervention(
-				__('filecabinet::messages.removedRow', ['element' => $model->getName(), 'type' => $model->getType()])
-			);
-		});
-
-		self::created(function($model)
-		{
-			$model->getForm()->setHistoryIntervention(
-				__('filecabinet::messages.addedRow', ['element' => $model->getName(), 'type' => $model->getType()])
-			);
-		});
 	}
 
 	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
@@ -161,8 +176,6 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	{
 		return $this->getRowType()->getDatatableFieldTypeString();
 	}
-
-	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
 	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
 	public function getFormfieldType() : string
@@ -180,27 +193,17 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return $this->getSlug();
 	}
 
-	public function getPlaceholder() : ? string
-	{
-		return $this->placeholder;
-	}
-
-	public function getPlaceholderGetterMethod() : ? string
-	{
-		return $this->placeholder_getter_method;
-	}
-
 	public function getFormfieldLabel() : string
 	{
 		return $this->getName();
 	}
 
-	public function getFormfieldPlaceholder(Model $model) : ? string
+	public function getFormfieldPlaceholder(Model $model) : ?string
 	{
-		if($placeholder = $this->getPlaceholder())
+		if ($placeholder = $this->getPlaceholder())
 			return $placeholder;
 
-		if($method = $this->getPlaceholderGetterMethod())
+		if ($method = $this->getPlaceholderGetterMethod())
 			return $model->{$method}();
 
 		return $this->getName();
@@ -213,7 +216,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isFormfieldDisabled() : bool
 	{
-		return !! $this->isDisabled();
+		return ! ! $this->isDisabled();
 	}
 
 	public function getFormfieldRules(Dossierrow $dossierrow = null) : array
@@ -226,7 +229,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return $this->isRepeatable();
 	}
 
-	public function getFormfieldTranslatedTooltip() : ? string
+	public function getFormfieldTranslatedTooltip() : ?string
 	{
 		return $this->description;
 	}
@@ -241,27 +244,26 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return $this->isMultiple($this->dossierrow);
 	}
 
-	public function getFormfieldRelationName() : ? string
+	public function getFormfieldRelationName() : ?string
 	{
 		return $this->getRelationName();
 	}
 
-	public function getNameForDisplayRelation()
-	{
-		return cache()->remember(
-			$this->cacheKey('getNameForDisplayRelation'),
-			3600 * 24,
-			function()
-			{
-				return "{$this->getName()} {$this->getForm()->getName()}";
-			}
-		);
-	}
-
-	public function getFormfieldRoles() : ? array
+	public function getFormfieldRoles() : ?array
 	{
 		return $this->getRoles();
 	}
+
+	public function getPlaceholder() : ?string
+	{
+		return $this->placeholder;
+	}
+
+	public function getPlaceholderGetterMethod() : ?string
+	{
+		return $this->placeholder_getter_method;
+	}
+
 	/** END INTERFACE FormfieldModelCompatibilityInterface methods **/
 
 	public function isExpirationDate() : bool
@@ -269,13 +271,27 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 		return $this->type == 'expirationDate';
 	}
 
-	static function findBySlug($slug) : ? static
-	{
-		return static::where('slug', $slug)->first();
-	}
-
 	public function canBeViewedInTable() : bool
 	{
-		return !! $this->table_show;
+		return ! ! $this->table_show;
 	}
+
+	public function getCondenseIndexUrl()
+	{
+		return $this->getKeyedRoute('condenseIndex');
+	}
+
+	public function getMoveIndexUrl()
+	{
+		return $this->getKeyedRoute('moveIndex');
+	}
+
+	public function getCondenseUrl()
+	{
+		return $this->getKeyedRoute('condense', [
+			'formrow' => request()->formrow,
+			'targetRow' => $this->getKey()
+		]);
+	}
+
 }

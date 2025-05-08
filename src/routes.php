@@ -7,7 +7,7 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-	'middleware' => ['web', 'auth', 'role:administrator|documents'],
+	'middleware' => ['web', 'auth', 'role:' . implode("|", config('filecabinet.roles.general'))],
 	'prefix' => 'filecabinet-manager',
 	'as' => config('filecabinet.routePrefix')
 	],
@@ -145,6 +145,12 @@ Route::group([
 
 		Route::group(['prefix' => 'formrows'], function()
 		{
+			Route::get('{formrow}/condense-index', [FileCabinet::getController('formrow', 'condenseIndex'), 'index'])->name('formrows.condenseIndex');
+			Route::get('{formrow}/condense/{targetRow}', [FileCabinet::getController('formrow', 'condense'), 'condense'])->name('formrows.condense');
+
+			Route::get('{formrow}/move-index', [FileCabinet::getController('formrow', 'moveIndex'), 'index'])->name('formrows.moveIndex');
+			Route::get('{formrow}/move/{form}', [FileCabinet::getController('formrow', 'move'), 'move'])->name('forms.move');
+
 			//FormrowReorderController
 			Route::post('reorder', [FileCabinet::getController('formrow', 'reorder'), 'storeMassReorder'])->name('formrows.storeMassReorder');
 
