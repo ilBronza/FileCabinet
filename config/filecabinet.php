@@ -44,6 +44,7 @@ use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseIndexControlle
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowMoveController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowReorderController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
+use IlBronza\FileCabinet\Http\Controllers\Forms\FormAttachByModelIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormCloneController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormDestroyController;

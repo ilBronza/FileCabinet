@@ -2,6 +2,9 @@
 
 namespace IlBronza\FileCabinet\Http\Controllers\Forms;
 
+use IlBronza\CRUD\Traits\CRUDIndexTrait;
+use IlBronza\CRUD\Traits\CRUDPlainIndexTrait;
+
 class FormAttachByModelIndexController extends FormIndexController
 {
     use CRUDPlainIndexTrait;
