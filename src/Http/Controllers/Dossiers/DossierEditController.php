@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Http\Controllers\Dossiers;
 
 use IlBronza\CRUD\Traits\CRUDEditUpdateTrait;
+use IlBronza\CRUD\Traits\CRUDRelationshipTrait;
 use IlBronza\FileCabinet\Helpers\DossierPopulatorHelper;
 use Illuminate\Http\Request;
 
