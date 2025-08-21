@@ -17,6 +17,46 @@ $ composer require ilbronza/filecabinet
 
 ## Usage
 
+## Form options
+
+``` bash
+
+automatically_creatable: 
+    if true, the form will be automatically created when the dossier is created in bulk from category
+automatic_creation_checker_method: 
+    if set, the form will check the target if the form is automatically creatable. 
+    Ex. if you populate this parameter with 'isBornInEu' and you try to attach automatically this form to an Operator, 
+    the operatro will call 'isBornInEu' method to check if the form is automatically creatable
+
+```
+
+## Datatable Fields
+
+``` bash
+
+        //link to dossiers by form. If the datatable row is a form, omit the form parameter
+		'mySelfDossiers' => [
+			'type' => 'filecabinet::dossiers.dossiersByForm',
+			//ONLY IF row value is not a Form
+			'form' => Form::getProjectClassName()::findCachedField('name', 'Patente')
+		],
+
+        //filecabinets list with populate/show link
+        'rootFilecabinets' => 'filecabinet::filecabinets.filecabinetsStatus',
+
+        //create a button to add filecabinets based on defined category
+        'mySelfAddTest' => [
+            'type' => 'filecabinet::attachForm.attachFormByCategory',
+            'category' => Category::getProjectClassName()::findCachedField('name', 'Collaudo')
+        ],
+
+        //create a button to add filecabinets based on root filecabinets categories
+        'mySelfAddTests' => 'filecabinet::attachForm.attachFormByRoots',
+
+```
+
+
+
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.

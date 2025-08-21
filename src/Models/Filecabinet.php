@@ -2,42 +2,140 @@
 
 namespace IlBronza\FileCabinet\Models;
 
+use IlBronza\Buttons\Icons\FaIcon;
+use IlBronza\CRUD\Interfaces\RecursiveTreeInterface;
+use IlBronza\CRUD\Traits\IlBronzaPackages\CRUDExtraButtonsTrait;
+use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
+use IlBronza\CRUD\Traits\Model\CRUDSortingIndexTrait;
+use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
+use IlBronza\FileCabinet\Models\Traits\FilecabinetButtonsRoutesTrait;
+use IlBronza\FileCabinet\Models\Traits\FilecabinetCompletionTrait;
+use IlBronza\FileCabinet\Models\Traits\FilecabinetRelationsTrait;
+use IlBronza\FileCabinet\Models\Traits\FilecabinetScopesTrait;
+use IlBronza\Menu\Interfaces\NavbarableElementInterface;
+use Illuminate\Support\Collection;
 
-use IlBronza\CRUD\Traits\CRUDSluggableTrait;
-use IlBronza\CRUD\Traits\Model\CRUDModelTrait;
-use IlBronza\CRUD\Traits\Model\CRUDRelationshipModelTrait;
-use IlBronza\Category\Models\Category;
-use IlBronza\FileCabinet\Models\Dossier;
-use IlBronza\FileCabinet\Models\Filecabinetrow;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
-class Filecabinet extends Model
+class Filecabinet extends BaseFileCabinetModel implements 
+	RecursiveTreeInterface,
+	NavbarableElementInterface
 {
-	use HasFactory;
+    use CRUDParentingTrait;
 
-	use SoftDeletes;
+    use CRUDSortingIndexTrait;
 
-	use CRUDModelTrait;
-	use CRUDRelationshipModelTrait;
+    use FilecabinetRelationsTrait;
+    use FilecabinetButtonsRoutesTrait;
+    use FilecabinetScopesTrait;
+    use FilecabinetCompletionTrait;
 
-	use CRUDSluggableTrait;
+    use CRUDExtraButtonsTrait;
 
-	public $deletingRelationships = ['dossiers', 'filecabinetrows'];
+    public function getContentElements() : Collection
+    {
+    	return $this->getDossiers()->sortBy('sorting_index');
+    }
 
-	public function categories()
+    static $parentKeyName = 'parent_id';
+
+	static $modelConfigPrefix = 'filecabinet';
+	static $deletingRelationships = ['children', 'dossiers'];
+
+	public bool $showChildrenContent = false;
+
+	public function hasDossiers() : bool
 	{
-		return $this->morphToMany(Category::class, 'categorizeable');
+		if($this->relationLoaded('dossiers'))
+			return $this->dossiers->count() > 0;
+
+		return $this->dossiers()->count() > 0;
 	}
 
-	public function dossiers()
+	public function getPopulateUrl() : string
 	{
-		return $this->hasMany(Dossier::class);
+		return $this->getKeyedRoute('populate');
 	}
 
-	public function filecabinetrows()
+	static function findWithTree(string $filecabinet)
 	{
-		return $this->hasMany(Filecabinetrow::class);
+		return static::getTreeWithRelatedElements($filecabinet, []);
+	}
+
+	public function getName() : ? string
+	{
+		return $this->getCategory()->getName();
+	}
+
+	public function getId() : ? string
+	{
+		return $this->getKey();
+	}
+
+	public function getButtonText() : string
+	{
+		return $this->getName();
+	}
+
+	public function getButtonUrl() : string
+	{
+		return $this->getPopulateUrl();
+	}
+
+	public function getIcon() : ? string
+	{
+		return null;
+	}
+
+	public function buildButtonBadgeHtml(int $toPopulate, int $populated)
+	{
+		return "<span class='uk-text-normal'>{$toPopulate}</span>/<strong>{$populated}</strong>";
+	}
+
+	public function getButtonBadgeText() : ? string
+	{
+		if(! $this->relationloaded('dossiers'))
+			return $this->buildButtonBadgeHtml(
+				$this->dossiers()->populated()->count(),
+				$this->dossiers()->count()
+			);
+
+		return $this->buildButtonBadgeHtml(
+				$this->dossiers->filter(function($item)
+					{
+						return $item->isPopulated();
+					})->count(),
+				$this->dossiers->count()
+			);
+	}
+
+	public function mustShowChildrenContent() : bool
+	{
+		return $this->showChildrenContent;
+	}
+
+	public function getCreatedAt()
+	{
+		return $this->created_at;
+	}
+
+	public function getStatusString()
+	{
+		$iconMethod = $this->isPopulated() ? 'check' : 'xmark';
+
+		$iconString = FaIcon::$iconMethod();
+
+		return "{$iconString} {$this->getName()}";
+	}
+
+	public function getPdfTitle()
+	{
+		if($title = $this->getCategory()->getPdfTitle())
+			return $title;
+
+		return $this->getName();
+	}
+
+	public function canGeneratePartialPdf() : bool
+	{
+		return config('filecabinet.filecabinet.buttons.showPrintPartialPdf', true);
 	}
 }
