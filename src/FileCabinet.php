@@ -107,5 +107,4 @@ class FileCabinet implements RoutedObjectInterface
             dd([$e->getMessage(), 'dichiara ' . "filecabinet.models.{$target}.controllers.{$controllerPrefix}"]);
         }
     }
-
 }
