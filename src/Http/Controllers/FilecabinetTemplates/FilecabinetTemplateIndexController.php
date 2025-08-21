@@ -2,7 +2,7 @@
 
 namespace IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates;
 
-use IlBronza\CRUD\Http\Controllers\Traits\PackageStandardIndexTrait;
+use IlBronza\CRUD\Http\Controllers\Traits\StandardTraits\PackageStandardIndexTrait;
 use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetTemplateCRUD;
 
 class FilecabinetTemplateIndexController extends FilecabinetTemplateCRUD
