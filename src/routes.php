@@ -94,6 +94,9 @@ Route::group([
 
 		Route::group(['prefix' => 'dossierrows'], function()
 		{
+			Route::get('{dossierrow}/show-file', [FileCabinet::getController('dossierrow', 'showFile'), 'showFile'])->name('dossierrows.showFile');
+
+
 			Route::get('{dossierrow}/create-new-instance', [FileCabinet::getController('dossierrow', 'createNewInstance'), 'createNewInstance'])->name('dossierrows.createNewInstance')->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator');
 
 
@@ -123,6 +126,16 @@ Route::group([
 
 			Route::get('{form}/clone', [FileCabinet::getController('form', 'clone'), 'clone'])
 				->name('forms.clone');
+
+
+			// Route::get('{form}/merge-table', [FileCabinet::getController('form', 'mergeTable'), 'mergeTable'])
+			// 	->name('forms.mergeTable');
+
+			// Route::get('{form}/merge/{target}', [FileCabinet::getController('form', 'mergeForm'), 'mergeForm'])
+			// 	->name('forms.mergeForm');
+
+			// Route::post('{form}/merge/{target}', [FileCabinet::getController('form', 'merge'), 'merge'])
+			// 	->name('forms.merge');
 
 
 			Route::get('{form}/formrows/create', [FileCabinet::getController('formrow', 'create'), 'createFromForm'])

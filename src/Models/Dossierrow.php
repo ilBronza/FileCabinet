@@ -70,6 +70,27 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getDossier()->getShowUrl();
 	}
 
+	public function isFileType()
+	{
+		return $this->getFormrow()->isFileType();
+	}
+
+	public function getShowFileUrl() : string
+	{
+		if(! $this->isFileType())
+			return null;
+		
+		return $this->getKeyedRoute('showFile');
+	}
+
+	public function getFilePath()
+	{
+		if(! $this->isFileType())
+			return null;
+		
+		return $this->file;
+	}
+
 	public function getDossierable() : ?Model
 	{
 		return $this->getDossier()?->getDossierable();

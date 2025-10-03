@@ -12,6 +12,7 @@ use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowCreateNewInstanc
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDeleteMediaController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowFileController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByFormIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelCategoryController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelFormController;
@@ -36,11 +37,11 @@ use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPopulateContro
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetShowController;
 use IlBronza\FileCabinet\Http\Controllers\FormAttaching\FormAttachByCategory;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseController;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowIndexController;
-use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowMoveController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowReorderController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
@@ -253,6 +254,7 @@ return [
             ],
             'controllers' => [
                 'show' => DossierrowShowController::class,
+                'showFile' => DossierrowShowFileController::class,
                 'index' => DossierrowIndexController::class,
 	            'createNewInstance' => DossierrowCreateNewInstanceController::class,
 				'deleteMedia' => DossierrowDeleteMediaController::class,
