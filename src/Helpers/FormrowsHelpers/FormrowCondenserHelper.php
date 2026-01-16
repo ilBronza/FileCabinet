@@ -2,7 +2,7 @@
 
 namespace IlBronza\FileCabinet\Helpers\FormrowsHelpers;
 
-use IlBronza\FileCabinet\Helpers\DossierCreatorHelper;
+use IlBronza\FileCabinet\Models\Formrow;
 
 class FormrowCondenserHelper extends FormrowCondenserBaseHelper
 {
@@ -16,7 +16,11 @@ class FormrowCondenserHelper extends FormrowCondenserBaseHelper
 		if($formrow->getRowType()->getDatabaseField() != $targetRow->getRowType()->getDatabaseField())
 			abort(403, "\"{$formrow->getName()}\" del form \"{$formrow->getForm()?->getName()}\" e \"{$targetRow->getName()}\" del form \"{$targetRow->getForm()?->getName()}\" non sono dello stesso tipo.<br />{$formrow->getName()} è \"{$formrow->getRowType()->getDatabaseField()}\" e {$targetRow->getName()} è \"{$targetRow->getRowType()->getDatabaseField()}\"");
 
-		return $helper->parseDossierrows();
+		$helper->parseDossierrows();
+
+		$formrow->delete();
+
+		return ;
 	}
 
 	public function closeFormrow()

@@ -75,19 +75,27 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->isFileType();
 	}
 
+	public function getDownloadFileUrl() : string
+	{
+		if (! $this->isFileType())
+			return null;
+
+		return $this->getKeyedRoute('downloadFile');
+	}
+
 	public function getShowFileUrl() : string
 	{
-		if(! $this->isFileType())
+		if (! $this->isFileType())
 			return null;
-		
+
 		return $this->getKeyedRoute('showFile');
 	}
 
 	public function getFilePath()
 	{
-		if(! $this->isFileType())
+		if (! $this->isFileType())
 			return null;
-		
+
 		return $this->file;
 	}
 
@@ -179,15 +187,22 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormfieldValue();
 	}
 
+	public function setValue($value)
+	{
+		return $this->getRowType()->setDossierrowValue(
+			$this, $value
+		);
+	}
+
 	public function getFormfieldValue() : mixed
 	{
 		try
 		{
 			return $this->getRowType()->getDossierrowValue(
 				$this
-			);			
+			);
 		}
-		catch(\TypeError $e)
+		catch (\TypeError $e)
 		{
 			return $e->getMessage();
 		}
@@ -268,19 +283,19 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getFormfieldRoles();
 	}
 
+	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
+	public function getFormfieldType() : string
+	{
+		return $this->getFormrow()->getFormfieldType();
+	}
+
+	/** END INTERFACE DatatableFieldModelCompatibilityInterface methods **/
+
 	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
 	public function getDatatableFieldTypeString() : string
 	{
 		return $this->getFormrow()->getDatatableFieldTypeString();
-	}
-
-	/** END INTERFACE DatatableFieldModelCompatibilityInterface methods **/
-
-	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
-	public function getFormfieldType() : string
-	{
-		return $this->getFormrow()->getFormfieldType();
 	}
 
 	public function storeRowValue(mixed $value, bool $validate = false) : bool
@@ -370,5 +385,10 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getStatus()
 	{
 		return DossierrowStatusHelper::getStatus($this);
+	}
+
+	public function hasUpdateEditor() : ? bool
+	{
+		return $this->getDossier()?->hasUpdateEditor();
 	}
 }

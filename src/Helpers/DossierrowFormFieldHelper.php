@@ -6,7 +6,7 @@ use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FormField\FormField;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormFieldsProvider;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
-
+use Illuminate\Support\Str;
 use function stripos;
 
 class DossierrowFormFieldHelper
@@ -18,10 +18,18 @@ class DossierrowFormFieldHelper
 
         $parameters['model'] = $dossierrow;
 
-        return FormFieldsProvider::createByNameParameters(
+        $formField = FormFieldsProvider::createByNameParameters(
                 $fieldname,
                 $parameters
             );
+
+        $formField->addRowHtmlClass(
+            Str::slug(
+                $dossierrow->getFormrow()->getName()
+            )
+        );
+
+        return $formField;
     }
 
 

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use IlBronza\FileCabinet\Helpers\DossierCreatorHelper;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Formrow;
+use Illuminate\Support\Collection;
 
 trait DossierGettersSettersTrait
 {
@@ -167,6 +168,28 @@ trait DossierGettersSettersTrait
 	public function pushValueByFormrow(Formrow $formrow, mixed $value, bool $validate = false)
 	{
 		return $this->getDossierrowByFormrow($formrow)->pushRowValue($value, true);
+	}
+
+	public function hasFiles() : Bool
+	{
+		foreach($this->getDossierrows() as $dossierrow)
+			if($dossierrow->isFileType())
+				if($dossierrow->getFilePath())
+					return true;
+
+		return false;
+	}
+
+	public function getFilesDossierrows() : Collection
+	{
+		$result = collect();
+
+		foreach($this->getDossierrows() as $dossierrow)
+			if($dossierrow->isFileType())
+				if($dossierrow->getFilePath())
+					$result->push($dossierrow);
+
+		return $result;
 	}
 }
 

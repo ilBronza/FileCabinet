@@ -2,33 +2,27 @@
 
 namespace IlBronza\FileCabinet\Http\Controllers\Dossierrows;
 
-use IlBronza\CRUD\Traits\CRUDRelationshipTrait;
-use IlBronza\CRUD\Traits\CRUDShowTrait;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowCRUD;
+use Illuminate\Support\Facades\Storage;
 
 class DossierrowShowFileController extends DossierrowCRUD
 {
-    use CRUDShowTrait;
-    use CRUDRelationshipTrait;
+    public $allowedMethods = ['showFile'];
 
-    public $allowedMethods = ['show'];
-
-    public function getGenericParametersFile() : ? string
+    public function getDisk() : string
     {
-        //FormShowFieldsetsParameters
-        return config("filecabinet.models.{$this->configModelClassName}.parametersFiles.show");
+        return config('filecabinet.fileRowsDisk');
     }
 
-    public function getRelationshipsManagerClass()
-    {
-        //FormRelationManager
-        return config("filecabinet.models.{$this->configModelClassName}.relationshipsManagerClasses.show");
-    }
-
-    public function show(string $dossierrow)
+    public function showFile(string $dossierrow)
     {
         $dossierrow = $this->findModel($dossierrow);
 
-        return $this->_show($dossierrow);
+        if(! Storage::disk($this->getDisk())->exists($dossierrow->file))
+            abort(404);
+
+        return response()->file(
+            Storage::disk($this->getDisk())->path($dossierrow->file)
+        );
     }
 }

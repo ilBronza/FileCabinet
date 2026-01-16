@@ -10,6 +10,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\TextFormField;
 use IlBronza\FormField\FormField;
+use IlBronza\Ukn\Facades\Ukn;
 
 class FormrowModelMethod extends BaseRow implements FormrowWithSpecialParametersInterface
 {
@@ -50,7 +51,16 @@ class FormrowModelMethod extends BaseRow implements FormrowWithSpecialParameters
 	public function getDossierrowValue(Dossierrow $dossierrow)
 	{
 		$model = $dossierrow->getDossierable();
-		$methodName = $this->getSpecialParametersSingleAttributeValue('read_method');
+		
+		if(!$methodName = $this->getSpecialParametersSingleAttributeValue('read_method'))
+			throw new \Exception("Missing real_method field in {$this->getModel()->getName()} belonging to form {$this->getModel()->getForm()->getName()}");
+
+
+		if(! method_exists($model, $methodName))
+		{
+			Ukn::e('Method ' . $methodName . ' doesn\'t exist for model ' . get_class($model));
+			return null;
+		}
 
 		return $this->transformValue(
 			$model->{$methodName}()

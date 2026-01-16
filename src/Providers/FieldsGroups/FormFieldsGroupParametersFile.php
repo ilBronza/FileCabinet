@@ -16,8 +16,8 @@ class FormFieldsGroupParametersFile extends FieldsGroupParametersFile
                 'mySelfPrimary' => 'primary',
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
-                'mySelfClone' => 'links.clone',
-                'mySelfMerge' => 'links.merge',
+                // 'mySelfClone' => 'links.clone',
+                // 'mySelfMerge' => 'links.merge',
 
                 'name' => 'flat',
                 'slug' => 'flat',

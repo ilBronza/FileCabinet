@@ -36,7 +36,7 @@ class DossierPopulatorHelper
 
     public function getParameterByName(string $parameterName) : mixed
     {
-        return $this->getBindingParameters()[$parameterName];
+        return $this->getBindingParameters()[$parameterName] ?? null;
     }
 
     public function getParameter(Dossierrow $dossierrow) : mixed

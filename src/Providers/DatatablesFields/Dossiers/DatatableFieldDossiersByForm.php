@@ -6,6 +6,8 @@ use IlBronza\Datatables\DatatablesFields\Links\DatatableFieldLink;
 
 class DatatableFieldDossiersByForm  extends DatatableFieldLink
 {
+	public ?string $translationPrefix = 'filecabinet::datatableFields';
+	public ? string $forcedStandardName = 'dossiersCount';
 	public $faIcon = 'box-archive';
 	public $form;
 

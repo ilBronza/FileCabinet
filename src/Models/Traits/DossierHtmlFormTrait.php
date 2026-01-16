@@ -53,12 +53,6 @@ trait DossierHtmlFormTrait
 
 			$formField = DossierrowFormFieldHelper::createFieldFromDossierrow($dossierrow);
 
-			$formField->addRowHtmlClass(
-				Str::slug(
-					$dossierrow->getFormrow()->getName()
-				)
-			);
-
 			$previousFormrowId = $dossierrow->getFormrowId();
 
 			$result->push($formField);
@@ -82,7 +76,9 @@ trait DossierHtmlFormTrait
 
 		$ibForm->setTitle(trim($this->getDisplaySortingIndex() . ' ' . $this->getName()));
 
-		$ibForm->setUpdateEditor($this->hasUpdateEditor());
+		$ibForm->setUpdateEditor(
+			$this->hasUpdateEditor()
+		);
 
 		if($description = $this->getDescription())
 			$ibForm->setIntro($description);
