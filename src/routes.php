@@ -90,7 +90,6 @@ Route::group([
 			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			;
 
-
 			//DossierUpdateController
 			Route::put('{dossier}/update', [FileCabinet::getController('dossier', 'update'), 'update'])->name('dossiers.update')
 			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|documents')
@@ -119,6 +118,8 @@ Route::group([
 
 		Route::group(['prefix' => 'dossierrows'], function()
 		{
+			Route::delete('{dossierrow}/destroy', [FileCabinet::getController('dossierrow', 'destroy'), 'destroy'])->name('dossierrows.destroy');
+
 			Route::get('{dossierrow}/show-file', [FileCabinet::getController('dossierrow', 'showFile'), 'showFile'])->name('dossierrows.showFile');
 
 			Route::get('{dossierrow}/download-file', [FileCabinet::getController('dossierrow', 'downloadFile'), 'downloadFile'])->name('dossierrows.downloadFile');

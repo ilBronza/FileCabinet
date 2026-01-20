@@ -10,6 +10,7 @@ use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorSlugFolde
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowAddInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDeleteMediaController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDownloadFileController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
@@ -93,6 +94,7 @@ use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierrowRelationManag
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FilecabinetTemplateRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormrowRelationManager;
+use IlBronza\Products\Http\Controllers\Order\OrderDeletionController;
 
 // use IlBronza\Category\Models\Category;
 // use IlBronza\FileCabinet\Models\Filecabinet;
@@ -272,7 +274,8 @@ return [
                 'show' => DossierrowRelationManager::class
             ],
             'controllers' => [
-                'show' => DossierrowShowController::class,
+	            'destroy' => DossierrowDestroyController::class,
+	            'show' => DossierrowShowController::class,
                 'showFile' => DossierrowShowFileController::class,
                 'files' => FileDossierrowIndexController::class,
                 'downloadFile' => DossierrowDownloadFileController::class,

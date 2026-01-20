@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use Spatie\MediaLibrary\HasMedia;
 
+use function config;
+
 class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, DatatableFieldModelCompatibilityInterface, HasMedia
 {
 	use InteractsWithMedia;
@@ -63,6 +65,11 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getUpdateUrl(array $data = [])
 	{
 		return $this->getDossier()->getUpdateUrl();
+	}
+
+	public function getAjaxDeleteInstanceUrl() : string
+	{
+		return $this->getKeyedRoute('destroy');
 	}
 
 	public function getShowUrl(array $data = [])

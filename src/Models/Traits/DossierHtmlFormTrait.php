@@ -53,6 +53,9 @@ trait DossierHtmlFormTrait
 
 			$formField = DossierrowFormFieldHelper::createFieldFromDossierrow($dossierrow);
 
+			if($previousFormrowId != $dossierrow->getFormrowId())
+				$formField->setFirstOfType();
+			
 			$previousFormrowId = $dossierrow->getFormrowId();
 
 			$result->push($formField);

@@ -10,7 +10,7 @@ use IlBronza\FileCabinet\Providers\RowTypes\SpecialParametersTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
 use IlBronza\FormField\Fields\TextFormField;
 use IlBronza\FormField\FormField;
-use IlBronza\Ukn\Facades\Ukn;
+use IlBronza\Ukn\Ukn;
 
 class FormrowModelMethod extends BaseRow implements FormrowWithSpecialParametersInterface
 {
