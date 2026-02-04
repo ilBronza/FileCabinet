@@ -21,7 +21,10 @@
 		<table class="table table-bordered dossiertable uk-width-1-1">
 			<tbody>
 			<tr>
-			@foreach($dossier->getDossierrows() as $dossierrow)
+			@foreach($dossier->getDossierrows()->sortBy(function($dossierrow)
+			{
+				return $dossierrow->getSortingIndex() . $dossierrow->updated_at?->timestamp;
+			}) as $dossierrow)
 				@if(($loop->index > 0)&&(($colCount = ($loop->index) % 2) == 0))
 				</tr><tr>
 				@endif

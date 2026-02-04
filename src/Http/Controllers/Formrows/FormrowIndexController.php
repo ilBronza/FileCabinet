@@ -19,12 +19,12 @@ class FormrowIndexController extends FormrowCRUD
     public function getIndexFieldsArray()
     {
 		//FormrowFieldsGroupParametersFile
-        return config('filecabinet.models.formrow.fieldsGroupsFiles.index')::getFieldsGroup();
+        return config('filecabinet.models.formrow.fieldsGroupsFiles.index')::getTracedFieldsGroup();
     }
 
     public function getRelatedFieldsArray()
     {
-        return config('filecabinet.models.formrow.fieldsGroupsFiles.related')::getFieldsGroup();
+        return config('filecabinet.models.formrow.fieldsGroupsFiles.related')::getTracedFieldsGroup();
     }
 
     public function getIndexElements()

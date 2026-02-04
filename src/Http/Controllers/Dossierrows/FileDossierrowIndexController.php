@@ -18,7 +18,7 @@ class FileDossierrowIndexController extends DossierrowCRUD
     public function getIndexFieldsArray()
     {
         //DossierrowFilessIndexFieldsGroupParametersFile
-        return config('filecabinet.models.dossierrow.fieldsGroupsFiles.filesIndex')::getFieldsGroup();
+        return config('filecabinet.models.dossierrow.fieldsGroupsFiles.filesIndex')::getTracedFieldsGroup();
     }
 
     public function getIndexElements()

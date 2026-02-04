@@ -15,12 +15,12 @@ class FilecabinetIndexController extends FilecabinetCRUD
 
     public function getIndexFieldsArray()
     {
-        return config('filecabinet.models.filecabinet.fieldsGroupsFiles.index')::getFieldsGroup();
+        return config('filecabinet.models.filecabinet.fieldsGroupsFiles.index')::getTracedFieldsGroup();
     }
 
     public function getRelatedFieldsArray()
     {
-        return config('filecabinet.models.filecabinet.fieldsGroupsFiles.related')::getFieldsGroup();
+        return config('filecabinet.models.filecabinet.fieldsGroupsFiles.related')::getTracedFieldsGroup();
     }
 
     public function getIndexElements()

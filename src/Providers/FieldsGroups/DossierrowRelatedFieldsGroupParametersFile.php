@@ -8,7 +8,7 @@ class DossierrowRelatedFieldsGroupParametersFile extends DossierrowFieldsGroupPa
 {
 	static function getFieldsGroup() : array
 	{
-        $result = parent::getFieldsGroup();
+        $result = parent::getTracedFieldsGroup();
 
         unset($result['fields']['dossier']);
 

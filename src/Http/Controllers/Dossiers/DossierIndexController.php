@@ -18,13 +18,13 @@ class DossierIndexController extends DossierCRUD
 	public function getIndexFieldsArray()
 	{
 		//DossierFieldsGroupParametersFile
-		return config('filecabinet.models.dossier.fieldsGroupsFiles.index')::getFieldsGroup();
+		return config('filecabinet.models.dossier.fieldsGroupsFiles.index')::getTracedFieldsGroup();
 	}
 
 	public function getRelatedFieldsArray()
 	{
 		//DossierRelatedFieldsGroupParametersFile
-		return config('filecabinet.models.dossier.fieldsGroupsFiles.related')::getFieldsGroup();
+		return config('filecabinet.models.dossier.fieldsGroupsFiles.related')::getTracedFieldsGroup();
 	}
 
 	public function getIndexElements()

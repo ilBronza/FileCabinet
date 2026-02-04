@@ -398,4 +398,16 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	{
 		return $this->getDossier()?->hasUpdateEditor();
 	}
+
+	public function getSortingIndex()
+	{
+		return cache()->remember(
+			$this->cacheKey('getSortingIndex'),
+			3600,
+			function()
+			{
+				return $this->getFormrow()->getSortingIndex();
+			}
+		);
+	}
 }
