@@ -266,6 +266,7 @@ return [
             'class' => Dossierrow::class,
             'table' => 'filecabinets__dossierrows',
             'fieldsGroupsFiles' => [
+                'filesIndex' => DossierrowFilessIndexFieldsGroupParametersFile::class,
                 'index' => DossierrowFieldsGroupParametersFile::class,
                 'filesIndex' => DossierrowFilessIndexFieldsGroupParametersFile::class,
                 'related' => DossierrowRelatedFieldsGroupParametersFile::class

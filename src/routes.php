@@ -118,6 +118,8 @@ Route::group([
 
 		Route::group(['prefix' => 'dossierrows'], function()
 		{
+			Route::get('files-dossierrows', [FileCabinet::getController('dossierrow', 'files'), 'index'])->name('dossierrows.files.index');
+
 			Route::delete('{dossierrow}/destroy', [FileCabinet::getController('dossierrow', 'destroy'), 'destroy'])->name('dossierrows.destroy');
 
 			Route::get('{dossierrow}/show-file', [FileCabinet::getController('dossierrow', 'showFile'), 'showFile'])->name('dossierrows.showFile');
