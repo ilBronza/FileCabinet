@@ -158,4 +158,14 @@ trait InteractsWithFormTrait
 			'dossierrows.schedules',
 		])->get();
 	}
+
+	public function getFilecabinetModelName()
+	{
+		return $this->getName();
+	}
+
+	public function getPdfFilename()
+	{
+		return $this->getName();
+	}
 }

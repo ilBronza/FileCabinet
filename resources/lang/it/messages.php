@@ -8,4 +8,5 @@ return [
 	'elementHasAlreadyFilecabinetByCategory' => ':element ha già degli schedari appartenenti a :category',
 	'youMustCompletePreviousFilecabinetsBefore' => 'Devi prima compilare la sezione :name',
 	'fieldUpdatedSuccessfully' => 'Campo ":field" aggiornato con successo',
+	'pleasePopulateThisElement' => 'Compila prima la sezione :element',
 ];

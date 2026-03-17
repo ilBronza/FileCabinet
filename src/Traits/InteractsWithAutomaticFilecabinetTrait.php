@@ -74,5 +74,15 @@ trait InteractsWithAutomaticFilecabinetTrait
         {
             static::checkForAutomaticFilecabinets($model, 'created');
         });
+
+        static::saved(function ($model)
+        {
+            static::checkForAutomaticFilecabinets($model, 'saved');
+        });
+
+        static::updated(function ($model)
+        {
+            static::checkForAutomaticFilecabinets($model, 'updated');
+        });
     }
 }

@@ -7,7 +7,7 @@
                     <i uk-icon="file-edit"></i>
                 </a>
                 
-                {{ $filecabinet->getFilecabinetable()->getLiveDrivemodelName() }}
+                {{ $filecabinet->getFilecabinetable()->getFilecabinetModelName() }}
             </span>
             @endif
             <span class="uk-h2 uk-width-1-1">{{ $filecabinet->getCategory()->getName() }}</span>        
