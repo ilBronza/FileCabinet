@@ -3,6 +3,7 @@
 return [
 	'text' => 'Stringa di testo limitata',
 	'textarea' => 'Area di testo libera',
+	'json' => 'Dati strutturati (JSON)',
 	'decimal' => 'decimale',
 	'integer' => 'Numero intero',
 	'boolean' => 'Booleano',

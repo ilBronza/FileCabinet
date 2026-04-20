@@ -18,16 +18,26 @@ class DossierrowFormFieldHelper
 
         $parameters['model'] = $dossierrow;
 
-        $formField = FormFieldsProvider::createByNameParameters(
-                $fieldname,
-                $parameters
-            );
+        try
+        {
 
-        $formField->addRowHtmlClass(
-            Str::slug(
-                $dossierrow->getFormrow()->getName()
-            )
-        );
+            $formField = FormFieldsProvider::createByNameParameters(
+                    $fieldname,
+                    $parameters
+                );
+
+            $formField->addRowHtmlClass(
+                Str::slug(
+                    $dossierrow->getFormrow()->getName()
+                )
+            );
+        }
+        catch(\Exception $e)
+        {
+            dd($dossierrow->getFormfieldType());
+
+            dd($dossierrow->formrow);
+        }
 
         return $formField;
     }
