@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Http\Controllers\Filecabinets;
 
 use IlBronza\FileCabinet\Helpers\FilecabinetGetTreeHelper;
+use IlBronza\FileCabinet\Helpers\FilecabinetTemplateSyncHelper;
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetCRUD;
 use IlBronza\FileCabinet\Models\Filecabinet;
 use Illuminate\Http\Request;
@@ -41,6 +42,8 @@ class FilecabinetDisplayController extends FilecabinetCRUD
             $filecabinet = $this->findModel($filecabinet);
 
         $this->setModel($filecabinet);
+
+        FilecabinetTemplateSyncHelper::sync($this->getModel());
 
         $this->setRootFilecabinet();
 

@@ -32,11 +32,12 @@ trait DossierCheckersTrait
 
 	public function mustBeUpdated() : bool
 	{
-		$formrowIds = $this->getFormrowsIds();
+		$formrowIds = $this->getFormrowsIds()->unique()->values();
 
-		$dossierrowIds = $this->getDossierrowsFormrowsIds();
+		$dossierFormrowIds = $this->getDossierrowsFormrowsIds()->unique()->values();
 
-		return count($formrowIds->diff($dossierrowIds));
+		return $formrowIds->diff($dossierFormrowIds)->isNotEmpty()
+			|| $dossierFormrowIds->diff($formrowIds)->isNotEmpty();
 	}
 
 	public function isRepeatable() : bool
