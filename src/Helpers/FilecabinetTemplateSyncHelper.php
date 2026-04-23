@@ -47,6 +47,8 @@ class FilecabinetTemplateSyncHelper
 			$changed = true;
 		}
 
+		$changed = static::syncSortingIndexByCategory($filecabinet) || $changed;
+
 		foreach($node->getFormElements() as $form)
 			$changed = static::syncForm($filecabinet, $model, $form) || $changed;
 
@@ -54,6 +56,22 @@ class FilecabinetTemplateSyncHelper
 			$changed = static::syncChildCategoryNode($childNode, $filecabinet, $model, $filecabinetTemplate) || $changed;
 
 		return $changed;
+	}
+
+	private static function syncSortingIndexByCategory(Filecabinet $filecabinet) : bool
+	{
+		$categorySortingIndex = $filecabinet->getCategory()->sorting_index ?? null;
+
+		if($categorySortingIndex === null)
+			return false;
+
+		if(($filecabinet->sorting_index ?? null) == $categorySortingIndex)
+			return false;
+
+		$filecabinet->sorting_index = $categorySortingIndex;
+		$filecabinet->save();
+
+		return true;
 	}
 
 	private static function syncForm(Filecabinet $filecabinet, Model $model, Form $form) : bool
@@ -93,10 +111,13 @@ class FilecabinetTemplateSyncHelper
 			);
 
 			$childFilecabinet->filecabinetTemplate()->associate($filecabinetTemplate);
+			$childFilecabinet->sorting_index = $category->sorting_index ?? ($childFilecabinet->sorting_index ?? null);
 			$childFilecabinet->save();
 
 			$changed = true;
 		}
+		else
+			$changed = static::syncSortingIndexByCategory($childFilecabinet) || $changed;
 
 		return static::syncNode($childNode, $childFilecabinet, $model, $filecabinetTemplate) || $changed;
 	}

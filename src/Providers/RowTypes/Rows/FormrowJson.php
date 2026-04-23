@@ -66,6 +66,7 @@ class FormrowJson extends BaseRow implements FormrowWithSpecialParametersInterfa
 			'date' => 'Data',
 			'boolean' => 'Booleano',
 			'textarea' => 'Testo lungo',
+			'select' => 'Lista',
 		];
 	}
 
@@ -87,7 +88,22 @@ class FormrowJson extends BaseRow implements FormrowWithSpecialParametersInterfa
 								'list' => $this->getAvailableSchemaFieldTypes(),
 								'rules' => 'string|required|in:' . implode(',', array_keys($this->getAvailableSchemaFieldTypes()))
 							],
-							'required' => ['boolean' => 'bool|nullable'],
+							'possibleValues' => [
+								'type' => 'textarea',
+								'tooltip' => 'Uno per riga oppure separati da virgola',
+								'rules' => 'string|nullable|max:2048',
+								'vertical' => true
+							],
+							'required' => [
+								'type' => 'select',
+								'multiple' => false,
+								'select2' => false,
+								'list' => [
+									'0' => 'No',
+									'1' => 'Sì'
+								],
+								'rules' => 'string|nullable|in:0,1'
+							],
 						],
 						'rules' => 'array|required',
 						'value' => $this->getModel()->getSpecialParameter('schema', [])
@@ -126,20 +142,87 @@ class FormrowJson extends BaseRow implements FormrowWithSpecialParametersInterfa
 			$type = $schemaRow['type'] ?? 'text';
 			$required = ! empty($schemaRow['required']);
 
-			$rules = array_filter([
-				$type === 'number' ? 'numeric' : ($type === 'boolean' ? 'boolean' : 'string'),
-				$required ? 'required' : 'nullable',
-				'max:255'
-			]);
-
-			// FormField expects shorthand like ['text' => 'rules...']
-			$field = [
-				'type' => $type,
-				'rules' => implode('|', $rules),
-				'label' => $schemaRow['label'] ?? null,
-			];
+			$field = $this->buildInnerFieldParametersFromSchemaRow($schemaRow, $type, $required);
 
 			$result[$key] = $field;
+		}
+
+		return $result;
+	}
+
+	protected function buildInnerFieldParametersFromSchemaRow(array $schemaRow, string $type, bool $required) : array
+	{
+		$label = $schemaRow['label'] ?? null;
+
+		if ($type === 'select')
+		{
+			$list = $this->buildSelectListFromSchemaRow($schemaRow);
+
+			$rules = array_filter([
+				$required ? 'required' : 'nullable',
+				count($list) ? ('in:' . implode(',', array_keys($list))) : null
+			]);
+
+			return [
+				'type' => 'select',
+				'multiple' => false,
+				'select2' => false,
+				'list' => $list,
+				'rules' => implode('|', $rules),
+				'label' => $label
+			];
+		}
+
+		$rules = array_filter([
+			$type === 'number' ? 'numeric' : ($type === 'boolean' ? 'boolean' : 'string'),
+			$required ? 'required' : 'nullable',
+			'max:255'
+		]);
+
+		return [
+			'type' => $type,
+			'rules' => implode('|', $rules),
+			'label' => $label,
+		];
+	}
+
+	protected function buildSelectListFromSchemaRow(array $schemaRow) : array
+	{
+		$possibleValues = $schemaRow['possibleValues'] ?? null;
+
+		// Legacy format: [{value: "..."}]
+		if (is_array($possibleValues))
+		{
+			$result = [];
+			foreach ($possibleValues as $element)
+			{
+				$value = $element['value'] ?? null;
+				if (! is_string($value) || $value === '')
+					continue;
+
+				$result[$value] = $value;
+			}
+
+			return $result;
+		}
+
+		// New format: multiline or CSV string
+		if (! is_string($possibleValues))
+			return [];
+
+		$raw = trim($possibleValues);
+		if ($raw === '')
+			return [];
+
+		$parts = preg_split("/[\\n,]+/", $raw);
+		$result = [];
+		foreach ($parts as $part)
+		{
+			$value = trim($part);
+			if ($value === '')
+				continue;
+
+			$result[$value] = $value;
 		}
 
 		return $result;
