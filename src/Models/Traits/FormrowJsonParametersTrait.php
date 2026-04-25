@@ -8,6 +8,9 @@ trait FormrowJsonParametersTrait
 {
 	public function parseSpecialParametersFields()
 	{
+		if(request()->ajax())
+			return ;
+
 		if(! $this->hasSpecialParameters())
 			return;
 
