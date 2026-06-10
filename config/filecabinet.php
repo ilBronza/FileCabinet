@@ -117,6 +117,7 @@ return [
 
 
     'datatableFieldWidths' => [
+        'datatableFieldFileExists' => '3em',
         'dossiers' => [
             'datatableFieldDossiersByForm' => '4em',
         ],
