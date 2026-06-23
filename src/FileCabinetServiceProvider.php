@@ -35,7 +35,7 @@ class FileCabinetServiceProvider extends ServiceProvider
 		$this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'filecabinet');
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'filecabinet');
-		$this->loadRoutesFrom(__DIR__ . '/routes.php');
+		$this->loadRoutesFrom(__DIR__ . '/../routes/filecabinet.php');
 
 		// Dossier::observe(DossierObserver::class);
 
