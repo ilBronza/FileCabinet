@@ -99,7 +99,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isFileType() : bool
 	{
-		return $this->getType() == 'file';
+		return in_array($this->getType(), ['file', 'contract-file']);
 	}
 
 	public function getRowType() : BaseRow

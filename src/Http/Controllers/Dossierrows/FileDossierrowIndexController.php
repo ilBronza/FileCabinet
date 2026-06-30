@@ -28,7 +28,7 @@ class FileDossierrowIndexController extends DossierrowCRUD
             'dossier.client'
         )->whereHas('formrow', function($query)
         {
-            $query->where('type', 'file');
+            $query->whereIn('type', ['file', 'contract-file']);
         })->where('compiled', 0)->whereNotNull('file')->get();
     }
 

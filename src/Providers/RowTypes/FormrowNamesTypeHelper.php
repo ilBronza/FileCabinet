@@ -53,14 +53,14 @@ class FormrowNamesTypeHelper
 
 	static function getTranslatedNameByType(string $type) : string
 	{
-		$qualifiedClass = static::getFormrowsNamespace() . ucfirst($type);
+		$qualifiedClass = static::getFormrowsNamespace() . Str::studly($type);
 
 		return $qualifiedClass::getTranslatedName();
 	}
 
 	static function getByType(string $type) : BaseRow
 	{
-		$className = static::getFormrowsNamespace() . ucfirst($type);
+		$className = static::getFormrowsNamespace() . Str::studly($type);
 
 		return new $className();
 	}

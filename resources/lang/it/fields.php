@@ -86,6 +86,8 @@ return [
 	'nameValueRule' => 'Regola valore nome file',
 	'filePrefix' => 'Prefisso file',
 	'fileSuffix' => 'Suffisso file',
+	'urlContractGetterMethod' => 'Metodo URL contratto da firmare',
+	'urlContractDownload' => 'Scarica il contratto da firmare',
 
 	// FormrowCreateStore - impostazioni tabella
 	'tableSettings' => 'Impostazioni tabella',

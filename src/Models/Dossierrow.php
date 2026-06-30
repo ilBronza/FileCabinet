@@ -4,6 +4,7 @@ namespace IlBronza\FileCabinet\Models;
 
 use Carbon\Carbon;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
+use IlBronza\FileCabinet\Helpers\DossierrowFileHelper;
 use IlBronza\FileCabinet\Helpers\DossierrowStatusHelper;
 use IlBronza\FileCabinet\Helpers\DossierStatusHelper;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
@@ -100,10 +101,7 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getFilePath()
 	{
-		if (! $this->isFileType())
-			return null;
-
-		return $this->file;
+		return DossierrowFileHelper::getFilePath($this);
 	}
 
 	public function getDossierable() : ?Model

@@ -10,6 +10,7 @@ return [
 	'singleSelect' => 'Selezione singola',
 	'expirationDate' => 'Data di scadenza',
 	'file' => 'File',
+	'contract-file' => 'File contratto',
 	'date' => 'Data',
 	'price' => 'Prezzo',
 	'quotationrowSelect' => 'Riga preventivo',

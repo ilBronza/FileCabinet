@@ -86,6 +86,8 @@ return [
 	'nameValueRule' => 'File name value rule',
 	'filePrefix' => 'File prefix',
 	'fileSuffix' => 'File suffix',
+	'urlContractGetterMethod' => 'Contract URL getter method',
+	'urlContractDownload' => 'Download the contract to sign',
 
 	// FormrowCreateStore - table settings
 	'tableSettings' => 'Table settings',

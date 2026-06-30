@@ -134,7 +134,7 @@ trait DossierHtmlFormTrait
 
 			$rules = FormfieldParametersHelper::getValidationRulesFromModel($dossierrow);
 
-			if ($dossierrow->getFormfieldType() == 'file')
+			if ($dossierrow->isFileType())
 				if (count($dossierrow->getMedia("*")) > 0)
 					$rules = 'nullable';
 
