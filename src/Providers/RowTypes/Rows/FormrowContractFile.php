@@ -2,11 +2,9 @@
 
 namespace IlBronza\FileCabinet\Providers\RowTypes\Rows;
 
-use IlBronza\FormField\FormField;
-
 class FormrowContractFile extends FormrowFile
 {
-	static $fieldType = 'filecabinet::providers.formFields.contractFile';
+	static $fieldType = 'contractFile';
 
 	static public function getType() : string
 	{
@@ -26,8 +24,4 @@ class FormrowContractFile extends FormrowFile
 		return $parameters;
 	}
 
-	public function getFormField() : FormField
-	{
-		return new \IlBronza\FileCabinet\Providers\FormFields\ContractFileFormField();
-	}
 }
