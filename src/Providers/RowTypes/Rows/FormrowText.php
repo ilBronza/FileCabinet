@@ -22,7 +22,9 @@ class FormrowText extends BaseRow
 	public function getDefaultRules() : array
 	{
 		return [
-			$this->isRepeatable() ? 'array' : 'string',
+			//va sempre string perché i ripetibili sono detailrow id differenti
+			//$this->isRepeatable() ? 'array' : 'string',
+			'string',
 			'max:' . $this->max
 		];
 	}

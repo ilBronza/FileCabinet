@@ -75,4 +75,33 @@ return [
 	'permissions_action' => 'Azione',
 	'permissions_permissions' => 'Permessi',
 	'form.name' => 'Form',
+
+	// FormrowFile - parametri file
+	'disk' => 'Disco',
+	'folderType' => 'Tipo cartella',
+	'folderName' => 'Nome cartella',
+	'folderPrefix' => 'Prefisso cartella',
+	'folderSuffix' => 'Suffisso cartella',
+	'nameType' => 'Tipo nome file',
+	'nameValueRule' => 'Regola valore nome file',
+	'filePrefix' => 'Prefisso file',
+	'fileSuffix' => 'Suffisso file',
+	'urlContractGetterMethod' => 'Metodo URL contratto da firmare',
+
+	// FormrowCreateStore - impostazioni tabella
+	'tableSettings' => 'Impostazioni tabella',
+	'table_show' => 'Mostra in tabella',
+	'table_title' => 'Titolo tabella',
+	'table_description' => 'Descrizione tabella',
+
+	// FormrowExpirationDate
+	'expiration_type' => 'Tipo scadenza',
+	'schedule_type' => 'Tipo schedulazione',
+
+	// FormrowModelMethod
+	'read_method' => 'Metodo lettura',
+	'write_method' => 'Metodo scrittura',
+
+	// FormrowUserSelect
+	'user_roles' => 'Ruoli utenti',
 ];

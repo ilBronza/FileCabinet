@@ -4,6 +4,7 @@ namespace IlBronza\FileCabinet\Models;
 
 use Carbon\Carbon;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
+use IlBronza\FileCabinet\Helpers\DossierrowFileHelper;
 use IlBronza\FileCabinet\Helpers\DossierrowStatusHelper;
 use IlBronza\FileCabinet\Helpers\DossierStatusHelper;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use Spatie\MediaLibrary\HasMedia;
+
+use function config;
 
 class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibilityInterface, DatatableFieldModelCompatibilityInterface, HasMedia
 {
@@ -65,9 +68,40 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getDossier()->getUpdateUrl();
 	}
 
+	public function getAjaxDeleteInstanceUrl() : string
+	{
+		return $this->getKeyedRoute('destroy');
+	}
+
 	public function getShowUrl(array $data = [])
 	{
 		return $this->getDossier()->getShowUrl();
+	}
+
+	public function isFileType()
+	{
+		return $this->getFormrow()->isFileType();
+	}
+
+	public function getDownloadFileUrl() : string
+	{
+		if (! $this->isFileType())
+			return null;
+
+		return $this->getKeyedRoute('downloadFile');
+	}
+
+	public function getShowFileUrl() : string
+	{
+		if (! $this->isFileType())
+			return null;
+
+		return $this->getKeyedRoute('showFile');
+	}
+
+	public function getFilePath()
+	{
+		return DossierrowFileHelper::getFilePath($this);
 	}
 
 	public function getDossierable() : ?Model
@@ -158,15 +192,22 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormfieldValue();
 	}
 
+	public function setValue($value)
+	{
+		return $this->getRowType()->setDossierrowValue(
+			$this, $value
+		);
+	}
+
 	public function getFormfieldValue() : mixed
 	{
 		try
 		{
 			return $this->getRowType()->getDossierrowValue(
 				$this
-			);			
+			);
 		}
-		catch(\TypeError $e)
+		catch (\TypeError $e)
 		{
 			return $e->getMessage();
 		}
@@ -247,19 +288,19 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 		return $this->getFormrow()->getFormfieldRoles();
 	}
 
+	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
+	public function getFormfieldType() : string
+	{
+		return $this->getFormrow()->getFormfieldType();
+	}
+
+	/** END INTERFACE DatatableFieldModelCompatibilityInterface methods **/
+
 	/** START INTERFACE DatatableFieldModelCompatibilityInterface methods **/
 
 	public function getDatatableFieldTypeString() : string
 	{
 		return $this->getFormrow()->getDatatableFieldTypeString();
-	}
-
-	/** END INTERFACE DatatableFieldModelCompatibilityInterface methods **/
-
-	/** START INTERFACE FormfieldModelCompatibilityInterface methods **/
-	public function getFormfieldType() : string
-	{
-		return $this->getFormrow()->getFormfieldType();
 	}
 
 	public function storeRowValue(mixed $value, bool $validate = false) : bool
@@ -349,5 +390,22 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 	public function getStatus()
 	{
 		return DossierrowStatusHelper::getStatus($this);
+	}
+
+	public function hasUpdateEditor() : ? bool
+	{
+		return $this->getDossier()?->hasUpdateEditor();
+	}
+
+	public function getSortingIndex()
+	{
+		return cache()->remember(
+			$this->cacheKey('getSortingIndex'),
+			3600,
+			function()
+			{
+				return $this->getFormrow()->getSortingIndex();
+			}
+		);
 	}
 }

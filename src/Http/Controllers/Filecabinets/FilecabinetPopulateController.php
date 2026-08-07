@@ -3,7 +3,7 @@
 namespace IlBronza\FileCabinet\Http\Controllers\Filecabinets;
 
 use IlBronza\FileCabinet\Helpers\FilecabinetConsecutivenessCheckerHelper;
-use IlBronza\Ukn\Facades\Ukn;
+use IlBronza\Ukn\Ukn;
 
 class FilecabinetPopulateController extends FilecabinetDisplayController
 {

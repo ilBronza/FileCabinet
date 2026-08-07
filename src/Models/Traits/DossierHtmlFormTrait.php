@@ -53,12 +53,9 @@ trait DossierHtmlFormTrait
 
 			$formField = DossierrowFormFieldHelper::createFieldFromDossierrow($dossierrow);
 
-			$formField->addRowHtmlClass(
-				Str::slug(
-					$dossierrow->getFormrow()->getName()
-				)
-			);
-
+			if($previousFormrowId != $dossierrow->getFormrowId())
+				$formField->setFirstOfType();
+			
 			$previousFormrowId = $dossierrow->getFormrowId();
 
 			$result->push($formField);
@@ -82,7 +79,9 @@ trait DossierHtmlFormTrait
 
 		$ibForm->setTitle(trim($this->getDisplaySortingIndex() . ' ' . $this->getName()));
 
-		$ibForm->setUpdateEditor($this->hasUpdateEditor());
+		$ibForm->setUpdateEditor(
+			$this->hasUpdateEditor()
+		);
 
 		if($description = $this->getDescription())
 			$ibForm->setIntro($description);
@@ -135,7 +134,7 @@ trait DossierHtmlFormTrait
 
 			$rules = FormfieldParametersHelper::getValidationRulesFromModel($dossierrow);
 
-			if ($dossierrow->getFormfieldType() == 'file')
+			if ($dossierrow->isFileType())
 				if (count($dossierrow->getMedia("*")) > 0)
 					$rules = 'nullable';
 

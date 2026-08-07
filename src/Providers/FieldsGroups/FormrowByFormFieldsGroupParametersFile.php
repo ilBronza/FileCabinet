@@ -24,7 +24,7 @@ class FormrowByFormFieldsGroupParametersFile extends FormrowFieldsGroupParameter
 					'faIcon' => 'up-down-left-right',
 					'function' => 'getMoveIndexUrl'
 				],
-				'name' => 'flat',
+				'name' => 'editor.text',
 				'slug' => 'flat',
 				'sorting_index' => 'utilities.sorting',
 				'description' => 'flat',

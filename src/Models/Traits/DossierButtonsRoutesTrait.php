@@ -55,4 +55,15 @@ trait DossierButtonsRoutesTrait
 			'icon' => 'wrench'
 		]);
 	}
+
+	public function getDownloadFilesUrl() : string
+	{
+		return $this->getKeyedRoute('downloadFiles');
+	}
+
+	public function getShowFilesUrl() : string
+	{
+		return $this->getKeyedRoute('showFiles');
+	}
+
 }

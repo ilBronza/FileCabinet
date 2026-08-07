@@ -14,4 +14,5 @@ return [
 	'form' => 'Form',
 	'dossierrows' => 'Righe valori',
 	'filecabinets' => 'Questionari',
+	'dossierrowInstanceAdded' => 'Aggiunta nuova istanza di ":formrow"',
 ];

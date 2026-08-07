@@ -96,7 +96,7 @@ class FilecabinetTemplateCreateStoreFieldsetsParameters extends FieldsetParamete
 
 	public function getModelsArray() : array
 	{
-		return config('app.filecabinet.filecabinetTemplate.applicableToModels');
+		return config('filecabinet.filecabinetTemplate.applicableToModels');
 	}
 
 	public function getEventsArray() : array

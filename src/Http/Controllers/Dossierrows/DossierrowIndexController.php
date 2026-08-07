@@ -15,12 +15,12 @@ class DossierrowIndexController extends DossierrowCRUD
 
     public function getIndexFieldsArray()
     {
-        return config('filecabinet.models.dossierrow.fieldsGroupsFiles.index')::getFieldsGroup();
+        return config('filecabinet.models.dossierrow.fieldsGroupsFiles.index')::getTracedFieldsGroup();
     }
 
     public function getRelatedFieldsArray()
     {
-        return config('filecabinet.models.dossierrow.fieldsGroupsFiles.related')::getFieldsGroup();
+        return config('filecabinet.models.dossierrow.fieldsGroupsFiles.related')::getTracedFieldsGroup();
     }
 
     public function getIndexElements()

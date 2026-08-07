@@ -26,9 +26,9 @@ class FormrowCreateStoreController extends FormrowCRUD
         ];
     }
 
-    public function createFromForm(Form $form)
+    public function createFromForm($form)
     {
-        $this->form = $form;
+        $this->form = Form::gpc()::find($form);
 
         return $this->create();
     }
@@ -38,9 +38,9 @@ class FormrowCreateStoreController extends FormrowCRUD
         return app('filecabinet')->route('formrows.storeFromForm', ['form' => $this->form]);
     }
 
-    public function storeFromForm(Request $request, Form $form)
+    public function storeFromForm(Request $request, $form)
     {
-        $this->form = $form;
+        $this->form = Form::gpc()::find($form);
 
         return $this->store($request);
     }

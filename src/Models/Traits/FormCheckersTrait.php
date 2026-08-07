@@ -5,7 +5,7 @@ namespace IlBronza\FileCabinet\Models\Traits;
 use Auth;
 use Carbon\Carbon;
 use IlBronza\FileCabinet\Models\Formrow;
-use IlBronza\Ukn\Facades\Ukn;
+use IlBronza\Ukn\Ukn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 

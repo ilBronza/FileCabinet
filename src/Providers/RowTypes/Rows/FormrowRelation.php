@@ -7,10 +7,18 @@ use IlBronza\CRUD\Helpers\ModelManagers\CrudModelAssociatorHelper;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseModelRelationRow;
 use IlBronza\FileCabinet\Providers\RowTypes\StandardCheckFieldValidityParametersTrait;
+use Illuminate\Support\Facades\Log;
 
 class FormrowRelation extends BaseModelRelationRow
 {
 	use StandardCheckFieldValidityParametersTrait;
+
+	public function getDefaultRules() : array
+	{
+		return [
+			$this->isMultiple() ? 'array' : 'string'
+		];
+	}
 
 	public function isMultiple() : bool
 	{
@@ -24,6 +32,9 @@ class FormrowRelation extends BaseModelRelationRow
 
 		if($relationType == 'BelongsToMany')
 			return true;
+
+		if($relationType == 'BelongsTo')
+			return false;
 
 		dd("vagliare le altre");
 	}
@@ -43,6 +54,13 @@ class FormrowRelation extends BaseModelRelationRow
 		if($relationType == 'BelongsToMany')
 			return $model->{$relationName}()->get()->pluck($relatedModelPrimaryKeyName);
 
+		if($relationType == 'BelongsTo')
+		{
+			$fieldName = $model->{$relationName}()->getForeignKeyName();
+
+			return $model->$fieldName;
+		}
+
 		dd('qua c\'è una relazione di tipo ' . $relationType);
 	}
 
@@ -54,6 +72,8 @@ class FormrowRelation extends BaseModelRelationRow
 
 	public function getValidationRulesArrayFromSpecialParametersArray() : array
 	{
+		Log::critical('qua invece che fare implode vedi di fare un exists cristo iddio');
+
 		$fields = $this->getPossibleValuesArray();
 
 		return [
@@ -73,6 +93,9 @@ class FormrowRelation extends BaseModelRelationRow
 
 		if (method_exists($dossierable, $getterMethodName))
 			return $dossierable->$getterMethodName();
+
+		if(! $this->getRelationName())
+			throw new \Exception("Relation name field (relation_name) not set for Formrow {$this->getModel()->getName()} id {$this->getModel()->getKey()} of form {$this->getModel()->getForm()->getName()}");
 
 		return $dossierable->_getRelationshipPossibleValuesArray(
 			$this->getRelationName()
@@ -130,7 +153,34 @@ class FormrowRelation extends BaseModelRelationRow
 		$model->{$relationshipMethod}()->sync($toRelate);
 	}
 
+	public function renderValueForView($value) : ?string
+	{
+		$model = $this->getDossierrow()->getDossierable();
+		
+		$relationName = $this->getRelationName();
 
+		$relationType = CrudModelAssociatorHelper::getRelationTypeName(
+				$model,
+				$relationName
+			);
+
+		// $relatedModelPrimaryKeyName = $model->{$relationName}()->make()->getKeyName();
+
+		if($relationType == 'BelongsToMany')
+		{
+			if(! $this->isMultiple())
+				return $model->{$relationName}()->first()->getName();
+
+			return $model->{$relationName}()->get()->implode('name', '<br />');
+		}
+
+		if($relationType == 'BelongsTo')
+		{
+			return $model->{$relationName}()->first()->getName();
+		}
+
+		dd('CHIAMA DAVIDE qua c\'è una relazione di tipo ' . $relationType);
+	}
 
 	public function storeDossierrow(Dossierrow $dossierrow, mixed $value, bool $validate = false) : bool
 	{

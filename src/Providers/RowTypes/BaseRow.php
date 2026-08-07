@@ -45,6 +45,15 @@ abstract class BaseRow
 
 	abstract public function getCheckFieldValidityParametersFieldsetParameters() : array;
 
+	public function setDossierrowValue(Dossierrow $dossierrow, $value)
+	{
+		$databaseField = $this->getDatabaseField();
+
+		$this->setDossierrow($dossierrow);
+
+		$dossierrow->$databaseField = $this->parseField($value);
+	}
+
 	public function getDossierrowValue(Dossierrow $dossierrow)
 	{
 		$databaseField = $this->getDatabaseField();
@@ -64,6 +73,11 @@ abstract class BaseRow
 	public function transformValue(mixed $databaseValue) : mixed
 	{
 		return $databaseValue;
+	}
+
+	public function parseField(mixed $value) : mixed
+	{
+		return $value;
 	}
 
 	public function getShowValue(mixed $databaseValue) : mixed
@@ -128,6 +142,7 @@ abstract class BaseRow
 
 		if ($this->hasSpecialParameters())
 			$this->addSpecialParametersValidationRules();
+
 
 		return $this->defaultRules;
 	}

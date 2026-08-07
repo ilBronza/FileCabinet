@@ -75,4 +75,33 @@ return [
 	'permissions_action' => 'Azione',
 	'permissions_permissions' => 'Permessi',
 	'form.name' => 'Form',
+
+	// FormrowFile - file parameters
+	'disk' => 'Disk',
+	'folderType' => 'Folder type',
+	'folderName' => 'Folder name',
+	'folderPrefix' => 'Folder prefix',
+	'folderSuffix' => 'Folder suffix',
+	'nameType' => 'File name type',
+	'nameValueRule' => 'File name value rule',
+	'filePrefix' => 'File prefix',
+	'fileSuffix' => 'File suffix',
+	'urlContractGetterMethod' => 'Contract URL getter method',
+
+	// FormrowCreateStore - table settings
+	'tableSettings' => 'Table settings',
+	'table_show' => 'Show in table',
+	'table_title' => 'Table title',
+	'table_description' => 'Table description',
+
+	// FormrowExpirationDate
+	'expiration_type' => 'Expiration type',
+	'schedule_type' => 'Schedule type',
+
+	// FormrowModelMethod
+	'read_method' => 'Read method',
+	'write_method' => 'Write method',
+
+	// FormrowUserSelect
+	'user_roles' => 'User roles',
 ];

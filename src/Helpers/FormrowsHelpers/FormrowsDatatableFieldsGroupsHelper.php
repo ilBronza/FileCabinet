@@ -18,7 +18,7 @@ class FormrowsDatatableFieldsGroupsHelper
 	{
 		$helper = new FieldsGroupsMergerHelper();
 
-		$helper->addFieldsGroupParameters($parametersFileName::getFieldsGroup());
+		$helper->addFieldsGroupParameters($parametersFileName::getTracedFieldsGroup());
 
 		$formParameters = (new static($form))->getFieldsGroup();
 

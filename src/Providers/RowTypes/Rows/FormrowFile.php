@@ -35,6 +35,8 @@ class FormrowFile extends BaseRow implements FormrowWithSpecialParametersInterfa
 	static $fieldType = 'file';
 	static $databaseField = 'string';
 
+	static public $datatableFieldString = 'fileDownload';
+
 	public function getDefaultRules() : array
 	{
 		return [
@@ -46,7 +48,7 @@ class FormrowFile extends BaseRow implements FormrowWithSpecialParametersInterfa
 	{
 		$result = [];
 
-		foreach(config('app.filecabinet.disks', []) as $disk)
+		foreach(config('filecabinet.disks', []) as $disk)
 			$result[$disk] = $disk;
 
 		return $result;

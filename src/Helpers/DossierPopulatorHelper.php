@@ -36,7 +36,7 @@ class DossierPopulatorHelper
 
     public function getParameterByName(string $parameterName) : mixed
     {
-        return $this->getBindingParameters()[$parameterName];
+        return $this->getBindingParameters()[$parameterName] ?? null;
     }
 
     public function getParameter(Dossierrow $dossierrow) : mixed
@@ -122,7 +122,7 @@ class DossierPopulatorHelper
     {
         foreach($this->getDossierrows() as $dossierrow)
 		{
-			if($dossierrow->getFormfieldType() == 'file')
+			if($dossierrow->isFileType())
 				if(count($dossierrow->getMedia("*")) > 0)
 					continue;
 

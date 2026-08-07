@@ -16,7 +16,7 @@ class FormIndexController extends FormCRUD
     public function getIndexFieldsArray()
     {
         //FormFieldsGroupParametersFile
-        return config('filecabinet.models.form.fieldsGroupsFiles.index')::getFieldsGroup();
+        return config('filecabinet.models.form.fieldsGroupsFiles.index')::getTracedFieldsGroup();
     }
 
     public function getIndexElements()

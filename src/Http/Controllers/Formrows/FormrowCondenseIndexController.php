@@ -9,7 +9,7 @@ class FormrowCondenseIndexController extends FormrowIndexController
     public function getIndexFieldsArray()
     {
 		//FormrowFieldsGroupParametersFile
-        return config('filecabinet.models.formrow.fieldsGroupsFiles.condense')::getFieldsGroup();
+        return config('filecabinet.models.formrow.fieldsGroupsFiles.condense')::getTracedFieldsGroup();
     }
 
     public function getIndexElements()

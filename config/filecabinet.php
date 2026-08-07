@@ -10,17 +10,23 @@ use IlBronza\FileCabinet\Helpers\MediaPathGenerators\MediaPathGeneratorSlugFolde
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowAddInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDeleteMediaController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDestroyController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowDownloadFileController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\DossierrowShowFileController;
+use IlBronza\FileCabinet\Http\Controllers\Dossierrows\FileDossierrowIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByFormIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelCategoryController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierByModelFormController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierCreateNewInstanceController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierDestroyController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierDownloadFileController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierEditController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierPopulateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierShowController;
+use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierShowFileController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Dossiers\DossierUpdateFieldsController;
 use IlBronza\FileCabinet\Http\Controllers\FilecabinetTemplates\FilecabinetDeleteMediaController;
@@ -36,11 +42,11 @@ use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetPopulateContro
 use IlBronza\FileCabinet\Http\Controllers\Filecabinets\FilecabinetShowController;
 use IlBronza\FileCabinet\Http\Controllers\FormAttaching\FormAttachByCategory;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseController;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowIndexController;
-use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCondenseIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowMoveController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowReorderController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
@@ -63,6 +69,7 @@ use IlBronza\FileCabinet\Providers\FieldsGroups\DossierByFormFieldsGroupParamete
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowFilessIndexFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\DossierrowRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
@@ -87,6 +94,7 @@ use IlBronza\FileCabinet\Providers\RelationshipsManagers\DossierrowRelationManag
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FilecabinetTemplateRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormRelationManager;
 use IlBronza\FileCabinet\Providers\RelationshipsManagers\FormrowRelationManager;
+use IlBronza\Products\Http\Controllers\Order\OrderDeletionController;
 
 // use IlBronza\Category\Models\Category;
 // use IlBronza\FileCabinet\Models\Filecabinet;
@@ -106,6 +114,18 @@ return [
     'enabled' => true,
 
     'updateEditor' => true,
+
+
+    'datatableFieldWidths' => [
+        'datatableFieldFileExists' => '3em',
+        'dossiers' => [
+            'datatableFieldDossiersByForm' => '4em',
+        ],
+        'filecabinets' => [
+            'datatableFieldFilecabinetsStatus' => '7em'
+        ],
+        'datatableFieldRowType' => '8em'
+    ],
 
     'roles' => [
         'general' => [
@@ -228,6 +248,8 @@ return [
                 'show' => DossierShowFieldsetsParameters::class
             ],
             'controllers' => [
+                'showFiles' => DossierShowFileController::class,
+                'downloadFiles' => DossierDownloadFileController::class,
 				'byModelCategory' => DossierByModelCategoryController::class,
 	            'byModelForm' => DossierByModelFormController::class,
 				'populate' => DossierPopulateController::class,
@@ -245,20 +267,27 @@ return [
             'class' => Dossierrow::class,
             'table' => 'filecabinets__dossierrows',
             'fieldsGroupsFiles' => [
+                'filesIndex' => DossierrowFilessIndexFieldsGroupParametersFile::class,
                 'index' => DossierrowFieldsGroupParametersFile::class,
+                'filesIndex' => DossierrowFilessIndexFieldsGroupParametersFile::class,
                 'related' => DossierrowRelatedFieldsGroupParametersFile::class
             ],
             'relationshipsManagerClasses' => [
                 'show' => DossierrowRelationManager::class
             ],
             'controllers' => [
-                'show' => DossierrowShowController::class,
+	            'destroy' => DossierrowDestroyController::class,
+	            'show' => DossierrowShowController::class,
+                'showFile' => DossierrowShowFileController::class,
+                'files' => FileDossierrowIndexController::class,
+                'downloadFile' => DossierrowDownloadFileController::class,
                 'index' => DossierrowIndexController::class,
 	            'createNewInstance' => DossierrowCreateNewInstanceController::class,
 				'deleteMedia' => DossierrowDeleteMediaController::class,
                 'addInstance' => DossierrowAddInstanceController::class,
             ],
         ],
+
         'dossierFilecabinet' => [
             'class' => DossierFilecabinet::class,
             'table' => 'filecabinets___dossier_filecabinets',

@@ -13,6 +13,6 @@ class FormMoveIndexController extends FormIndexController
     public function getIndexFieldsArray()
     {
         //FormFieldsGroupParametersFile
-        return config('filecabinet.models.form.fieldsGroupsFiles.moveIndex')::getFieldsGroup();
+        return config('filecabinet.models.form.fieldsGroupsFiles.moveIndex')::getTracedFieldsGroup();
     }
 }

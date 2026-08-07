@@ -1,4 +1,4 @@
-<ul class="uk-list">
+<ul class="uk-list dossiers-populate">
     @foreach($dossiers->sortBy('sorting_index') as $dossier)
     <li id="dossier{{ $dossier->getKey() }}">
         @php
