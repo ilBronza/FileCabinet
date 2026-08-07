@@ -13,7 +13,8 @@ Route::group([
 		// 'role:' . implode("|", config('filecabinet.roles.general'))
 	],
 	'prefix' => 'filecabinet-manager',
-	'as' => config('filecabinet.routePrefix')
+	'as' => config('filecabinet.routePrefix'),
+	'routeTranslationPrefix' => FileCabinet::getRouteTranslationPrefix(),
 	],
 	function()
 	{
