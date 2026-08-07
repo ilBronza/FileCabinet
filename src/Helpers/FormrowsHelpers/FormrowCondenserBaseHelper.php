@@ -129,7 +129,7 @@ abstract class FormrowCondenserBaseHelper
 
 			if($existingDossierrow = $targetDossier->dossierrows()->where('formrow_id', $this->targetRow->getKey())->first())
 			{
-				if($existingDossierrow->getValue())
+				if($existingDossierrow->isPopulated())
 				{
 					if($this->targetRow->isRepeatable())
 					{
