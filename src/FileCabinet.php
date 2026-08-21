@@ -27,12 +27,18 @@ class FileCabinet implements RoutedObjectInterface
                 'roles' => ['administrator']
             ]);
 
+        $button->roles = array_values(array_unique(array_merge(
+            $button->getRoles(),
+            config('filecabinet.roles.manager')
+        )));
+
         $button->setFirst();
 
         $containerButton = $menu->createButton([
             'name' => 'file-cabinet-manager',
             'icon' => 'file-invoice',
-            'text' => 'filecabinet::filecabinet.manage'
+            'text' => 'filecabinet::filecabinet.manage',
+            'roles' => config('filecabinet.roles.manager'),
         ]);
 
         $filecabinetTemplateButton = $menu->createButton([

@@ -10,7 +10,6 @@ Route::group([
 	'middleware' => [
 		'web',
 		'auth',
-		// 'role:' . implode("|", config('filecabinet.roles.general'))
 	],
 	'prefix' => 'filecabinet-manager',
 	'as' => config('filecabinet.routePrefix'),
@@ -18,7 +17,12 @@ Route::group([
 	],
 	function()
 	{
-		Route::group(['prefix' => 'filecabinet-templates'], function()
+		$managerRoleMiddleware = 'role:' . implode('|', config('filecabinet.roles.manager'));
+
+		Route::group([
+			'prefix' => 'filecabinet-templates',
+			'middleware' => [$managerRoleMiddleware],
+		], function()
 		{
 			Route::get('', [FileCabinet::getController('filecabinetTemplate', 'index'), 'index'])->name('filecabinetTemplates.index');
 			Route::get('create', [FileCabinet::getController('filecabinetTemplate', 'create'), 'create'])->name('filecabinetTemplates.create');
@@ -38,9 +42,10 @@ Route::group([
 		});
 
 
-		Route::group(['prefix' => 'filecabinets'], function()
+		Route::group(['prefix' => 'filecabinets'], function() use ($managerRoleMiddleware)
 		{
-			Route::get('', [FileCabinet::getController('filecabinet', 'index'), 'index'])->name('filecabinets.index');
+			Route::get('', [FileCabinet::getController('filecabinet', 'index'), 'index'])->name('filecabinets.index')
+				->middleware($managerRoleMiddleware);
 
 
 			//FilecabinetPdfController
@@ -51,12 +56,10 @@ Route::group([
 
 			//FilecabinetPopulateController
 			Route::get('{filecabinet}/populate', [FileCabinet::getController('filecabinet', 'populate'), 'populate'])->name('filecabinets.populate')
-				// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 				;
 
 			//FilecabinetShowController
 			Route::get('{filecabinet}', [FileCabinet::getController('filecabinet', 'show'), 'show'])->name('filecabinets.show')
-				// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 				;
 		});
 
@@ -84,20 +87,16 @@ Route::group([
 
 			//DossierCreateNewInstanceController
 			Route::get('{dossier}/create-new-instance', [FileCabinet::getController('dossier', 'createNewInstance'), 'createNewInstance'])->name('dossiers.createNewInstance')
-				// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 				;
 
 			Route::get('/asd-toto-rimuovere-create-new-instance', [FileCabinet::getController('dossier', 'createNewInstance'), 'createNewInstance'])->name('dossiers.create')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			;
 
 			//DossierUpdateController
 			Route::put('{dossier}/update', [FileCabinet::getController('dossier', 'update'), 'update'])->name('dossiers.update')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|documents')
 			;
 
 			Route::get('{dossier}/populate', [FileCabinet::getController('dossier', 'populate'), 'populate'])->name('dossiers.populate')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|areaManager')
 			;
 
 			Route::delete('{dossier}/delete', [FileCabinet::getController('dossier', 'destroy'), 'destroy'])->name('dossiers.destroy');
@@ -106,11 +105,9 @@ Route::group([
 			Route::get('', [FileCabinet::getController('dossier', 'index'), 'index'])->name('dossiers.index');
 
 			Route::get('{dossier}', [FileCabinet::getController('dossier', 'show'), 'show'])->name('dossiers.show')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator|areaManager')
 			;
 
 			Route::get('{dossier}/edit', [FileCabinet::getController('dossier', 'edit'), 'edit'])->name('dossiers.edit')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			;
 
 
@@ -129,7 +126,6 @@ Route::group([
 
 
 			Route::get('{dossierrow}/create-new-instance', [FileCabinet::getController('dossierrow', 'createNewInstance'), 'createNewInstance'])->name('dossierrows.createNewInstance')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			;
 
 
@@ -142,17 +138,14 @@ Route::group([
 
 				return redirect()->to($dossier->getPopulateUrl());
 			})->name('dossierrows.edit')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			;
 
 			//DossierrowAddInstanceController
 			Route::post('{dossierrow}/add-field-instance', [FileCabinet::getController('dossierrow', 'addInstance'), 'addInstance'])->name('dossierrows.addInstance')
-			// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			;
 
 			Route::delete('dossierrow/{dossierrow}/delete-media/{media}', [FileCabinet::getController('dossierrow', 'deleteMedia'), 'deleteMedia'])
 				->name('dossierrows.deleteMedia')
-				// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 				;
 
 			Route::get('', [FileCabinet::getController('dossierrow', 'index'), 'index'])->name('dossierrows.index');
@@ -162,9 +155,14 @@ Route::group([
 		{
 			Route::get('attach-to-model/model/{class}/id/{id}', [FileCabinet::getController('form', 'attachByModel'), 'index'])
 			     ->name('forms.attachByModel.index')
-			     // ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 			     ;
+		});
 
+		Route::group([
+			'prefix' => 'forms',
+			'middleware' => [$managerRoleMiddleware],
+		], function()
+		{
 			Route::get('{form}/clone', [FileCabinet::getController('form', 'clone'), 'clone'])
 				->name('forms.clone');
 
@@ -197,7 +195,10 @@ Route::group([
 			Route::delete('{form}/delete', [FileCabinet::getController('form', 'destroy'), 'destroy'])->name('forms.destroy');
 		});
 
-		Route::group(['prefix' => 'formrows'], function()
+		Route::group([
+			'prefix' => 'formrows',
+			'middleware' => [$managerRoleMiddleware],
+		], function()
 		{
 			Route::get('{formrow}/condense-index', [FileCabinet::getController('formrow', 'condenseIndex'), 'index'])->name('formrows.condenseIndex');
 			Route::get('{formrow}/condense/{targetRow}', [FileCabinet::getController('formrow', 'condense'), 'condense'])->name('formrows.condense');
@@ -226,10 +227,8 @@ Route::group([
 			{
 				//FormAttachByCategory
 				Route::get('by-category/{category}/to-class/{class}/key/{key}', [FileCabinet::getController('form', 'attachByCategory'), 'attachByCategory'])->name('forms.attachByCategory')
-				// ->withoutMiddleware(['role:administrator'])->middleware('role:worker|administrator')
 				;
 			});
 
 	}
 );
-

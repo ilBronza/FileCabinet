@@ -131,7 +131,10 @@ return [
         'general' => [
             'administrator',
             'documents'
-        ]
+        ],
+        'manager' => [
+            'fileCabinetManager',
+        ],
     ],
     
     'routePrefix' => 'ibFilecabinet',
