@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet;
 
 use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaServiceProviderPackagesTrait;
+use IlBronza\FileCabinet\Console\Commands\RecalculateSchedulesCommand;
 use IlBronza\FileCabinet\Models\Dossier;
 use IlBronza\FileCabinet\Models\Dossierrow;
 use IlBronza\FileCabinet\Models\Filecabinet as FilecabinetModel;
@@ -103,7 +104,8 @@ class FileCabinetServiceProvider extends ServiceProvider
 			__DIR__.'/../resources/lang' => resource_path('lang/vendor/ilbronza'),
 		], 'filecabinet.views');*/
 
-		// Registering package commands.
-		// $this->commands([]);
+		$this->commands([
+			RecalculateSchedulesCommand::class,
+		]);
 	}
 }
