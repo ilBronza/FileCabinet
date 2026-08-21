@@ -13,6 +13,7 @@ use IlBronza\FormField\Fields\DateFormField;
 use IlBronza\FormField\FormField;
 use IlBronza\Schedules\Helpers\Applicators\ScheduleApplicatorHelper;
 use IlBronza\Schedules\Models\Type;
+use RuntimeException;
 
 use function __;
 use function is_null;
@@ -52,11 +53,19 @@ class FormrowExpirationDate extends BaseRow implements FormrowWithSpecialParamet
 
 	public function performAfterStoreAction(Dossierrow $dossierrow, mixed $date)
 	{
-		if(! $scheduleType = Type::find($this->getScheduleTypeId()))
-		{
-			return null;
-			throw new \Exception('Schedule type not found for expiration date ' . $this->getName());
-		}
+		$scheduleTypeId = $this->getScheduleTypeId();
+		$typeClass = Type::getProjectClassName();
+		$scheduleType = $scheduleTypeId === null || $scheduleTypeId === ''
+			? null
+			: $typeClass::query()->find($scheduleTypeId);
+
+		if(! $scheduleType)
+			throw new RuntimeException(sprintf(
+				'Invalid schedule_type [%s] for Formrow [%s] and Dossierrow [%s].',
+				$scheduleTypeId === null || $scheduleTypeId === '' ? '<missing>' : $scheduleTypeId,
+				$this->getModel()->getKey(),
+				$dossierrow->getKey()
+			));
 
 //		$dossier = $dossierrow->getDossier();
 
