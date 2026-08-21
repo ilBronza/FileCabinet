@@ -37,6 +37,7 @@ class DossierStatusHelper
 
 			if($schedule->isExpired())
 				$alerts[] = $schedule->getName() . ' è scaduta (' . $schedule->getDeadlineValue() . ')';
+
 			elseif($schedule->isExpiring())
 				$alerts[] = $schedule->getName() . ' sta per scadere (' . $schedule->getDeadlineValue() . ')';
 		}
