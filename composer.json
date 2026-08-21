@@ -23,7 +23,10 @@
     "autoload-dev": {
         "psr-4": {
             "IlBronza\\FileCabinet\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "tests/helpers.php"
+        ]
     },
     "extra": {
         "laravel": {
