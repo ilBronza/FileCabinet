@@ -104,4 +104,8 @@ return [
 
 	// FormrowUserSelect
 	'user_roles' => 'Ruoli utenti',
+    'formrow.name' => 'Campo del modulo',
+    'formrow.form.name' => 'Modulo',
+    'dossier.client.name' => 'Cliente del fascicolo',
+    'all_schedules' => 'Tutte le scadenze',
 ];

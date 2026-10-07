@@ -71,4 +71,12 @@ return [
 	'ibFilecabinetformsshow' => 'Mostra modulo :model',
 	'ibFilecabinetformsstore' => 'Salva modulo',
 	'ibFilecabinetformsupdate' => 'Aggiorna modulo',
+    'ibFilecabinetfilecabinetTemplates.index' => 'Modelli di archivio',
+    'ibFilecabinetfilecabinetTemplates.create' => 'Crea modello di archivio',
+    'ibFilecabinetfilecabinets.index' => 'Archivi',
+    'ibFilecabinetdossiers.index' => 'Fascicoli',
+    'ibFilecabinetdossierrows.files.index' => 'Documenti dei fascicoli',
+    'ibFilecabinetdossierrows.index' => 'Voci dei fascicoli',
+    'ibFilecabinetforms.attachByModel.index' => 'Associa modulo all’elemento',
+    'ibFilecabinetforms.create' => 'Crea modulo',
 ];

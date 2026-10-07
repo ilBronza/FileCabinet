@@ -15,4 +15,5 @@ return [
 	'dossierrows' => 'Righe valori',
 	'filecabinets' => 'Questionari',
 	'dossierrowInstanceAdded' => 'Aggiunta nuova istanza di ":formrow"',
+    'dossier' => 'Fascicolo',
 ];
