@@ -67,6 +67,24 @@ Please see the [changelog](changelog.md) for more information on what has change
 $ composer test
 ```
 
+## Attach existing dossiers
+
+`AttachExistingDossiersHelper::attach($filecabinet, $dossiers)` attaches every supplied
+active dossier instance belonging to the cabinet owner. It does not create or modify
+dossiers. Repeated calls skip active pivots and restore soft-deleted pivots. The
+return value counts new and restored attachments. Validation rejects mixed owners,
+connections, archived dossiers, or an unsaved/archived cabinet before writing.
+
+```php
+use IlBronza\FileCabinet\Helpers\AttachExistingDossiersHelper;
+
+$attached = AttachExistingDossiersHelper::attach($cabinet, $existingDossiers);
+```
+
+Use this for migrations and custom filing screens that must preserve multiple
+instances of the same form. Existing template creation behavior is unchanged.
+Coverage: `tests/Feature/AttachExistingDossiersTest.php`.
+
 ## Contributing
 
 Please see [contributing.md](contributing.md) for details and a todolist.
