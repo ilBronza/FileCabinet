@@ -37,6 +37,7 @@ class FileCabinetServiceProvider extends ServiceProvider
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'filecabinet');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/filecabinet.php');
+		$this->loadRoutesFrom(__DIR__ . '/../routes/offline.php');
 
 		// Dossier::observe(DossierObserver::class);
 
@@ -95,9 +96,9 @@ class FileCabinetServiceProvider extends ServiceProvider
 		], 'filecabinet.views');*/
 
 		// Publishing assets.
-		/*$this->publishes([
-			__DIR__.'/../resources/assets' => public_path('vendor/ilbronza'),
-		], 'filecabinet.views');*/
+		$this->publishes([
+			__DIR__ . '/../resources/assets' => base_path('resources'),
+		], 'filecabinet.assets');
 
 		// Publishing the translation files.
 		/*$this->publishes([

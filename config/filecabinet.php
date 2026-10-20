@@ -115,6 +115,18 @@ return [
 
     'updateEditor' => true,
 
+    'offline' => [
+        'enabled' => true,
+        'middleware' => [],
+        // Optional additional authorization callback (model, user), returning bool.
+        'authorizer' => null,
+        'assets' => [
+            'scripts' => ['js/app.js'],
+            'styles' => ['css/ilbronza.filecabinet.offline.css'],
+            'cache' => [],
+        ],
+    ],
+
 
     'datatableFieldWidths' => [
         'datatableFieldFileExists' => '3em',
