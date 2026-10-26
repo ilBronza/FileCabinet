@@ -7,6 +7,7 @@ use IlBronza\CRUD\Traits\CRUDSluggableTrait;
 use IlBronza\CRUD\Traits\Model\CRUDReorderableStandardTrait;
 use IlBronza\FileCabinet\Models\Traits\FormrowComplianceTrait;
 use IlBronza\FileCabinet\Models\Traits\FormrowJsonParametersTrait;
+use IlBronza\FileCabinet\Models\Traits\PdfSettingsTrait;
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
 use IlBronza\FileCabinet\Providers\RowTypes\FormrowNamesTypeHelper;
 use IlBronza\FormField\Casts\JsonFieldCast;
@@ -23,6 +24,7 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 	use CRUDSluggableTrait;
 	use FormrowJsonParametersTrait;
 	use FormrowComplianceTrait;
+	use PdfSettingsTrait;
 
 	static $modelConfigPrefix = 'formrow';
 	static $deletingRelationships = ['dossierrows'];

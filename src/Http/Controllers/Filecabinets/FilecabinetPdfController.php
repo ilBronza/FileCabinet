@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Http\Controllers\Filecabinets;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use IlBronza\FileCabinet\Helpers\FilecabinetPdfTreeHelper;
 use IlBronza\FileCabinet\Models\Filecabinet;
 
 class FilecabinetPdfController extends FilecabinetDisplayController
@@ -19,6 +20,7 @@ class FilecabinetPdfController extends FilecabinetDisplayController
     public function assignPdfModel()
     {
         $this->setModel($this->setRootFilecabinet());
+        FilecabinetPdfTreeHelper::prepare($this->getModel());
     }
 
     public function getPdfFilename(Filecabinet $filecabinet)

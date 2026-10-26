@@ -10,6 +10,7 @@ use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\Category\Traits\InteractsWithCategoryTrait;
 use IlBronza\FileCabinet\Models\Traits\FormCheckersTrait;
 use IlBronza\FileCabinet\Models\Traits\FormGettersSettersTrait;
+use IlBronza\FileCabinet\Models\Traits\PdfSettingsTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -28,6 +29,7 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 	use CRUDSluggableTrait;
 	use FormGettersSettersTrait;
 	use FormCheckersTrait;
+	use PdfSettingsTrait;
 
 	use InteractsWithCategoryTrait;
 
@@ -107,6 +109,20 @@ class Form extends BaseFileCabinetModel implements ClonableModelInterface
 			'href' => $this->getCreateFormrowUrl(),
 			'text' => 'filecabinet::formrows.create',
 			'icon' => 'plus'
+		]);
+	}
+
+	public function getPdfFormrowsOrderUrl() : string
+	{
+		return $this->getKeyedRoute('formrows.pdfOrder');
+	}
+
+	public function getPdfFormrowsOrderButton() : Button
+	{
+		return Button::create([
+			'href' => $this->getPdfFormrowsOrderUrl(),
+			'text' => 'filecabinet::buttons.pdfFormrowsOrder',
+			'icon' => 'file-pdf',
 		]);
 	}
 

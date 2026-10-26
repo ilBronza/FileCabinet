@@ -1,6 +1,10 @@
 <?php
 
 return [
+	'ibFilecabinetformspdfOrder' => 'Ordine form nel PDF',
+	'ibFilecabinetformsstorePdfOrder' => 'Salva ordine form nel PDF',
+	'ibFilecabinetformsformrowspdfOrder' => 'Ordine campi nel PDF',
+	'ibFilecabinetformsformrowsstorePdfOrder' => 'Salva ordine campi nel PDF',
 	'ibFilecabinetdossierrowsaddInstance' => 'Add instance — riga dossier',
 	'ibFilecabinetdossierrowscreateNewInstance' => 'Create new instance — riga dossier',
 	'ibFilecabinetdossierrowsdeleteMedia' => 'Elimina media — riga dossier',

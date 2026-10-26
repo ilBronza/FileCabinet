@@ -47,6 +47,7 @@ use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowPdfOrderIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowMoveController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowReorderController;
 use IlBronza\FileCabinet\Http\Controllers\Formrows\FormrowShowController;
@@ -56,6 +57,7 @@ use IlBronza\FileCabinet\Http\Controllers\Forms\FormCreateStoreController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormDestroyController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormEditUpdateController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormIndexController;
+use IlBronza\FileCabinet\Http\Controllers\Forms\FormPdfOrderIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormMoveIndexController;
 use IlBronza\FileCabinet\Http\Controllers\Forms\FormShowController;
 use IlBronza\FileCabinet\Models\Dossier;
@@ -75,6 +77,8 @@ use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetFieldsGroupParameters
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetRelatedFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FilecabinetTemplateFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FormPdfOrderFieldsGroupParametersFile;
+use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowPdfOrderFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormMoveFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowByFormFieldsGroupParametersFile;
 use IlBronza\FileCabinet\Providers\FieldsGroups\FormrowCondenseFieldsGroupParametersFile;
@@ -200,6 +204,7 @@ return [
             'table' => 'filecabinets__forms',
             'fieldsGroupsFiles' => [
 	            'index' => FormFieldsGroupParametersFile::class,
+                'pdfOrder' => FormPdfOrderFieldsGroupParametersFile::class,
                 'moveIndex' => FormMoveFieldsGroupParametersFile::class
             ],
             'parametersFiles' => [
@@ -212,6 +217,7 @@ return [
             ],
             'controllers' => [
 	            'index' => FormIndexController::class,
+                'pdfOrder' => FormPdfOrderIndexController::class,
 	            'attachByModel' => FormAttachByModelIndexController::class,
                 'create' => FormCreateStoreController::class,
                 'store' => FormCreateStoreController::class,
@@ -229,6 +235,7 @@ return [
             'controllers' => [
 	            'reorder' => FormrowReorderController::class,
                 'index' => FormrowIndexController::class,
+                'pdfOrder' => FormrowPdfOrderIndexController::class,
 	            'condenseIndex' => FormrowCondenseIndexController::class,
 	            'condense' => FormrowCondenseController::class,
 	            'moveIndex' => FormMoveIndexController::class,
@@ -245,6 +252,7 @@ return [
             ],
             'fieldsGroupsFiles' => [
                 'byForm' => FormrowByFormFieldsGroupParametersFile::class,
+                'pdfOrder' => FormrowPdfOrderFieldsGroupParametersFile::class,
 	            'index' => FormrowFieldsGroupParametersFile::class,
 	            'condense' => FormrowCondenseFieldsGroupParametersFile::class,
                 'related' => FormrowRelatedFieldsGroupParametersFile::class

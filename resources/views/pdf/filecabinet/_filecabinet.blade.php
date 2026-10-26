@@ -31,10 +31,10 @@
 
 	</div>
 
-	@if((count($filecabinet->getDossiers()))&&($alphabet = range('a', 'z')))
+	@if((count($pdfDossiers = $filecabinet->getPdfDossiers()))&&($alphabet = range('a', 'z')))
 		<div class="uk-card-body">
 			<div>
-				@foreach($filecabinet->getDossiers() as $dossier)
+				@foreach($pdfDossiers as $dossier)
 					<div>
 						@include('filecabinet::pdf.filecabinet._dossier', [
 							'buttonParentLevel' => (isset($buttonParentLevel) ? $buttonParentLevel .'.' : '') . $alphabet[$loop->index % 26]

@@ -8,6 +8,7 @@ use IlBronza\CRUD\Traits\IlBronzaPackages\CRUDExtraButtonsTrait;
 use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\CRUD\Traits\Model\CRUDSortingIndexTrait;
 use IlBronza\FileCabinet\Models\BaseFileCabinetModel;
+use IlBronza\FileCabinet\Helpers\PdfOrderingHelper;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetButtonsRoutesTrait;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetCompletionTrait;
 use IlBronza\FileCabinet\Models\Traits\FilecabinetRelationsTrait;
@@ -32,7 +33,17 @@ class Filecabinet extends BaseFileCabinetModel implements
 
     public function getContentElements() : Collection
     {
+        if ($this->pdfRendering)
+            return $this->getPdfDossiers();
+
     	return $this->getDossiers()->sortBy('sorting_index');
+    }
+
+    public bool $pdfRendering = false;
+
+    public function getPdfDossiers() : Collection
+    {
+        return PdfOrderingHelper::orderedVisible($this->getDossiers(), fn ($dossier) => $dossier->getForm());
     }
 
     static $parentKeyName = 'parent_id';

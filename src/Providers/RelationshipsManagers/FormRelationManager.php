@@ -19,7 +19,8 @@ class FormRelationManager Extends RelationshipsManager
 						'fieldsGroupsParametersFile' => config('filecabinet.models.formrow.fieldsGroupsFiles.byForm'),
 						'sorting' => true,
 						'buttons' => [
-							$this->getModel()->getCreateFormrowButton()
+							$this->getModel()->getCreateFormrowButton(),
+							...($this->getModel()->isPdfVisible() ? [$this->getModel()->getPdfFormrowsOrderButton()] : []),
 						]
 					],
 //					'dossiers' => [

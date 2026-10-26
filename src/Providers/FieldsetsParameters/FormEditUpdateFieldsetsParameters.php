@@ -2,13 +2,16 @@
 
 namespace IlBronza\FileCabinet\Providers\FieldsetsParameters;
 
+use IlBronza\FileCabinet\Providers\FieldsetsParameters\Traits\PdfSettingsVisibilityTrait;
 use IlBronza\Form\Helpers\FieldsetsProvider\FieldsetParametersFile;
 
 class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
 {
+	use PdfSettingsVisibilityTrait;
+
 	public function _getFieldsetsParameters() : array
 	{
-		return [
+		return $this->configurePdfSettingsVisibility([
 			'package' => [
 				'translationPrefix' => 'filecabinet::fields',
 				'fields' => [
@@ -51,6 +54,12 @@ class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
 			'pdfSettings' => [
 				'translationPrefix' => 'filecabinet::fields',
 				'fields' => [
+					'pdf_show' => [
+						'type' => 'boolean',
+						'rules' => 'bool|nullable',
+						'tooltip' => 'filecabinet::pdfOrdering.visibilityHelp',
+					],
+					'pdf_sorting_index' => ['number' => 'integer|nullable|min:0|max:65535'],
 					'pdf_title' => ['textarea' => 'string|nullable|max:255'],
 					'pdf_description' => [
 						'vertical' => true,
@@ -88,6 +97,6 @@ class FormEditUpdateFieldsetsParameters extends FieldsetParametersFile
 				],
 				'width' => ['1-3@m']
 			]
-		];
+		]);
 	}
 }

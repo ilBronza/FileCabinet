@@ -2,6 +2,10 @@
 
 return [
 	'pdfSettings' => 'Impostazioni pdf',
+	'pdf_show' => 'Mostra nel PDF',
+	'pdf_sorting_index' => 'Ordinamento PDF (override)',
+	'pdf_sorting_position' => 'Posizione nel PDF',
+	'mySelfPdfFormrowsOrder' => 'Ordine campi nel PDF',
 	'pdf_print_fields_when_empty' => 'Stampa campi vuoti',
 	'pdf_image' => 'Immagine intestazione nel Pdf',
 	'pdf_show_menu' => 'Stampa menu',

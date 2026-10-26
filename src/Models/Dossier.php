@@ -5,6 +5,7 @@ namespace IlBronza\FileCabinet\Models;
 use IlBronza\Buttons\Button;
 use IlBronza\CRUD\Traits\Model\CRUDParentingTrait;
 use IlBronza\FileCabinet\Helpers\DossierStatusHelper;
+use IlBronza\FileCabinet\Helpers\PdfOrderingHelper;
 use IlBronza\FileCabinet\Models\Traits\DossierButtonsRoutesTrait;
 use IlBronza\FileCabinet\Models\Traits\DossierCheckersTrait;
 use IlBronza\FileCabinet\Models\Traits\DossierGettersSettersTrait;
@@ -37,6 +38,7 @@ class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 	use DossierScopesTrait;
 
 	public ? bool $updateEditor;
+	public bool $pdfRendering = false;
 
 	protected $casts = [
 		'populated_at' => 'date',
@@ -71,7 +73,15 @@ class Dossier extends BaseFileCabinetModel implements NavbarableElementInterface
 
 	public function getContentElements() : Collection
 	{
+		if ($this->pdfRendering)
+			return PdfOrderingHelper::orderedVisible($this->getChildren(), fn ($dossier) => $dossier->getForm());
+
 		return $this->getChildren()->sortBy('sorting_index');
+	}
+
+	public function getPdfDossierrows() : Collection
+	{
+		return PdfOrderingHelper::orderedVisible($this->getDossierrows(), fn ($row) => $row->getFormrow());
 	}
 
 	public function getAllSchedulesAttribute() : Collection

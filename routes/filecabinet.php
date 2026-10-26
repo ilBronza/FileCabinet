@@ -182,6 +182,11 @@ Route::group([
 			Route::post('{form}/formrows', [FileCabinet::getController('formrow', 'store'), 'storeFromForm'])->name('formrows.storeFromForm');
 
 			//FormIndexController
+			Route::get('pdf-order', [FileCabinet::getController('form', 'pdfOrder'), 'index'])->name('forms.pdfOrder');
+			Route::post('pdf-order', [FileCabinet::getController('form', 'pdfOrder'), 'storeMassReorder'])->name('forms.storePdfOrder');
+			Route::get('{form}/formrows/pdf-order', [FileCabinet::getController('formrow', 'pdfOrder'), 'index'])->name('forms.formrows.pdfOrder');
+			Route::post('{form}/formrows/pdf-order', [FileCabinet::getController('formrow', 'pdfOrder'), 'storeMassReorder'])->name('forms.formrows.storePdfOrder');
+
 			Route::get('', [FileCabinet::getController('form', 'index'), 'index'])->name('forms.index');
 
 			//FormCreateStoreController

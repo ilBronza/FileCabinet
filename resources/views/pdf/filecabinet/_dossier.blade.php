@@ -1,7 +1,8 @@
+@if($dossier->getForm()->isPdfVisible())
 <div class="dossier uk-card uk-card-default uk-card-small">
 	<div class="uk-card-header">
 		<span class="dossiertitle">
-			@if($filecabinet)
+			@if($filecabinet ?? null)
 			{!! $filecabinet->getPdfTitle() !!}
 			@endif
 
@@ -21,10 +22,7 @@
 		<table class="table table-bordered dossiertable uk-width-1-1">
 			<tbody>
 			<tr>
-			@foreach($dossier->getDossierrows()->sortBy(function($dossierrow)
-			{
-				return $dossierrow->getSortingIndex() . $dossierrow->updated_at?->timestamp;
-			}) as $dossierrow)
+			@foreach($dossier->getPdfDossierrows() as $dossierrow)
 				@if(($loop->index > 0)&&(($colCount = ($loop->index) % 2) == 0))
 				</tr><tr>
 				@endif
@@ -37,3 +35,4 @@
 		@endif
 	</div>
 </div>
+@endif
