@@ -31,6 +31,31 @@ Missing or null overrides use the package config; clearing a field in the editor
 restores that default. The config value is shown as a placeholder, so saving a
 formrow without an override keeps it linked to future config changes.
 
+## PDF header and footer
+
+The PDF repeats the `filecabinet::pdf.filecabinet._headerFooter` partial on every
+page, with the logo on the left and the PDF title on the right, vertically
+centered in the same header row, and the page number in the footer. Set
+`filecabinet.pdf.logo` to a public asset path, absolute image path or URL; when
+`null`, it uses `uikittemplate.logo`. Public asset paths such as `/img/logo.svg`
+are resolved against the project's public directory for Dompdf. URLs, data URIs
+and existing absolute file paths are preserved. An empty string hides the logo.
+
+`filecabinet.pdf.logo_max_width` defaults to `200` pixels;
+`filecabinet.pdf.logo_max_height` defaults to `null` (no height limit). Either
+dimension accepts a pixel value or `null`. The logo keeps its aspect ratio.
+The controller measures the rendered header and reserves its actual height on
+every page, including wrapped titles and taller logos.
+
+Extend `FilecabinetPdfController` and override `getHeaderFooterView()` to select
+another partial, `getPdfLogo()` to change the logo source, `getPdfTitle()` to
+customize the title (by default, the template's PDF title), or
+`getHeaderFooterData()` to provide custom partial data. `getPdfViewData()` exposes
+the complete data passed to the main PDF view.
+Logo limits and header measurement can also be overridden through
+`getPdfLogoMaxWidth()`, `getPdfLogoMaxHeight()`, `getPdfHeaderHeight()` and
+`getPdfHeaderMeasurementView()`.
+
 ## Form options
 
 ``` bash

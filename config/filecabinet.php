@@ -126,6 +126,14 @@ return [
         ],
     ],
 
+    'pdf' => [
+        // Public asset path, absolute file path or URL; null uses uikittemplate.logo.
+        'logo' => null,
+        // Maximum logo dimensions in pixels; null leaves that dimension unrestricted.
+        'logo_max_width' => 200,
+        'logo_max_height' => null,
+    ],
+
     'offline' => [
         'enabled' => true,
         'middleware' => [],

@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include($headerFooterView, $headerFooterData)
+
 
 <style type="text/css">
 .dossiertable th

@@ -1,3 +1,5 @@
+@php($depth = $depth ?? 1)
+
 <div class="uk-card uk-card-default uk-card-small sis-padding-left-xs">
 	<div class="uk-card-header">
 
@@ -5,14 +7,11 @@
 			<div class="uk-margin-bottom">
 
 				@if($image = $template->getPdfImage())
-					<div class="uk-float-left uk-margin-large-right">
+					<div>
 						<img src="{{ $image->getPath() }}" />
 					</div>
 				@endif
 
-				<div class="uk-text-right">
-					<h{{ ($depth = ($depth ?? 1)) }} class="uk-text-bold">{!! $template->getPdfTitle() !!}</h{{ $depth }}>
-				</div>
 			</div>
 
 			@else
