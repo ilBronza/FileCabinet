@@ -115,6 +115,13 @@ return [
 
     'updateEditor' => true,
 
+    'formrows' => [
+        'boolean' => [
+            'render_true' => 'Sì',
+            'render_false' => 'No',
+        ],
+    ],
+
     'offline' => [
         'enabled' => true,
         'middleware' => [],

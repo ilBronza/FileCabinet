@@ -20,6 +20,9 @@ trait FormrowJsonParametersTrait
 
 		foreach($specialParametersFields as $name => $fieldParameters)
 		{
+			if (! array_key_exists($name, $this->getAttributes()))
+				continue;
+
 			$parameters[$name] = $this->$name;
 
 			unset($this[$name]);
@@ -29,6 +32,9 @@ trait FormrowJsonParametersTrait
 
 		foreach($validationParametersFields as $name => $fieldParameters)
 		{
+			if (! array_key_exists($name, $this->getAttributes()))
+				continue;
+
 			$parameters[$name] = $this->$name;
 
 			unset($this[$name]);

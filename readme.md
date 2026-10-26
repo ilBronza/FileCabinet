@@ -17,6 +17,20 @@ $ composer require ilbronza/filecabinet
 
 ## Usage
 
+## Boolean rendering
+
+`FormrowBoolean::renderValueForView()` uses `filecabinet.formrows.boolean.render_true`
+and `filecabinet.formrows.boolean.render_false`, which default to `Sì` and `No`.
+Null values remain empty. This applies wherever FileCabinet renders a boolean row
+through this method, including PDFs.
+
+To customize a single formrow, fill in `render_true` and/or `render_false` in its
+EXTRA parameters. These optional text fields are saved in the formrow's
+`parameters` JSON and override the corresponding config value independently.
+Missing or null overrides use the package config; clearing a field in the editor
+restores that default. The config value is shown as a placeholder, so saving a
+formrow without an override keeps it linked to future config changes.
+
 ## Form options
 
 ``` bash
