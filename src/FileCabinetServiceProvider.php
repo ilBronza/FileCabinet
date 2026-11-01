@@ -10,6 +10,7 @@ use IlBronza\FileCabinet\Models\Filecabinet as FilecabinetModel;
 use IlBronza\FileCabinet\Models\FilecabinetTemplate;
 use IlBronza\FileCabinet\Models\Form;
 use IlBronza\FileCabinet\Models\Formrow;
+use IlBronza\FileCabinet\Providers\RowTypes\RowTypeRegistry;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -56,6 +57,8 @@ class FileCabinetServiceProvider extends ServiceProvider
 	public function register() : void
 	{
 		$this->mergeConfigFrom(__DIR__ . '/../config/filecabinet.php', 'filecabinet');
+
+		$this->app->singleton(RowTypeRegistry::class);
 
 		// Register the service the package provides.
 		$this->app->singleton('filecabinet', function ($app)

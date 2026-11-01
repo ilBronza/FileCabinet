@@ -3,8 +3,6 @@
 namespace IlBronza\FileCabinet\Providers\RowTypes;
 
 use IlBronza\FileCabinet\Providers\RowTypes\BaseRow;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class FormrowNamesTypeHelper
 {
@@ -53,34 +51,16 @@ class FormrowNamesTypeHelper
 
 	static function getTranslatedNameByType(string $type) : string
 	{
-		$qualifiedClass = static::getFormrowsNamespace() . Str::studly($type);
-
-		return $qualifiedClass::getTranslatedName();
+		return app(RowTypeRegistry::class)->info($type)['name'];
 	}
 
 	static function getByType(string $type) : BaseRow
 	{
-		$className = static::getFormrowsNamespace() . Str::studly($type);
-
-		return new $className();
+		return app(RowTypeRegistry::class)->make($type);
 	}
 
 	static function getPossibleTypesArray() : array
 	{
-		$filesInFolder = File::files(static::getBasePath());
-
-		$result = [];
-
-		foreach($filesInFolder as $file)
-		{
-			$qualifiedClass = static::getClassFromFilePath($file);
-
-			$type = $qualifiedClass::getType();
-			$name = $qualifiedClass::getTranslatedName();
-
-			$result[$type] = $name;
-		}
-
-		return $result;
+		return app(RowTypeRegistry::class)->choices();
 	}
 }

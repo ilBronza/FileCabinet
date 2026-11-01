@@ -3,6 +3,7 @@
 namespace IlBronza\FileCabinet\Helpers;
 
 use IlBronza\FileCabinet\Models\Dossierrow;
+use IlBronza\FileCabinet\Providers\RowTypes\BaseModelReferenceRow;
 use IlBronza\FormField\FormField;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormFieldsProvider;
 use IlBronza\FormField\Helpers\FormFieldsProvider\FormfieldParametersHelper;
@@ -19,7 +20,25 @@ class DossierrowFormFieldHelper
     static function createFieldFromDossierrow(Dossierrow $dossierrow) : FormField
     {
         $fieldname = $dossierrow->getKey();
+
+		if (! $dossierrow->getRowType()->isAvailable())
+			return FormFieldsProvider::createByNameParameters($fieldname, [
+				'type' => 'text',
+				'label' => $dossierrow->getFormfieldLabel(),
+				'value' => $dossierrow->getRowType()->message,
+				'model' => $dossierrow,
+				'disabled' => true,
+				'readOnly' => true,
+				'required' => false,
+				'repeatable' => false,
+				'updateEditor' => false,
+				'rules' => ['prohibited'],
+			]);
+
         $parameters = FormfieldParametersHelper::extractFromModel($dossierrow);
+		// FormField serializes rules for HTML and accepts string rules only.
+		// Server validation still uses the complete rules, including reference ownership.
+		$parameters['rules'] = array_values(array_filter($parameters['rules'], 'is_string'));
 		$parameters = static::addContractFileParameters($dossierrow, $parameters);
 
         $parameters['model'] = $dossierrow;
@@ -27,10 +46,13 @@ class DossierrowFormFieldHelper
         try
         {
 
-            $formField = FormFieldsProvider::createByNameParameters(
-                    $fieldname,
-                    $parameters
-                );
+			if ($dossierrow->getRowType() instanceof BaseModelReferenceRow)
+			{
+				$formField = $dossierrow->getRowType()->getFormField();
+				$formField->assignArrayParameters(FormFieldsProvider::manageParameters($fieldname, $parameters));
+			}
+			else
+				$formField = FormFieldsProvider::createByNameParameters($fieldname, $parameters);
 
             $formField->addRowHtmlClass(
                 Str::slug(

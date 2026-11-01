@@ -14,6 +14,18 @@ class FormrowEditFieldsetsParameters extends FormrowCreateStoreFieldsetsParamete
     {
         $defaultParameters = parent::_getFieldsetsParameters();
 
+		if (! $this->getModel()->getRowType()->isAvailable())
+		{
+			$type = $this->getModel()->getType();
+			$defaultParameters['baseData']['fields']['type'] = [
+				'type' => 'select',
+				'list' => [$type => $this->getModel()->getRowType()->message],
+				'disabled' => true,
+				'readOnly' => true,
+				'rules' => 'nullable|in:' . $type,
+			];
+		}
+
         $defaultParameters['pdfSettings']['fields'] = [
             'pdf_show' => [
                 'type' => 'boolean',

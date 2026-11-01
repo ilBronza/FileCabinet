@@ -31,6 +31,8 @@ class DossierPopulatorEditorHelper extends DossierPopulatorHelper
 			$this->getDossierrowId()
 		);
 
+		abort_unless($this->dossierrow->getRowType()->isAvailable(), 422, $this->dossierrow->getRowType()->message ?? '');
+
 		$this->dossierrow->storeRowValue(
 			$this->getParameterByName(
 				'value'

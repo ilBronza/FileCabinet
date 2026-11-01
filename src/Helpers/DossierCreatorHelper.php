@@ -65,7 +65,7 @@ class DossierCreatorHelper
                 // );
 
         foreach($dossier->getDossierrows(true) as $dossierrow)
-            if(! static::formHasFormRow($dossier->getForm(), $dossierrow))
+            if($dossierrow->getRowType()->isAvailable() && ! static::formHasFormRow($dossier->getForm(), $dossierrow))
                 $dossierrow->delete();
 
         $dossier->setFieldsUpdated();

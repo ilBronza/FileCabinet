@@ -167,7 +167,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getRowType() : BaseRow
 	{
-		return $this->getFormrow()->getRowType();
+		$type = $this->getFormrow()->getRowType();
+		$type->setDossierrow($this);
+		return $type;
 	}
 
 	public function emptyRowValue()
@@ -261,6 +263,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function getFormfieldProblems() : array
 	{
+		if (! $this->getRowType()->isAvailable())
+			return [$this->getRowType()->message];
+
 		$formrow = $this->getFormrow();
 
 		if ($formrow->slug != 'test-decimale')
@@ -336,6 +341,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function isCompleted() : bool
 	{
+		if (! $this->getRowType()->isAvailable())
+			return false;
+
 		if (! $this->isFormfieldRequired())
 			return true;
 
@@ -349,6 +357,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function isMissing() : bool
 	{
+		if (! $this->getRowType()->isAvailable())
+			return true;
+
 		if (! $this->isFormfieldRequired())
 			return false;
 
@@ -360,6 +371,9 @@ class Dossierrow extends BaseFileCabinetModel implements FormfieldModelCompatibi
 
 	public function isPopulated() : bool
 	{
+		if (! $this->getRowType()->isAvailable())
+			return false;
+
 		return $this->getValue() !== null;
 	}
 

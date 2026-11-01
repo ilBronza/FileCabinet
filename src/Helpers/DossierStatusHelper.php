@@ -22,7 +22,9 @@ class DossierStatusHelper
 		$alerts = [];
 
 		foreach($dossier->getDossierrows() as $dossierrow)
-			if($dossierrow->isMissing())
+			if (! $dossierrow->getRowType()->isAvailable())
+				$alerts[] = $dossierrow->getRowType()->message;
+			elseif($dossierrow->isMissing())
 				$alerts[] = $dossierrow->getName() . ' è un campo obbligatorio';
 
 		$schedules = $dossier->getAllSchedules();
@@ -88,6 +90,9 @@ class DossierStatusHelper
 
 	public function checkDossierrowProblems(Dossierrow $dossierrow) : array
 	{
+		if (! $dossierrow->getRowType()->isAvailable())
+			return [$dossierrow->getRowType()->message];
+
 		$formrow = $dossierrow->getFormrow();
 
 		$rules = $formrow->getValueComplianceRules();

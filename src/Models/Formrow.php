@@ -41,6 +41,13 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 		self::saving(function ($model)
 		{
+			$originalType = $model->getRawOriginal('type');
+			if ($model->exists && $originalType && ! app(\IlBronza\FileCabinet\Providers\RowTypes\RowTypeRegistry::class)->has($originalType)
+				&& $model->isDirty(['type', 'parameters']))
+				throw \Illuminate\Validation\ValidationException::withMessages([
+					'type' => app(\IlBronza\FileCabinet\Providers\RowTypes\RowTypeRegistry::class)->missingMessage($originalType),
+				]);
+
 			$model->parseSpecialParametersFields();
 		});
 
@@ -106,16 +113,13 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function getRowType() : BaseRow
 	{
-		if ($this->rowtype)
-			return $this->rowtype;
-
-		$this->rowtype = FormrowNamesTypeHelper::getByType(
+		$rowtype = FormrowNamesTypeHelper::getByType(
 			$this->getType()
 		);
 
-		$this->rowtype->setModel($this);
+		$rowtype->setModel($this);
 
-		return $this->rowtype;
+		return $rowtype;
 	}
 
 	public function getSortingIndex()
@@ -140,6 +144,9 @@ class Formrow extends BaseFileCabinetModel implements FormfieldModelCompatibilit
 
 	public function isReadOnly() : bool
 	{
+		if (! $this->getRowType()->isAvailable())
+			return true;
+
 		return ! ! $this->read_only;
 	}
 

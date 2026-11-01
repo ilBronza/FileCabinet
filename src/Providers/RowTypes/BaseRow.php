@@ -11,11 +11,21 @@ abstract class BaseRow
 {
 	static public $datatableFieldString = 'flat';
 	public Model $model;
-	public ?Dossierrow $dossierrow;
+	public ?Dossierrow $dossierrow = null;
 	public bool $required;
 	public array $defaultRules;
 
 	public ?bool $multiple;
+
+	public function isAvailable() : bool
+	{
+		return true;
+	}
+
+	public function getDatatableValueMethod() : string
+	{
+		return 'getValueByFormrow';
+	}
 
 	public function getDatatableFieldTypeString() : string
 	{
@@ -34,13 +44,7 @@ abstract class BaseRow
 
 	static function getType() : string
 	{
-		$filename = static::class;
-
-		$namespace = FormrowNamesTypeHelper::getNamespace();
-
-		$filename = str_replace($namespace, "", $filename);
-
-		return lcfirst(str_replace("Formrow", "", $filename));
+		return lcfirst(preg_replace('/^Formrow/', '', class_basename(static::class)));
 	}
 
 	abstract public function getCheckFieldValidityParametersFieldsetParameters() : array;

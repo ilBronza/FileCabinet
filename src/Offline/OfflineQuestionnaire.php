@@ -69,7 +69,8 @@ class OfflineQuestionnaire
     {
         $formrow = $row->getFormrow();
         $type = Str::camel($formrow->getType());
-        $supported = in_array($type, self::TYPES, true);
+		$available = $row->getRowType()->isAvailable();
+        $supported = $available && in_array($type, self::TYPES, true);
         $editable = $supported && ! $formrow->isReadOnly();
         $options = [];
         $value = null;
@@ -103,7 +104,7 @@ class OfflineQuestionnaire
             'type' => $type,
             'required' => $formrow->isRequired(),
             'editable' => $editable,
-            'reason' => ! $supported ? 'Da completare online' : ($editable ? null : 'Sola lettura'),
+            'reason' => ! $available ? $row->getRowType()->message : (! $supported ? 'Da completare online' : ($editable ? null : 'Sola lettura')),
             'options' => $options,
             'value' => $value,
             'schema' => $schema,

@@ -115,7 +115,7 @@ class DossierPopulatorHelper
 
     public function setDossierPopulated()
     {
-        $this->getDossier()->setPopulated();
+        $this->getDossier()->checkForCompletion();
     }
 
     public function populate()

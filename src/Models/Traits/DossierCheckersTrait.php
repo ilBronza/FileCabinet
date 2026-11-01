@@ -6,6 +6,10 @@ trait DossierCheckersTrait
 {
 	public function isPopulated() : bool
 	{
+		foreach ($this->getDossierrows() as $row)
+			if (! $row->getRowType()->isAvailable())
+				return false;
+
 		return !! $this->getPopulatedAt();
 	}
 
@@ -26,6 +30,8 @@ trait DossierCheckersTrait
 
 		if($completed)
 			$this->setPopulated($save);
+		else
+			$this->setNotPopulated($save);
 
 		return $completed;
 	}

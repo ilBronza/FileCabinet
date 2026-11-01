@@ -8,6 +8,9 @@ class FormrowCondenserHelper extends FormrowCondenserBaseHelper
 {
 	static function condense(Formrow $formrow, Formrow $targetRow)
 	{
+		abort_unless($formrow->getRowType()->isAvailable() && $targetRow->getRowType()->isAvailable(), 422,
+			'Tipi di campo non disponibili: impossibile convertire i valori salvati.');
+
 		$helper = new static;
 
 		$helper->setFormrow($formrow);

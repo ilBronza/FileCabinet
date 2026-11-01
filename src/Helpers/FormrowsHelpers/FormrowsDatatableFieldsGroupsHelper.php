@@ -55,7 +55,7 @@ class FormrowsDatatableFieldsGroupsHelper
 
 			$fields['mySelf' . $formrow->getSlug()] = [
 				'type' => $formrow->getDatatableFieldTypeString(),
-				'overridingValueMethod' => 'getValueByFormrow',
+				'overridingValueMethod' => $formrow->getRowType()->getDatatableValueMethod(),
 //				'renderAs' => $formrow->getDatatableFieldTypeString(),
 				'translatedName' => $formrow->getName(),
 //				'function' => 'getValueByFormrow',
