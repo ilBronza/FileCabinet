@@ -57,11 +57,12 @@ if (in_array('FileCabinet', $packages, true))
 	check($registry->has('text'), 'Base fields missing.');
 	foreach (['operatorSelect', 'operatorsSelect'] as $legacy)
 		check($registry->make($legacy)->isAvailable() === in_array('Operators', $packages, true), "Incorrect legacy availability: {$legacy}");
-	foreach (['Operators' => ['clientOperator', 'clientOperators'], 'Warehouse' => ['room', 'rooms']] as $package => $types)
+	foreach (['Operators' => ['clientOperator', 'clientOperators', 'contracttype'], 'Warehouse' => ['room', 'rooms', 'roomType']] as $package => $types)
 		foreach ($types as $id)
 		{
 			$present = in_array($package, $packages, true);
 			check($registry->has($id) === $present, "Incorrect availability: {$id}");
+			check($registry->info($id)['package'] === 'ilbronza/' . strtolower($package), "Incorrect package metadata: {$id}");
 			check(array_key_exists($id, $registry->choices()) === $present, "Incorrect editor list: {$id}");
 			$one = $registry->make($id);
 			$two = $registry->make($id);

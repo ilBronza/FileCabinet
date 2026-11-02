@@ -91,6 +91,17 @@ class UnavailableRowTypeTest extends TestCase
 		$formrow->save();
 	}
 
+	public function test_missing_catalog_types_explain_their_optional_packages() : void
+	{
+		$registry = app(RowTypeRegistry::class);
+		foreach (['contracttype' => 'ilbronza/operators', 'roomType' => 'ilbronza/warehouse'] as $type => $package)
+		{
+			$this->assertFalse($registry->make($type)->isAvailable());
+			$this->assertSame($package, $registry->info($type)['package']);
+			$this->assertStringContainsString($package, $registry->make($type)->message);
+		}
+	}
+
 	public function test_unknown_third_party_type_also_has_a_safe_fallback() : void
 	{
 		$type = app(RowTypeRegistry::class)->make('thirdPartyRemoved');

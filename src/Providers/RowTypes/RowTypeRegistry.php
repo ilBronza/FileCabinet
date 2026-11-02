@@ -16,8 +16,10 @@ class RowTypeRegistry
 		'operatorsSelect' => 'ilbronza/operators',
 		'clientOperator' => 'ilbronza/operators',
 		'clientOperators' => 'ilbronza/operators',
+		'contracttype' => 'ilbronza/operators',
 		'room' => 'ilbronza/warehouse',
 		'rooms' => 'ilbronza/warehouse',
+		'roomType' => 'ilbronza/warehouse',
 	];
 
 	public function __construct()

@@ -12,9 +12,11 @@ use IlBronza\FileCabinet\Models\Formrow;
 use IlBronza\FileCabinet\Providers\RowTypes\RowTypeRegistry;
 use IlBronza\FileCabinet\Tests\TestCase;
 use IlBronza\Operators\Models\ClientOperator;
+use IlBronza\Operators\Models\Contracttype;
 use IlBronza\Operators\Models\Operator;
 use IlBronza\Operators\OperatorsServiceProvider;
 use IlBronza\Warehouse\Models\Room\Room;
+use IlBronza\Warehouse\Models\Room\RoomType;
 use IlBronza\Warehouse\WarehouseServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +44,10 @@ class OptionalReferenceTypesTest extends TestCase
 		$app['config']->set('operators.models.clientOperator.table', 'reference_workers');
 		$app['config']->set('operators.models.operator.class', ReferenceOperator::class);
 		$app['config']->set('operators.models.operator.table', 'reference_operators');
+		$app['config']->set('operators.models.contracttype.class', ReferenceContracttype::class);
+		$app['config']->set('operators.models.contracttype.table', 'reference_contracttypes');
+		$app['config']->set('warehouse.models.roomType.class', ReferenceRoomType::class);
+		$app['config']->set('warehouse.models.roomType.table', 'reference_room_types');
 		$app['config']->set('warehouse.models.room.class', ReferenceRoom::class);
 		$app['config']->set('warehouse.models.room.table', 'reference_rooms');
 		$app['config']->set('clients.models.destination.class', ReferenceDestination::class);
@@ -77,11 +83,26 @@ class OptionalReferenceTypesTest extends TestCase
 			$table->string('id')->primary(); $table->string('name'); $table->string('destination_id')->nullable();
 			$table->softDeletes();
 		});
+		foreach (['reference_contracttypes', 'reference_room_types'] as $name)
+			Schema::create($name, function (Blueprint $table) {
+				$table->string('id')->primary(); $table->string('name');
+				$table->boolean('visible')->default(true); $table->timestamp('archived_at')->nullable();
+				$table->softDeletes();
+			});
 		DB::table('reference_destinations')->insert([
 			['id' => 'dest-one', 'client_id' => 'company-one'], ['id' => 'dest-two', 'client_id' => 'company-two'],
 		]);
 		foreach ([self::A, self::B, self::OLD, self::FOREIGN, self::ARCHIVED] as $id)
 		{
+			DB::table('reference_contracttypes')->insert([
+				'id' => $id, 'name' => 'Contracttype ' . $id, 'visible' => $id !== self::FOREIGN,
+				'archived_at' => $id === self::OLD ? '2000-01-01' : null,
+				'deleted_at' => $id === self::ARCHIVED ? '2000-01-01' : null,
+			]);
+			DB::table('reference_room_types')->insert([
+				'id' => $id, 'name' => 'Room type ' . $id, 'visible' => $id !== self::FOREIGN,
+				'deleted_at' => in_array($id, [self::OLD, self::ARCHIVED], true) ? '2000-01-01' : null,
+			]);
 			DB::table('reference_operators')->insert(['id' => 'operator-' . $id, 'display_name' => 'Worker ' . $id]);
 			DB::table('reference_workers')->insert([
 				'id' => $id, 'client_id' => $id === self::FOREIGN ? 'company-two' : 'company-one',
@@ -114,7 +135,7 @@ class OptionalReferenceTypesTest extends TestCase
 	{
 		$registry = app(RowTypeRegistry::class);
 		$paths = [];
-		foreach (['clientOperator', 'clientOperators', 'room', 'rooms'] as $type)
+		foreach (['clientOperator', 'clientOperators', 'room', 'rooms', 'contracttype', 'roomType'] as $type)
 		{
 			$row = $registry->make($type);
 			$this->assertTrue($row->isAvailable());
@@ -122,12 +143,12 @@ class OptionalReferenceTypesTest extends TestCase
 			$this->assertArrayHasKey($type, $registry->choices());
 			$paths[] = (new \ReflectionClass($row))->getFileName();
 		}
-		$this->assertCount(4, array_unique($paths));
+		$this->assertCount(6, array_unique($paths));
 	}
 
 	public function test_single_fields_store_uuid_ids_and_render_worker_and_room_names() : void
 	{
-		foreach (['clientOperator' => 'Worker ', 'room' => 'Room '] as $type => $label)
+		foreach (['clientOperator' => 'Worker ', 'room' => 'Room ', 'contracttype' => 'Contracttype ', 'roomType' => 'Room type '] as $type => $label)
 		{
 			$row = $this->row($type);
 			$this->assertTrue($row->storeRowValue(self::A));
@@ -192,7 +213,7 @@ class OptionalReferenceTypesTest extends TestCase
 
 	public function test_historical_references_remain_readable_and_can_only_be_retained_in_their_original_field() : void
 	{
-		foreach (['clientOperator', 'room', 'clientOperators', 'rooms'] as $type)
+		foreach (['clientOperator', 'room', 'clientOperators', 'rooms', 'contracttype', 'roomType'] as $type)
 		{
 			$row = $this->row($type);
 			$multiple = $row->isFormfieldMultiple();
@@ -223,6 +244,44 @@ class OptionalReferenceTypesTest extends TestCase
 		}
 	}
 
+	public function test_catalog_choices_are_shared_between_owners_and_reject_invalid_or_archived_new_references() : void
+	{
+		foreach (['contracttype', 'roomType'] as $type)
+		{
+			$one = $this->row($type);
+			$two = $this->row($type, 'company-two');
+			$this->assertSame([self::A, self::B], array_keys($one->getRowType()->getPossibleValuesArray()));
+			$this->assertSame($one->getRowType()->getPossibleValuesArray(), $two->getRowType()->getPossibleValuesArray());
+			$two->getDossier()->setRelation('dossierable', null);
+			$this->assertTrue($this->rulesPass($two, self::A));
+			$this->assertTrue($one->storeRowValue(self::A));
+			foreach ([self::OLD, self::ARCHIVED, self::FOREIGN, 'missing-uuid', 123, [self::A]] as $invalid)
+			{
+				$this->assertFalse($this->rulesPass($one, $invalid));
+				try {
+					$one->storeRowValue($invalid, false);
+					$this->fail('Catalog writes must validate references even without optional validation.');
+				} catch (ValidationException $e) {
+					$this->assertSame(self::A, $one->fresh()->string);
+				}
+			}
+		}
+	}
+
+	public function test_catalog_historical_queries_preserve_the_host_application_scopes() : void
+	{
+		foreach (['contracttype', 'roomType'] as $type)
+		{
+			$row = $this->row($type);
+			DB::table($row->getTable())->where('id', $row->getKey())->update(['string' => self::FOREIGN]);
+			$row->setRawAttributes($row->fresh()->getAttributes(), true);
+			$this->assertFalse($this->rulesPass($row, self::FOREIGN));
+			$this->assertSame(self::FOREIGN, $row->getShowValue());
+			$this->assertStringNotContainsString('Contracttype ', $row->renderFormfieldValue());
+			$this->assertStringNotContainsString('Room type ', $row->renderFormfieldValue());
+		}
+	}
+
 	public function test_future_workers_and_rooms_without_a_company_cannot_be_selected() : void
 	{
 		DB::table('reference_workers')->where('id', self::A)->update(['started_at' => '2999-01-01']);
@@ -241,7 +300,7 @@ class OptionalReferenceTypesTest extends TestCase
 	public function test_real_optional_types_restore_single_and_multiple_values_without_conversion() : void
 	{
 		$installed = app(RowTypeRegistry::class);
-		foreach (['clientOperator', 'clientOperators', 'room', 'rooms'] as $type)
+		foreach (['clientOperator', 'clientOperators', 'room', 'rooms', 'contracttype', 'roomType'] as $type)
 		{
 			$row = $this->row($type);
 			$value = $row->isFormfieldMultiple() ? [self::A, self::B] : self::A;
@@ -259,7 +318,7 @@ class OptionalReferenceTypesTest extends TestCase
 
 	public function test_required_reference_fields_reject_empty_values() : void
 	{
-		foreach (['clientOperator', 'clientOperators', 'room', 'rooms'] as $type)
+		foreach (['clientOperator', 'clientOperators', 'room', 'rooms', 'contracttype', 'roomType'] as $type)
 		{
 			$row = $this->row($type);
 			$row->getFormrow()->required = true;
@@ -294,6 +353,28 @@ if (class_exists(ClientOperator::class))
 if (class_exists(Room::class))
 {
 	class ReferenceRoom extends Room {}
+}
+if (class_exists(Contracttype::class))
+{
+	class ReferenceContracttype extends Contracttype
+	{
+		protected static function booted() : void
+		{
+			parent::booted();
+			static::addGlobalScope('visible-catalog', fn ($query) => $query->where('visible', true));
+		}
+	}
+}
+if (class_exists(RoomType::class))
+{
+	class ReferenceRoomType extends RoomType
+	{
+		protected static function booted()
+		{
+			parent::booted();
+			static::addGlobalScope('visible-catalog', fn ($query) => $query->where('visible', true));
+		}
+	}
 }
 if (class_exists(Destination::class))
 {

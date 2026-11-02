@@ -41,11 +41,11 @@ passato a `register()` è quello da salvare in `Formrow.type`.
 
 Mantenere la variante singola e quella multipla in **file e classi distinti**.
 Per riferimenti a modelli usare `BaseModelReferenceRow`: il package implementa
-`referenceQuery($historical)` con il vincolo di appartenenza al proprietario del
-dossier e `referenceLabel($model)`. La variante multipla può estendere quella
+`referenceQuery($historical)` con i vincoli di visibilità e, per modelli aziendali,
+di appartenenza al proprietario del dossier, e `referenceLabel($model)`. La variante multipla può estendere quella
 singola, usare `MultipleModelReferencesTrait`, impostare `$multiple = true` e
-`$databaseField = 'text'`. Entrambe le query, anche quella storica, devono sempre
-limitare i risultati all'azienda corretta.
+`$databaseField = 'text'`. Per i modelli aziendali, entrambe le query, anche quella storica, devono
+sempre limitare i risultati all'azienda corretta.
 
 Il registro è un singleton; le istanze dei tipi **non** lo sono. `make()`, l'helper,
 `Formrow::getRowType()` e `Dossierrow::getRowType()` creano oggetti nuovi. Il contesto
@@ -77,9 +77,12 @@ metadati di tutti i tipi disponibili e coppie identificatore/nome per l'editor.
 | `clientOperators` | Operators | `src/FileCabinet/RowTypes/FormrowClientOperators.php` | array JSON di UUID in `text` |
 | `room` | Warehouse | `src/FileCabinet/RowTypes/FormrowRoom.php` | UUID di Room in `string` |
 | `rooms` | Warehouse | `src/FileCabinet/RowTypes/FormrowRooms.php` | array JSON di UUID in `text` |
+| `contracttype` | Operators | `src/FileCabinet/RowTypes/FormrowContracttype.php` | UUID di Contracttype in `string` |
+| `roomType` | Warehouse | `src/FileCabinet/RowTypes/FormrowRoomType.php` | UUID di RoomType in `string` |
 
 Sono utilizzati i modelli del progetto risolti con `getProjectClassName()`.
-Il proprietario supportato è un `Client`, anche una sua sottoclasse del progetto,
+Per `clientOperator`, `clientOperators`, `room` e `rooms`, il proprietario supportato
+è un `Client`, anche una sua sottoclasse del progetto,
 associato come `dossierable`. Per altri proprietari le scelte sono vuote e la
 validazione rifiuta riferimenti: un altro contesto richiede una query esplicita.
 
@@ -102,6 +105,15 @@ selezione salvata, non possono essere aggiunti nuovamente come nuove scelte.
 Un record eliminato fisicamente viene mostrato con il suo ID: non è disponibile
 uno snapshot storico del nome e il riferimento non è più verificabile.
 
+`contracttype` e `roomType` selezionano dai cataloghi condivisi di mansioni e
+tipologie di locale: non richiedono un proprietario aziendale e non filtrano le
+opzioni in base ai lavoratori o alle stanze dell'azienda. Le nuove selezioni
+escludono le mansioni archiviate e i record cancellati logicamente. I riferimenti
+già salvati restano leggibili e conservabili nella stessa Dossierrow; le query
+storiche rimuovono soltanto gli scope di archiviazione/cancellazione, mantenendo
+gli eventuali scope aggiunti dall'applicazione ospite. I due tipi sono singoli;
+per più valori si può usare la normale ripetibilità del campo.
+
 La compilazione dei nuovi riferimenti è online. L'esportazione offline mantiene
 la propria lista di tipi supportati e li segnala come da completare online.
 
@@ -109,7 +121,7 @@ la propria lista di tipi supportati e li segnala come da completare online.
 
 Un identificatore sconosciuto risolve in `UnavailableRow`, un segnaposto di sola
 lettura. Rendering online, tabelle, PDF e snapshot offline possono continuare a
-mostrare un messaggio. Il registro conosce il package richiesto dai quattro tipi
+mostrare un messaggio. Il registro conosce il package richiesto dai sei tipi
 sopra; per tipi terzi non conosciuti mostra comunque l'identificatore mancante.
 
 Il segnaposto non sceglie una colonna di ripiego e non interpreta i valori.
